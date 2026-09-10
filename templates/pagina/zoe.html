@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block titulo %}ZOE — Zona de Organización Estudiantil | Instituto Técnico Distrital Julio Flórez{% endblock %}
+
+{% block contenido %}
+
+<!-- ============ ENCABEZADO ============ -->
+<header class="encabezado-pagina">
+  <div class="container">
+    <a href="{{ url_for('bachillerato_internacional') }}" class="volver small d-inline-block mb-3">
+      <i class="bi bi-arrow-left"></i> Volver a Bachillerato Internacional
+    </a>
+    <div class="icono-circulo"><i class="bi bi-boxes"></i></div>
+    <h1>ZOE — Zona de Organización Estudiantil</h1>
+    <p>Una plataforma académica creada por estudiantes, para estudiantes del Programa de Orientación Profesional (POP) del Bachillerato Internacional.</p>
+  </div>
+</header>
+
+<!-- ============ QUÉ ES ZOE ============ -->
+<section>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="encabezado-seccion text-lg-start">
+          <div class="linea ms-lg-0 mx-auto"></div>
+          <h2>¿Qué es ZOE?</h2>
+        </div>
+        <p><strong>ZOE (Zona de Organización Estudiantil)</strong> es una plataforma académica integral diseñada específicamente para el Programa de Orientación Profesional (POP) del Bachillerato Internacional.</p>
+        <p>Centraliza todos los componentes académicos del programa IB en un solo ecosistema digital, facilitando la gestión de portafolios, tareas, comunicación y recursos educativos, para que estudiantes y docentes tengan todo lo que necesitan en un mismo lugar.</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="tarjeta acento-verde h-100">
+          <div class="icono"><i class="bi bi-collection"></i></div>
+          <h3>Un solo ecosistema digital</h3>
+          <p>Portafolios, tareas, comunicación y recursos educativos, organizados en una única plataforma pensada para el programa IB.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ POR QUÉ SE FUNDÓ ============ -->
+<section class="section-alt">
+  <div class="container">
+    <div class="encabezado-seccion">
+      <div class="linea"></div>
+      <h2>¿Por qué se fundó?</h2>
+      <p>El origen de ZOE responde a una necesidad real identificada por la propia comunidad estudiantil</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="tarjeta acento-rojo h-100">
+          <div class="icono"><i class="bi bi-exclamation-triangle"></i></div>
+          <h3>El problema</h3>
+          <p>Los estudiantes de Programación de Software notaron la dispersión de materiales, tareas y comunicaciones en múltiples plataformas, generando ineficiencias y dificultando el seguimiento académico.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tarjeta acento-amarillo h-100">
+          <div class="icono"><i class="bi bi-lightbulb"></i></div>
+          <h3>La solución</h3>
+          <p>ZOE nace como respuesta a esa dispersión: una solución pensada para unificar todos los componentes del programa POP en un único lugar.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tarjeta acento-verde h-100">
+          <div class="icono"><i class="bi bi-mortarboard"></i></div>
+          <h3>El impacto</h3>
+          <p>Un apoyo directo al proceso de implementación del Bachillerato Internacional en nuestra institución, facilitando el día a día académico.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESARROLLADORES ============ -->
+<section>
+  <div class="container">
+    <div class="encabezado-seccion">
+      <div class="linea"></div>
+      <h2>Desarrollado por nuestros estudiantes</h2>
+      <p>ZOE fue creada por estudiantes del Instituto Técnico Distrital Julio Flórez como parte de su proyecto de grado</p>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4 col-lg-3 text-center">
+        <div class="tarjeta-cargo">
+          <div class="avatar"><i class="bi bi-person-fill"></i></div>
+          <div class="nombre">Santiago Aguilera Martínez</div>
+          <div class="area">Equipo desarrollador ZOE</div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-3 text-center">
+        <div class="tarjeta-cargo">
+          <div class="avatar"><i class="bi bi-person-fill"></i></div>
+          <div class="nombre">Sofía Hernández Pérez</div>
+          <div class="area">Equipo desarrollador ZOE</div>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-3 text-center">
+        <div class="tarjeta-cargo">
+          <div class="avatar"><i class="bi bi-person-fill"></i></div>
+          <div class="nombre">Michael Andrés Pereira Franco</div>
+          <div class="area">Equipo desarrollador ZOE</div>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-muted mt-4">Estudiantes de la especialidad de Programación de Software, quienes desarrollaron esta aplicación con el propósito de apoyar a la institución en su proceso de implementación del Bachillerato Internacional.</p>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section-oscura">
+  <div class="container text-center">
+    <div class="linea mx-auto"></div>
+    <h2>¿Formas parte del Programa de Orientación Profesional?</h2>
+    <p class="mx-auto" style="max-width:600px">Conoce más sobre el POP y el Bachillerato Internacional en nuestra institución.</p>
+    <a href="{{ url_for('bachillerato_internacional') }}" class="btn-institucional mt-3 d-inline-block">Conocer el POP →</a>
+  </div>
+</section>
+
+{% endblock %}
