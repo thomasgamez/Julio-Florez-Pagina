@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block titulo %}Logros y Reconocimientos — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Logros y Reconocimientos</h1>
+    <p>Estudiantes, grupos y programas que han destacado dentro y fuera de la institución</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="d-flex gap-2 flex-wrap mb-4" id="filtros-logros">
+      <button class="btn btn-sm rounded-pill btn-institucional filtro-btn activo" data-filtro="todos">Todos</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional filtro-btn" data-filtro="Deportivo">Deportivo</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional filtro-btn" data-filtro="Académico">Académico</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional filtro-btn" data-filtro="Cultural">Cultural</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional filtro-btn" data-filtro="Mención Especial">Mención Especial</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional filtro-btn" data-filtro="Grupos y Programas">Grupos y Programas</button>
+    </div>
+
+    <div class="row g-4" id="grid-logros">
+      {% for l in logros %}
+      <div class="col-md-6 col-lg-4 tarjeta-logro-wrap" data-categoria="{{ l.categoria }}">
+        <div class="tarjeta-especialidad h-100">
+          <img src="{{ url_for('static', filename='images/' ~ l.imagen) }}" alt="{{ l.titulo_logro }}">
+          <div class="contenido">
+            <span class="badge-institucional">{{ l.categoria }}</span>
+            <span class="small text-muted ms-1">{{ l.fecha }}</span>
+            <h3 class="h6 mt-2">{{ l.titulo_logro }}</h3>
+            <p class="small fw-semibold text-verde mb-1"><i class="bi bi-person-badge"></i> {{ l.nombre }} {% if l.grado %}<span class="text-muted fw-normal">— {{ l.grado }}</span>{% endif %}</p>
+            <p class="small text-muted mb-0">{{ l.descripcion }}</p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <p class="text-muted text-center py-5">Aún no hay logros publicados. ¡Pronto reconoceremos aquí a nuestros estudiantes destacados!</p>
+      {% endfor %}
+    </div>
+
+    <p class="text-muted text-center py-5 d-none" id="sin-resultados">No hay logros registrados en esta categoría todavía.</p>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const botones = document.querySelectorAll('#filtros-logros .filtro-btn');
+  const tarjetas = document.querySelectorAll('#grid-logros .tarjeta-logro-wrap');
+  const sinResultados = document.getElementById('sin-resultados');
+
+  botones.forEach(boton => {
+    boton.addEventListener('click', () => {
+      const filtro = boton.dataset.filtro;
+
+      botones.forEach(b => {
+        b.classList.remove('btn-institucional', 'activo');
+        b.classList.add('btn-outline-institucional');
+      });
+      boton.classList.remove('btn-outline-institucional');
+      boton.classList.add('btn-institucional', 'activo');
+
+      let visibles = 0;
+      tarjetas.forEach(t => {
+        const coincide = filtro === 'todos' || t.dataset.categoria === filtro;
+        t.classList.toggle('d-none', !coincide);
+        if (coincide) visibles++;
+      });
+      sinResultados.classList.toggle('d-none', visibles !== 0);
+    });
+  });
+});
+</script>
+{% endblock %}

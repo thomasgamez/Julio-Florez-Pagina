@@ -1,0 +1,34 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Logros y Reconocimientos{% endblock %}
+{% block encabezado %}Gestión de Logros y Reconocimientos{% endblock %}
+{% block acciones_topbar %}
+<a href="{{ url_for('admin_logro_nuevo') }}" class="btn-institucional"><i class="bi bi-plus-lg"></i> Nuevo logro</a>
+{% endblock %}
+{% block contenido_admin %}
+
+<div class="tabla-admin">
+  <table class="table mb-0">
+    <thead><tr><th>Nombre / Grupo</th><th>Logro</th><th>Categoría</th><th>Fecha</th><th>Estado</th><th class="text-end">Acciones</th></tr></thead>
+    <tbody>
+      {% for l in logros %}
+      <tr>
+        <td class="fw-semibold">{{ l.nombre }}</td>
+        <td>{{ l.titulo_logro }}</td>
+        <td><span class="badge-institucional">{{ l.categoria }}</span></td>
+        <td>{{ l.fecha }}</td>
+        <td>{% if l.publicado %}<span class="badge bg-success">Publicado</span>{% else %}<span class="badge bg-secondary">Borrador</span>{% endif %}</td>
+        <td class="text-end">
+          <a href="{{ url_for('admin_logro_editar', id_logro=l.id) }}" class="btn btn-sm btn-outline-institucional"><i class="bi bi-pencil"></i></a>
+          <form method="POST" action="{{ url_for('admin_logro_eliminar', id_logro=l.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este logro?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-muted py-4">Aún no hay logros registrados. Crea el primero.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

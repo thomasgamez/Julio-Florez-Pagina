@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block titulo %}Especialidades Técnicas — Julio Flórez{% endblock %}
+
+{% block contenido %}
+
+<header class="encabezado-pagina" style="background-image: linear-gradient(rgba(15,46,34,.85), rgba(15,46,34,.85)), url('{{ url_for('static', filename='images/GRUPO ONCE 2026.jpeg') }}'); background-size:cover; background-position:center;">
+  <div class="container">
+    <h1>Especialidades Técnicas</h1>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row g-4">
+      {% for esp in especialidades %}
+      <div class="col-md-6">
+        <div class="tarjeta-especialidad h-100">
+          <img src="{{ url_for('static', filename='imagenes nuevas/' ~ esp.imagen) }}" alt="{{ esp.nombre }}">
+          <div class="contenido">
+            <h3 class="h5"><i class="bi {{ esp.icono }} text-verde"></i> {{ esp.nombre }}</h3>
+            <p class="text-muted">{{ esp.descripcion }}</p>
+            <details class="mb-2">
+              <summary class="fw-semibold text-verde" style="cursor:pointer">Ver competencias y perfil</summary>
+              <ul class="small text-muted mt-2">
+                {% for c in esp.competencias %}<li>{{ c }}</li>{% endfor %}
+              </ul>
+            </details>
+            <hr>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle bg-verde text-white d-flex align-items-center justify-content-center" style="width:34px;height:34px;font-size:.8rem;font-weight:700">{{ esp.iniciales }}</div>
+              <div class="small">
+                <div>Docente a cargo</div>
+                <h4><strong>{{ esp.docente }}</strong></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- COORDINACIÓN -->
+<section class="section-alt">
+  <div class="container">
+    <div class="encabezado-seccion"><div class="linea"></div><h2>Coordinación de Especialidades</h2><p>Liderazgo pedagógico al frente de los programas técnicos</p></div>
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="tarjeta d-flex gap-3 align-items-start" style="background:var(--verde-oscuro);border:none">
+          <div class="rounded-3 bg-amarillo text-verde-oscuro d-flex align-items-center justify-content-center fw-bold" style="width:56px;height:56px;font-size:1.1rem;flex-shrink:0">CE</div>
+          <div class="text-white">
+            <p class="small text-amarillo mb-1 fw-semibold">COORDINADORA DE ESPECIALIDADES TÉCNICAS</p>
+            <h3 class="h5 text-white">LUZ DARY ROSAS CRESPO</h3>
+            <p class="small mb-2" style="color:#dfe6e1">Gestiona la formación docente y asegura la calidad de los procesos de aprendizaje de cada especialidad.</p>
+            <a href="mailto:especialidades@ejulioflorez.edu.co" class="text-amarillo small"><i class="bi bi-envelope"></i> especialidades@ejulioflorez.edu.co</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="text-center">
+  <div class="container">
+    <h2 class="mb-2">¿Listo para comenzar tu formación técnica?</h2>
+    <p class="text-muted">Inscríbete al proceso de matrículas y haz parte de la comunidad del Julio Flórez</p>
+    <a href="{{ url_for('matriculas') }}" class="btn-institucional">Proceso de Matrículas →</a>
+  </div>
+</section>
+
+{% endblock %}

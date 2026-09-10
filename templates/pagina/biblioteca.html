@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block titulo %}Biblioteca — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Biblioteca</h1>
+    <p>Catálogo, préstamos y servicios de la biblioteca institucional</p>
+  </div>
+</header>
+
+<div class="bg-verde-claro py-2 text-center small">
+  <i class="bi bi-clock"></i> Horario: Lun–Vie 7:00 a.m. – 3:00 p.m.
+  <span class="mx-2">·</span>
+  <i class="bi bi-arrow-repeat"></i> Préstamo máximo: 7 días
+</div>
+
+<section>
+  <div class="container">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4"><img src="{{ url_for('static', filename='images/biblioteca-1.jpg') }}" class="img-fluid rounded-3 w-100" style="height:150px;object-fit:cover" alt=""></div>
+      <div class="col-md-4"><img src="{{ url_for('static', filename='images/biblioteca-2.jpg') }}" class="img-fluid rounded-3 w-100" style="height:150px;object-fit:cover" alt=""></div>
+      <div class="col-md-4"><img src="{{ url_for('static', filename='images/biblioteca-3.jpg') }}" class="img-fluid rounded-3 w-100" style="height:150px;object-fit:cover" alt=""></div>
+    </div>
+
+    <div class="row g-2 mb-4">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar por título o autor...">
+      </div>
+      <div class="col-md-3">
+        <select class="form-select"><option>Todas las categorías</option></select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select"><option>Todos los grados</option></select>
+      </div>
+    </div>
+
+    {% if libros %}
+    <div class="row g-3">
+      {% for l in libros %}
+      <div class="col-md-6 col-lg-4">
+        <div class="tarjeta h-100">
+          <h3 class="h6 mb-1">{{ l.titulo }}</h3>
+          <p class="small text-muted mb-1">{{ l.autor }}</p>
+          <span class="badge-institucional">{{ l.categoria }}</span>
+          <span class="small text-muted ms-1">{{ l.grado }}</span>
+          <p class="small mt-2 mb-0">
+            {% if l.cantidad_disponible > 0 %}
+              <span class="text-verde fw-semibold"><i class="bi bi-check-circle"></i> {{ l.cantidad_disponible }} disponible(s)</span>
+            {% else %}
+              <span class="text-rojo fw-semibold"><i class="bi bi-x-circle"></i> Sin ejemplares disponibles</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="tarjeta text-center py-5">
+      <i class="bi bi-book fs-1 text-verde"></i>
+      <h3 class="h5 mt-3">Catálogo vacío</h3>
+      <p class="text-muted mb-0">Los libros serán cargados por el administrador de la biblioteca.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

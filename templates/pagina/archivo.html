@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block titulo %}Sistema de Archivo — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Sistema de Archivo</h1>
+    <p>Sistema interno de gestión del archivo físico institucional</p>
+  </div>
+</header>
+
+<section class="text-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="tarjeta">
+          <div class="icono mx-auto"><i class="bi bi-archive"></i></div>
+          <h3>Redirigiendo al Sistema de Archivo</h3>
+          <p class="text-muted">El Sistema de Archivo es una plataforma especializada para la gestión del archivo físico interno del colegio. Serás redirigido automáticamente en:</p>
+          <div class="rounded-circle bg-verde text-white d-flex align-items-center justify-content-center mx-auto fw-bold fs-4" style="width:60px;height:60px" id="contador">5</div>
+          <p class="small text-muted mt-3 mb-2">Estás siendo redirigido a: <br><strong>https://archivo.ejulioflorez.edu.co</strong></p>
+          <a href="#" class="btn-institucional"><i class="bi bi-box-arrow-up-right"></i> Ir al Sistema de Archivo ahora</a>
+          <p class="small text-muted mt-3 mb-0">Se abrirá en una nueva pestaña. El sistema de archivo es independiente de este portal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+  let n = 5;
+  const el = document.getElementById('contador');
+  const t = setInterval(() => {
+    n--;
+    if(el) el.textContent = n;
+    if(n <= 0) clearInterval(t);
+  }, 1000);
+</script>
+{% endblock %}

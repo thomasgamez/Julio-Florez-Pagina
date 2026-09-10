@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block titulo %}Símbolos Institucionales — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
+    <h1>{{ info.titulo }}</h1>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <h3 class="h5">El Escudo</h3>
+        <p>El escudo institucional está compuesto por los <strong>colores rojo, blanco y amarillo</strong>, que representan el valor, la pureza del conocimiento y la riqueza del saber, respectivamente. En su parte superior, una banda roja con laureles blancos enmarca el nombre de la institución.</p>
+        <p>En el centro, un libro abierto sobre fondo gris simboliza el conocimiento; sobre fondo amarillo, un átomo con sus órbitas representa la ciencia, la tecnología y la innovación.</p>
+        <p>La leyenda <strong>"Innovación · Ciencia · Autonomía"</strong> sintetiza el lema de la institución y su compromiso con la formación técnica de vanguardia.</p>
+      </div>
+      <div class="col-lg-5 text-center">
+        <img src="{{ url_for('static', filename='images/escudo.png') }}" style="max-width:150px" alt="Escudo" onerror="this.style.display='none'">
+        <p class="fw-semibold mt-3">La Bandera</p>
+        <div class="d-flex justify-content-center gap-1">
+          <div style="width:50px;height:34px;background:#c0392b"></div>
+          <div style="width:50px;height:34px;background:#fff;border:1px solid #ddd"></div>
+          <div style="width:50px;height:34px;background:#d4af37"></div>
+        </div>
+        <p class="small text-muted mt-2">Rojo · Blanco · Amarillo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="container">
+      <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
+      <h1>{{ info.titulo }}</h1>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta"><div class="icono"><i class="bi bi-bank"></i></div><h3>Gobierno Escolar</h3><p>Rector, Consejo Directivo, Consejo Académico, personero, representantes estudiantiles. Democracia participativa en nuestra comunidad.</p></div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta"><div class="icono"><i class="bi bi-file-earmark-pdf"></i></div><h3>Manual de Convivencia</h3><p>Documento oficial que regula la convivencia, derechos y deberes de todos los miembros de la comunidad educativa.</p><a href="#" class="enlace">Descargar →</a></div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta"><div class="icono"><i class="bi bi-person-badge"></i></div><h3>Uniformes</h3><p>Uniforme de diario (gris y verde) y uniforme de educación física (sudadera azul con franjas verdes). Obligatorio para todos los estudiantes.</p></div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta"><div class="icono"><i class="bi bi-calendar3"></i></div><h3>Calendario Escolar</h3><p>El año escolar 2026 inicia el 6 de abril. Consulta el calendario completo con fechas de evaluaciones, izadas y vacaciones.</p><a href="#" class="enlace">Ver calendario →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

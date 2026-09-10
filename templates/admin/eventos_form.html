@@ -1,0 +1,67 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}{{ 'Editar' if evento else 'Nuevo' }} Evento{% endblock %}
+{% block encabezado %}{{ 'Editar' if evento else 'Nuevo' }} Evento{% endblock %}
+{% block contenido_admin %}
+
+<div class="tarjeta" style="max-width:720px">
+  <form method="POST">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label small fw-semibold">Título *</label>
+        <input type="text" name="titulo" class="form-control" required value="{{ evento.titulo if evento else '' }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small fw-semibold">Categoría *</label>
+        <select name="categoria" class="form-select" required>
+          {% for cat in ['Académico','Cultural','Deportivo','Institucional','Padres de Familia','Bienestar'] %}
+          <option {{ 'selected' if evento and evento.categoria==cat }}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small fw-semibold">Estado *</label>
+        <select name="estado" class="form-select" required>
+          {% for est in ['Programado','Finalizado'] %}
+          <option {{ 'selected' if evento and evento.estado==est }}>{{ est }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small fw-semibold">Sede *</label>
+        <select name="sede" class="form-select" required>
+          {% for s in ['Ambas','Sede A','Sede B'] %}
+          <option {{ 'selected' if evento and evento.sede==s }}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-semibold">Mes (3 letras) *</label>
+        <input type="text" name="mes" class="form-control text-uppercase" maxlength="3" placeholder="JUN" required value="{{ evento.mes if evento else '' }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-semibold">Día *</label>
+        <input type="text" name="dia" class="form-control" placeholder="21" required value="{{ evento.dia if evento else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Fecha completa *</label>
+        <input type="text" name="fecha_completa" class="form-control" placeholder="21 de junio de 2026" required value="{{ evento.fecha_completa if evento else '' }}">
+      </div>
+      <div class="col-12">
+        <label class="form-label small fw-semibold">Descripción *</label>
+        <textarea name="descripcion" class="form-control" rows="4" required>{{ evento.descripcion if evento else '' }}</textarea>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="publicado" id="publicado" {{ 'checked' if not evento or evento.publicado }}>
+          <label class="form-check-label small" for="publicado">Publicar de inmediato en el sitio</label>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-4">
+      <button type="submit" class="btn-institucional">Guardar evento</button>
+      <a href="{{ url_for('admin_eventos') }}" class="btn-outline-institucional">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

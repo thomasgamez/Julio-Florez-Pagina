@@ -1,0 +1,105 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Biblioteca{% endblock %}
+{% block encabezado %}Gestión de Biblioteca{% endblock %}
+{% block acciones_topbar %}
+<button class="btn-institucional" data-bs-toggle="modal" data-bs-target="#modalLibro"><i class="bi bi-plus-lg"></i> Nuevo libro</button>
+{% endblock %}
+{% block contenido_admin %}
+
+<h3 class="h6 mb-3">Catálogo de libros</h3>
+<div class="tabla-admin mb-4">
+  <table class="table mb-0">
+    <thead><tr><th>Título</th><th>Autor</th><th>Categoría</th><th>Grado</th><th>Disponibles</th><th class="text-end">Acciones</th></tr></thead>
+    <tbody>
+      {% for l in libros %}
+      <tr>
+        <td class="fw-semibold">{{ l.titulo }}</td>
+        <td>{{ l.autor }}</td>
+        <td>{{ l.categoria }}</td>
+        <td>{{ l.grado }}</td>
+        <td>
+          <span class="badge {{ 'bg-success' if l.cantidad_disponible > 0 else 'bg-danger' }}">
+            {{ l.cantidad_disponible }} / {{ l.cantidad_total }}
+          </span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-institucional" data-bs-toggle="modal" data-bs-target="#modalEditar{{ l.id }}"><i class="bi bi-pencil"></i></button>
+          <form method="POST" action="{{ url_for('admin_biblioteca_eliminar', id_libro=l.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este libro?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+
+      <!-- Modal editar -->
+      <div class="modal fade" id="modalEditar{{ l.id }}" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form method="POST" action="{{ url_for('admin_biblioteca_editar', id_libro=l.id) }}">
+              <div class="modal-header"><h5 class="modal-title">Editar libro</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+              <div class="modal-body">
+                <label class="form-label small">Título</label><input class="form-control mb-2" name="titulo" value="{{ l.titulo }}" required>
+                <label class="form-label small">Autor</label><input class="form-control mb-2" name="autor" value="{{ l.autor }}" required>
+                <label class="form-label small">Categoría</label><input class="form-control mb-2" name="categoria" value="{{ l.categoria }}">
+                <label class="form-label small">Grado</label><input class="form-control mb-2" name="grado" value="{{ l.grado }}">
+                <div class="row">
+                  <div class="col-6"><label class="form-label small">Cantidad total</label><input type="number" class="form-control" name="cantidad_total" value="{{ l.cantidad_total }}" min="0" required></div>
+                  <div class="col-6"><label class="form-label small">Disponibles</label><input type="number" class="form-control" name="cantidad_disponible" value="{{ l.cantidad_disponible }}" min="0" required></div>
+                </div>
+              </div>
+              <div class="modal-footer"><button class="btn-institucional" type="submit">Guardar cambios</button></div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-muted py-4">Sin libros registrados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h3 class="h6 mb-3">Préstamos activos</h3>
+<div class="tabla-admin">
+  <table class="table mb-0">
+    <thead><tr><th>Libro</th><th>Estudiante</th><th>Grado</th><th>Fecha préstamo</th><th>Fecha límite</th><th class="text-end">Acción</th></tr></thead>
+    <tbody>
+      {% for p in prestamos %}
+      <tr>
+        <td>{{ p.libro_titulo }}</td>
+        <td>{{ p.estudiante }}</td>
+        <td>{{ p.grado }}</td>
+        <td>{{ p.fecha_prestamo }}</td>
+        <td>{{ p.fecha_limite }}</td>
+        <td class="text-end">
+          <form method="POST" action="{{ url_for('admin_biblioteca_devolver', id_prestamo=p.id) }}">
+            <button class="btn btn-sm btn-institucional">Marcar devuelto</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-muted py-4">No hay préstamos activos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal nuevo libro -->
+<div class="modal fade" id="modalLibro" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{{ url_for('admin_biblioteca') }}">
+        <div class="modal-header"><h5 class="modal-title">Nuevo libro</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <label class="form-label small">Título *</label><input class="form-control mb-2" name="titulo" required>
+          <label class="form-label small">Autor *</label><input class="form-control mb-2" name="autor" required>
+          <label class="form-label small">Categoría</label><input class="form-control mb-2" name="categoria">
+          <label class="form-label small">Grado recomendado</label><input class="form-control mb-2" name="grado" placeholder="Ej: 10°-11°">
+          <label class="form-label small">Cantidad de ejemplares *</label><input type="number" class="form-control" name="cantidad_total" min="1" value="1" required>
+        </div>
+        <div class="modal-footer"><button class="btn-institucional" type="submit">Agregar libro</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

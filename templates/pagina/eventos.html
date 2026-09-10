@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block titulo %}Eventos — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Eventos</h1>
+    <p>Cronograma de actividades institucionales y académicas</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="d-flex gap-2 flex-wrap mb-4">
+      <button class="btn btn-sm rounded-pill btn-institucional">Todos</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional">Académico</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional">Cultural</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional">Deportivo</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional">Institucional</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional">Padres de Familia</button>
+      <button class="btn btn-sm rounded-pill btn-outline-institucional">Bienestar</button>
+    </div>
+
+    <div class="row g-4">
+      {% for ev in eventos %}
+      <div class="col-md-6 col-lg-4">
+        <div class="tarjeta h-100">
+          <div class="d-flex gap-3 align-items-start mb-2">
+            <div class="fecha-badge"><div class="mes">{{ ev.mes }}</div><div class="dia">{{ ev.dia }}</div></div>
+            <div>
+              <span class="badge-institucional">{{ ev.categoria }}</span>
+              <span class="badge-institucional" style="background:var(--amarillo-claro);color:#8a6d00">{{ ev.estado }}</span>
+            </div>
+          </div>
+          <h3 class="h6">{{ ev.titulo }}</h3>
+          <p class="small text-muted">{{ ev.descripcion }}</p>
+          <p class="small text-muted mb-1"><i class="bi bi-calendar3"></i> {{ ev.fecha_completa }}</p>
+          <p class="small text-muted mb-0"><i class="bi bi-geo-alt"></i> {{ ev.sede }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

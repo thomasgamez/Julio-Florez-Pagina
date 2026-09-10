@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block titulo %}Contacto — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Contacto</h1>
+    <p>Estamos para atenderte</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row g-4 align-items-start">
+      <div class="col-lg-5">
+        <div class="tarjeta mb-3">
+          <div class="icono"><i class="bi bi-geo-alt-fill"></i></div>
+          <h3 class="h6">Sede Principal — Bachillerato Julio Flórez</h3>
+          <p class="small text-muted mb-0">
+            Carrera 68B N° 94-12, Bogotá D.C. - Colombia<br>
+            <i class="bi bi-telephone-fill"></i> 305 792 3922 · 253 6376
+          </p>
+        </div>
+        <div class="tarjeta mb-3">
+          <div class="icono"><i class="bi bi-geo-alt-fill"></i></div>
+          <h3 class="h6">Sede A — Primaria Santa Rosa</h3>
+          <p class="small text-muted mb-0">
+            Calle 102A N° 70-40, Bogotá D.C. - Colombia<br>
+            <i class="bi bi-telephone-fill"></i> 300 207 2701
+          </p>
+        </div>
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-envelope-fill"></i></div>
+          <h3 class="h6">Correo institucional</h3>
+          <p class="small text-muted mb-0">rectoria@ejulioflorez.edu.co</p>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="tarjeta">
+          <h3 class="h5 mb-3">Envíanos un mensaje</h3>
+          <form method="POST" action="{{ url_for('contacto') }}">
+            <div class="row g-3">
+              <div class="col-md-6"><input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required></div>
+              <div class="col-md-6"><input type="email" class="form-control" name="correo" placeholder="Correo electrónico" required></div>
+              <div class="col-12"><input type="text" class="form-control" name="asunto" placeholder="Asunto" required></div>
+              <div class="col-12"><textarea class="form-control" name="mensaje" rows="5" placeholder="Mensaje" required></textarea></div>
+              <div class="col-12"><button class="btn-institucional w-100" type="submit">Enviar mensaje</button></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

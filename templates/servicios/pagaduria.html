@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block titulo %}Pagaduría — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Pagaduría</h1>
+    <p>Información sobre pagos, trámites y servicios financieros</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="tarjeta text-center">
+          <div class="icono mx-auto"><i class="bi bi-clock"></i></div>
+          <h3 class="h6">Horario de Atención</h3>
+          <p class="small text-muted mb-0">Lunes a Viernes<br>7:00 a.m. - 3:00 p.m.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tarjeta text-center">
+          <div class="icono mx-auto"><i class="bi bi-telephone"></i></div>
+          <h3 class="h6">Contacto</h3>
+          <p class="small text-muted mb-0">pagaduria@ejulioflorez.edu.co</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tarjeta text-center">
+          <div class="icono mx-auto"><i class="bi bi-credit-card"></i></div>
+          <h3 class="h6">Medios Autorizados</h3>
+          <p class="small text-muted mb-0">Efectivo · Transferencia<br>PSE institucional</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert border-0 rounded-3 d-flex gap-2" style="background:var(--amarillo-claro);color:#7a5c00">
+      <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+      <div class="small">El Instituto Técnico Distrital Julio Flórez es una institución de educación pública y la educación es <strong>gratuita</strong> conforme a la Ley 1294 de 2009 y la política de gratuidad del Distrito. Solo se cobran conceptos expresamente autorizados por la Secretaría de Educación. Cualquier cobro no autorizado debe reportarse a la Personería Estudiantil o al PQR.</div>
+    </div>
+
+    <h3 class="h5 mt-5 mb-3">Conceptos Autorizados</h3>
+    <div class="row g-3 mb-4">
+      {% for c in conceptos %}
+      <div class="col-md-6">
+        <div class="tarjeta d-flex justify-content-between align-items-start">
+          <div>
+            <h4 class="h6 mb-1">{{ c.nombre }} {% if c.obligatorio %}<span class="badge bg-danger">Obligatorio</span>{% endif %}</h4>
+            <p class="small text-muted mb-0">{{ c.descripcion }}</p>
+          </div>
+          <div class="text-verde fw-bold text-nowrap ms-3">${{ "{:,}".format(c.valor) }}</div>
+        </div>
+      </div>
+      {% else %}
+      <p class="text-muted">No hay conceptos publicados por el momento.</p>
+      {% endfor %}
+    </div>
+
+    <h3 class="h5 mt-5 mb-3">Preguntas Frecuentes</h3>
+    <div class="accordion" id="faqPagaduria">
+      {% for f in faq %}
+      <div class="accordion-item mb-2 rounded-3 overflow-hidden" style="border:1px solid var(--borde)">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ loop.index }}">
+            <i class="bi bi-question-circle text-verde me-2"></i> {{ f.pregunta }}
+          </button>
+        </h2>
+        <div id="faq{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#faqPagaduria">
+          <div class="accordion-body small text-muted">{{ f.respuesta }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

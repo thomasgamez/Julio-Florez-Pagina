@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block titulo %}{{ info.titulo }} — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina"
+  style="background:linear-gradient(120deg, {{ info.color }}cc, {{ info.color }}99), url('{{ url_for('static', filename='images/' ~ info.imagen) }}');background-size:cover;background-position:center">
+  <div class="container">
+    <a href="{{ url_for('nuestra_institucion_seccion', seccion='vida-escolar') }}" class="volver"><i class="bi bi-arrow-left"></i> Vida Escolar y Bienestar</a>
+    <div class="icono-circulo mt-3"><i class="bi {{ info.icono }}"></i></div>
+    <h1>{{ info.titulo }}</h1>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <img src="{{ url_for('static', filename='images/' ~ info.imagen) }}" class="img-fluid rounded-3 mb-4 w-100"
+          style="max-height:320px;object-fit:cover" alt="{{ info.titulo }}">
+        <div class="fs-6">{{ info.contenido | safe }}</div>
+      </div>
+    </div>
+
+    <!-- OTROS SERVICIOS DE VIDA ESCOLAR -->
+    <hr class="my-5">
+    <h3 class="h5 mb-4">Otros servicios de Vida Escolar</h3>
+    <div class="row g-3">
+      {% for clave, dato in secciones.items() %}
+      {% if clave != seccion_actual %}
+      <div class="col-md-6 col-lg-4">
+        <a href="{{ url_for('vida_escolar', seccion=clave) }}" class="tarjeta d-block h-100 text-decoration-none">
+          <div class="icono" style="background:{{ dato.color }}22;color:{{ dato.color }}"><i
+              class="bi {{ dato.icono }}"></i></div>
+          <h4 class="h6">{{ dato.titulo }}</h4>
+          <p class="small text-muted mb-1">{{ dato.resumen }}</p>
+          <span class="enlace small">Ver más →</span>
+        </a>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

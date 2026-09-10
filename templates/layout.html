@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='images/ESCUDO CITD JF.png') }}">
+<title>{% block titulo %}Instituto Técnico Distrital Julio Flórez{% endblock %}</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Iconos -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Tipografías -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- CSS propio -->
+<link rel="stylesheet" href="{{ url_for('static', filename='Styles/main.css') }}">
+
+{% block estilos_extra %}{% endblock %}
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-xxl navbar-institucional sticky-top">
+  <div class="container-fluid px-3 px-lg-5">
+   <div class="navbar-pill w-100 d-flex align-items-center">
+    <a class="navbar-brand" href="{{ url_for('inicio') }}">
+      <img src="{{ url_for('static', filename='images/ESCUDO CITD JF.png') }}" alt="Escudo Institucional" onerror="this.style.display='none'">
+      <span class="marca-titulo">Instituto Técnico Distrital<span>Julio Flórez</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" style="background:#fff">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="menuPrincipal">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('inicio') }}">Inicio</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Nuestra Institución</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('nuestra_institucion_seccion', seccion='historia') }}"><i class="bi bi-journal-bookmark text-verde"></i><span><span class="titulo">Quienes somos</span><span class="desc">Origen de Nuestra Institución</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('nuestra_institucion_seccion', seccion='simbolos') }}"><i class="bi bi-shield-shaded text-verde"></i><span><span class="titulo">Símbolos Institucionales</span><span class="desc">Escudo, bandera y lema</span></span></a></li>      
+            <li><a class="dropdown-item" href="{{ url_for('organigrama') }}"><i class="bi bi-diagram-3 text-verde"></i><span><span class="titulo">Organigrama</span><span class="desc">Rector, coordinadores y docentes</span></span></a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-folder2-open text-verde"></i><span><span class="titulo">Documentos Institucionales</span><span class="desc">PEI, SIEE y circulares</span></span></a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Bachillerato Internacional</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='que-es-ib') }}"><i class="bi bi-globe-americas text-verde"></i><span><span class="titulo">¿Qué es el IB?</span><span class="desc">Introducción al programa</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='media-tecnica') }}"><i class="bi bi-mortarboard text-verde"></i><span><span class="titulo">Media Técnica Internacional</span><span class="desc">Para grados 10° y 11°</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='pop') }}"><i class="bi bi-compass text-verde"></i><span><span class="titulo">Programa de Orientación Profesional</span><span class="desc">POP</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='asignaturas-pd') }}"><i class="bi bi-journal-text text-verde"></i><span><span class="titulo">Asignaturas PD</span><span class="desc">Plan de estudios del Diploma</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='estudios-formacion') }}"><i class="bi bi-briefcase text-verde"></i><span><span class="titulo">Estudios de Formación Profesional</span><span class="desc">Antes "Especialidades"</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='componentes-troncales') }}"><i class="bi bi-diagram-3 text-verde"></i><span><span class="titulo">Componentes Troncales del POP</span><span class="desc">Los 4 pilares</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='perfil-comunidad') }}"><i class="bi bi-people text-verde"></i><span><span class="titulo">Perfil de la Comunidad de Aprendizaje</span><span class="desc">Los 10 atributos IB</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('bachillerato_seccion', seccion='equipo-ib') }}"><i class="bi bi-person-badge text-verde"></i><span><span class="titulo">Equipo de Coordinación IB</span><span class="desc">Contactos del programa</span></span></a></li>
+          </ul>
+        </li>
+        
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('campos_formacion') }}">Campos de Formación</a></li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Comunidad</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('noticias') }}"><i class="bi bi-newspaper text-verde"></i><span><span class="titulo">Noticias</span><span class="desc">Información y actualidad</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('eventos') }}"><i class="bi bi-calendar-event text-verde"></i><span><span class="titulo">Eventos</span><span class="desc">Agenda institucional</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('logros') }}"><i class="bi bi-trophy text-verde"></i><span><span class="titulo">Logros y Reconocimientos</span><span class="desc">Estudiantes y grupos destacados</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('galeria') }}"><i class="bi bi-images text-verde"></i><span><span class="titulo">Galería</span><span class="desc">Momentos destacados</span></span></a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Vida Escolar</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('vida_escolar', seccion='rutas') }}"><i class="bi bi-bus-front text-verde"></i><span><span class="titulo">Rutas y Transporte Escolar</span><span class="desc">Recorridos y horarios</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('vida_escolar', seccion='alimentacion') }}"><i class="bi bi-cup-hot text-verde"></i><span><span class="titulo">Alimentación / Comedor</span><span class="desc">Servicio de restaurante</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('vida_escolar', seccion='horarios') }}"><i class="bi bi-clock text-verde"></i><span><span class="titulo">Horarios</span><span class="desc">Jornadas escolares</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('vida_escolar', seccion='coordinacion') }}"><i class="bi bi-people text-verde"></i><span><span class="titulo">Coordinación</span><span class="desc">Atención académica</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('vida_escolar', seccion='padres') }}"><i class="bi bi-journal-text text-verde"></i><span><span class="titulo">Atención a Padres</span><span class="desc">Canales de comunicación</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('vida_escolar', seccion='informacion') }}"><i class="bi bi-info-circle text-verde"></i><span><span class="titulo">Información Importante</span><span class="desc">Normativas y políticas</span></span></a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{{ url_for('secretaria') }}"><i class="bi bi-file-earmark-person text-verde"></i><span><span class="titulo">Secretaría Académica</span><span class="desc">Trámites y certificados</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('orientacion') }}"><i class="bi bi-heart-pulse text-verde"></i><span><span class="titulo">Orientación Escolar</span><span class="desc">Apoyo psicosocial y vocacional</span></span></a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Servicios</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{{ url_for('pagaduria') }}"><i class="bi bi-cash-coin text-verde"></i><span><span class="titulo">Pagaduría</span><span class="desc">Pensiones y trámites financieros</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('biblioteca') }}"><i class="bi bi-book text-verde"></i><span><span class="titulo">Biblioteca</span><span class="desc">Recursos y catálogo en línea</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('archivo') }}"><i class="bi bi-archive text-verde"></i><span><span class="titulo">Archivo</span><span class="desc">Documentos y resoluciones</span></span></a></li>
+            <li><a class="dropdown-item" href="https://citdjulioflorez.edupage.org/login/index.php?out=1"><i class="bi bi-mortarboard text-verde"></i><span><span class="titulo">Plataforma Académica</span><span class="desc">Notas y seguimiento</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('pqr') }}"><i class="bi bi-chat-square-text text-verde"></i><span><span class="titulo">PQR</span><span class="desc">Peticiones, quejas y reclamos</span></span></a></li>
+            <li><a class="dropdown-item" href="{{ url_for('contacto') }}"><i class="bi bi-chat-square-text text-verde"></i><span><span class="titulo">Contacto</span><span class="desc">Escríbenos</span></span></a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item ms-lg-2"><a href="{{ url_for('matriculas') }}" class="nav-link btn-matriculas">Matrículas 2026</a></li>
+        <li class="nav-item ms-lg-1">
+          <a href="{{ url_for('admin_login') }}" class="nav-link btn-acceso-admin" title="Acceso administrativo">
+            <i class="bi bi-lock-fill"></i>
+          </a>
+        </li>
+        <li class="nav-item ms-lg-1">
+          <button id="theme-toggle" class="btn-tema" aria-label="Cambiar tema">
+            <i class="bi bi-moon-fill"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+   </div>
+  </div>
+</nav>
+
+<!-- ================= CONTENIDO DE CADA PÁGINA ================= -->
+{% block contenido %}{% endblock %}
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer-institucional">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <img src="{{ url_for('static', filename='images/escudo.png') }}" height="38" alt="" onerror="this.style.display='none'">
+          <strong class="text-white">Instituto Técnico Distrital<br>Julio Flórez</strong>
+        </div>
+        <p class="small">Innovación · Ciencia · Autonomía</p>
+        <p class="small">Resolución de Aprobación N° 002348 de 2023 — Secretaría de Educación del Distrito</p>
+        <div class="d-flex gap-3 fs-5 mt-3">
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-6">
+        <h5>Institución</h5>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a href="{{ url_for('nuestra_institucion') }}">Nuestra Institución</a></li>
+          <li><a href="{{ url_for('bachillerato_internacional') }}">Bachillerato Internacional</a></li>
+          <li><a href="{{ url_for('campos_formacion') }}">Campos de Formación</a></li>
+          <li><a href="{{ url_for('organigrama') }}">Organigrama</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-6">
+        <h5>Comunidad</h5>
+        <ul class="list-unstyled d-flex flex-column gap-2">
+          <li><a href="{{ url_for('noticias') }}">Noticias</a></li>
+          <li><a href="{{ url_for('eventos') }}">Eventos</a></li>
+          <li><a href="{{ url_for('logros') }}">Logros y Reconocimientos</a></li>
+          <li><a href="{{ url_for('galeria') }}">Galería</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+       <h5>Contacto</h5>
+        <p class="small mb-1"><strong>Sede Principal</strong><br><i class="bi bi-geo-alt"></i> Cra. 68B N° 94-12, Bogotá D.C.</p>
+        <p class="small mb-1"><strong>Sede A</strong><br><i class="bi bi-geo-alt"></i> Calle 102A N° 70-40, Bogotá D.C.</p>
+      </div>
+    </div>
+    <div class="franja-final d-flex justify-content-between flex-wrap">
+      <span>© 2026 Instituto Técnico Distrital Julio Flórez — Secretaría de Educación del Distrito — Alcaldía Mayor de Bogotá</span>
+      <span><a href="#">Documentos</a> · <a href="{{ url_for('pqr') }}">PQR</a> · <a href="#">Privacidad</a></span>
+    </div>
+  </div>
+</footer>
+<!-- ================= BARRA SUPERIOR ================= -->
+<div class="topbar">
+  <div class="container d-flex justify-content-between flex-wrap">
+    <div>
+      <i class="bi bi-telephone-fill"></i> 1800 671-0800
+      <span class="separator">|</span>
+      <i class="bi bi-envelope-fill"></i> info@ejulioflorez.edu.co
+    </div>
+    <div>
+      <a href="#">Plataforma Académica</a><span class="separator">//</span>
+      <a href="{{ url_for('matriculas') }}">Matrículas</a><span class="separator">|</span>
+      <a href="{{ url_for('pqr') }}">PQR</a><span class="separator">|</span>
+      <a href="#">Correo Institucional</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts_extra %}{% endblock %}
+
+<!-- ================= SELECTOR DE TEMA CLARO/OSCURO ================= -->
+<script>
+  const toggleBtn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+
+  // Cargar tema guardado (o "claro" por defecto)
+  const temaGuardado = localStorage.getItem('tema') || 'claro';
+  root.setAttribute('data-theme', temaGuardado);
+
+  toggleBtn.addEventListener('click', () => {
+    const temaActual = root.getAttribute('data-theme');
+    const nuevoTema = temaActual === 'oscuro' ? 'claro' : 'oscuro';
+    root.setAttribute('data-theme', nuevoTema);
+    localStorage.setItem('tema', nuevoTema);
+  });
+</script>
+
+</body>
+</html>

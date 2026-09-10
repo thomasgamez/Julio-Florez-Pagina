@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block titulo %}Orientación Escolar — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina" style="background:linear-gradient(120deg,#7a2020,#c0392b)">
+  <div class="container">
+    <div class="icono-circulo"><i class="bi bi-heart-pulse"></i></div>
+    <h1>Orientación Escolar</h1>
+    <p>Acompañamiento psicosocial, vocacional y de convivencia para toda la comunidad</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row align-items-center g-5 mb-5">
+      <div class="col-lg-7">
+        <h2>¿Qué hace el equipo de Orientación?</h2>
+        <p>El departamento de Orientación Escolar acompaña a estudiantes, familias y docentes en los procesos de desarrollo emocional, social y vocacional, promoviendo el bienestar integral de la comunidad educativa.</p>
+        <p>A través del <strong>Programa de Orientación Profesional (POP)</strong>, apoyamos a los estudiantes de grados 10° y 11° en la construcción de su proyecto de vida, con talleres vocacionales, pruebas de intereses y orientación sobre oferta educativa superior.</p>
+      </div>
+      <div class="col-lg-5">
+        <img src="{{ url_for('static', filename='images/orientacion-hero.jpg') }}" class="img-fluid rounded-3" alt="Orientación Escolar">
+      </div>
+    </div>
+
+    <div class="encabezado-seccion"><div class="linea"></div><h2>Áreas de Acompañamiento</h2></div>
+    <div class="row g-4 mb-5">
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-emoji-smile"></i></div>
+          <h3 class="h6">Apoyo Socioemocional</h3>
+          <p class="small text-muted mb-0">Acompañamiento individual y grupal frente a situaciones que afectan el bienestar emocional del estudiante.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-signpost-split"></i></div>
+          <h3 class="h6">Orientación Vocacional</h3>
+          <p class="small text-muted mb-0">Pruebas de intereses, talleres y asesoría sobre oferta de educación superior y técnica.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-people"></i></div>
+          <h3 class="h6">Convivencia Escolar</h3>
+          <p class="small text-muted mb-0">Mediación y resolución de conflictos desde el enfoque restaurativo, en articulación con Coordinación.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-house-heart"></i></div>
+          <h3 class="h6">Escuela de Familias</h3>
+          <p class="small text-muted mb-0">Talleres y encuentros con padres de familia sobre pautas de crianza y acompañamiento escolar.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="tarjeta text-center">
+          <div class="icono mx-auto"><i class="bi bi-calendar-check"></i></div>
+          <h3 class="h6">Solicitar una cita</h3>
+          <p class="small text-muted mb-2">Estudiantes, padres o docentes pueden solicitar acompañamiento a través del correo institucional o directamente en Coordinación.</p>
+          <a href="mailto:orientacion@ejulioflorez.edu.co" class="enlace">orientacion@ejulioflorez.edu.co</a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tarjeta text-center">
+          <div class="icono mx-auto" style="background:var(--amarillo-claro);color:#8a6d00"><i class="bi bi-shield-exclamation"></i></div>
+          <h3 class="h6">Línea de atención en crisis</h3>
+          <p class="small text-muted mb-2">Si tú o alguien que conoces está en una situación de riesgo, comunícate de inmediato con la Línea 106 (Bogotá) o la Línea de la Vida.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

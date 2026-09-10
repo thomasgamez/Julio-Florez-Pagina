@@ -1,0 +1,260 @@
+{% extends "layout.html" %}
+{% block titulo %}Inicio — Instituto Técnico Distrital Julio Flórez{% endblock %}
+
+{% block contenido %}
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div id="carouselExampleFade" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{{ url_for('static', filename='images/fotocol_3.jpeg') }}" class="d-block w-100"
+          alt="Comunidad educativa Julio Flórez">
+      </div>
+      <div class="carousel-item">
+        <img src="{{ url_for('static', filename='images/GRUPO ONCE 2026.jpeg') }}" class="d-block w-100"
+          alt="Grupo de grado once 2026">
+      </div>
+      <div class="carousel-item">
+        <img src="{{ url_for('static', filename='images/WhatsApp Image 2025-11-11 at 21.58.22.jpeg') }}"
+          class="d-block w-100" alt="Actividad institucional">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  
+
+  <div class="container hero-contenido">
+    <div class="icono-circulo"><i class="bi bi-mortarboard-fill"></i></div>
+     <p class="nombre-institucion">INSTITUTO TECNICO DISTRITAL
+     JULIO FLOREZ </p>
+    <h1>Jóvenes Líderes<br><span class="resalte">Transformadores</span><br>de la Realidad</h1>
+    <p>Institución educativa oficial de carácter técnico, comprometida con una educación innovadora y de calidad.
+      Formamos ciudadanos del mundo...</p>
+    
+</header>
+
+<!-- ============ NUESTRA INSTITUCIÓN (resumen) ============ -->
+<section>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="encabezado-seccion text-lg-start">
+          <div class="linea ms-lg-0 mx-auto"></div> 
+          <p class="hero-resolucion">Resolución de Aprobación N° 002348 de 2023 — Secretaría de Educación del Distrito</p>
+          <h1>Nuestra Institución</h1>
+        </div>
+        <p class="text-muted">Formando ciudadanos del mundo desde el corazón de Bogotá</p>
+        <p>El colegio es una institución educativa oficial de carácter técnico (Programación de Software, Administración de Empresas,
+          Diseño e integración multimedia y Manejo Ambiental), 
+          ubicada en la localidad de Suba, Bogotá D.C. 
+          Siendo los pioneros en la implementación de la <strong>jornada única</strong> en el Distrito Capital desde el año 2015.</p>
+        <p>Hacemos parte de los 5 primeros colegios públicos de Bogotá en graduar y certificar estudiantes 
+          del <strong>Programa de Orientación Profesional del Bachillerato Internacional (IB).</strong></p>
+        <a href="{{ url_for('nuestra_institucion') }}" class="btn-institucional">Conocer más →</a>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6"><img src="{{ url_for('static', filename='imagenes nuevas/coelgio 5.jpeg') }}"
+              class="img-fluid rounded-3 foto-preview" alt="Comunidad estudiantil"></div>
+          <div class="col-6"><img src="{{ url_for('static', filename='images/image4.jpg') }}"
+              class="img-fluid rounded-3 foto-preview" alt="Actividad cultural"></div>
+          <div class="col-12"><img
+              src="{{ url_for('static', filename='images/WhatsApp Image 2025-11-11 at 21.50.55.jpeg') }}"
+              class="img-fluid rounded-3 foto-preview foto-preview-ancha" alt="Consejo académico"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ESPECIALIDADES TÉCNICAS ============ -->
+<section class="section-alt">
+  <div class="container">
+    <div class="encabezado-seccion">
+      <div class="linea"></div>
+      <h2>Estudios de Formación Profesional o Especialidades Técnicas</h2>
+      <p>Cuatro programas articulados que preparan a nuestros estudiantes para el mundo laboral y
+        universitario</p>
+    </div>
+    <div class="row g-4">
+      {% for esp in especialidades %}
+      <div class="col-md-6 col-lg-3">
+        <div class="tarjeta-especialidad h-100">
+          <img src="{{ url_for('static', filename='imagenes nuevas/' ~ esp.imagen) }}" alt="{{ esp.nombre }}">
+          <div class="contenido">
+            <span class="etiqueta"><i class="bi bi-mortarboard-fill"></i> {{ esp.nombre }}</span>
+            <p class="small text-muted mb-2">{{ esp.descripcion }}</p>
+            <a href="{{ url_for('bachillerato_internacional') }}#estudios-formacion" class="enlace">Ver más →</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="{{ url_for('bachillerato_internacional') }}#estudios-formacion" class="btn-outline-institucional">Ver más →</a>
+    </div>
+  </div>
+</section>
+<!-- ============ BACHILLERATO INTERNACIONAL ============ -->
+<section class="section-oscura section-ib">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="icono-badge-oscuro">
+          <img src="{{ url_for('static', filename='images/LOGO IB.png') }}" alt="Logo Bachillerato Internacional (IB)">
+        </span>
+        <div class="linea mt-3"></div>
+        <h2>Bachillerato Internacional</h2>
+        <p class="mb-3">Somos el único colegio oficial del norte de Bogotá reconocido por la <strong>Organización del
+            Bachillerato Internacional</strong> para ofrecer el Programa del Diploma (DP), preparando a nuestros
+          estudiantes para universidades de todo el mundo.</p>
+        <p class="mb-4">El Programa del Diploma forma jóvenes con pensamiento crítico, mentalidad internacional,
+          habilidades de investigación y compromiso social — ciudadanos del mundo capaces de transformar su entorno.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{{ url_for('bachillerato_internacional') }}" class="btn-institucional">Conocer el POP →</a>
+          <a href="{{ url_for('matriculas') }}" class="btn-rojo">Inscribirse</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-12"><img src="{{ url_for('static', filename='/images/ESTUDIANTES CERTIFICADOS IB.jpeg') }}"
+              class="img-fluid rounded-3 foto-preview foto-preview-ancha" alt="Estudiantes IB"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAMPOS DE FORMACIÓN ============ -->
+<section>
+  <div class="container">
+    <div class="encabezado-seccion">
+      <div class="linea"></div>
+      <h2>Campos de Formación</h2>
+      <p>Una propuesta pedagógica integral que articula el saber, el ser y el hacer en seis campos del conocimiento</p>
+    </div>
+    <div class="row g-4">
+      {% for campo in campos_home %}
+      <div class="col-md-6 col-lg-4">
+        <div class="tarjeta">
+          <div class="icono"><i class="bi {{ campo.icono }}"></i></div>
+          <h3>{{ campo.nombre }}</h3>
+          <p>{{ campo.resumen }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="{{ url_for('campos_formacion') }}" class="btn-outline-institucional">Explorar campos →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACCESOS RÁPIDOS ============ -->
+<section class="quick-access-section">
+  <div class="quick-access-card">
+    <div class="quick-access-header">
+      <span class="qa-eyebrow">Accesos Rápidos</span>
+      <p>Servicios y trámites al alcance de un clic</p>
+    </div>
+
+    <div class="quick-access-grid">
+      <a href="{{ url_for('pagaduria') }}" class="quick-access-item">
+        <span class="qa-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 10h18M3 6h18M5 14h4v4H5zM13 14h6v4h-6z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="qa-label">Pagaduría</span>
+      </a>
+
+      <a href="{{ url_for('biblioteca') }}" class="quick-access-item">
+        <span class="qa-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h9v16H4zM13 5h7v16h-7z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="qa-label">Biblioteca</span>
+      </a>
+
+      <a href="{{ url_for('archivo') }}" class="quick-access-item">
+        <span class="qa-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="qa-label">Sistema de Archivo</span>
+      </a>
+
+      <a href="#" class="quick-access-item" target="_blank" rel="noopener">
+        <span class="qa-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M5 5h6v0H5v14h14v-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="qa-label">Edupage</span>
+      </a>
+
+      <a href="{{ url_for('pqr') }}" class="quick-access-item">
+        <span class="qa-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="qa-label">PQR</span>
+      </a>
+
+      <a href="{{ url_for('contacto') }}" class="quick-access-item">
+        <span class="qa-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 5l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="qa-label">Contacto</span>
+      </a>
+    </div>
+  </div>
+</section>
+<!-- ============ CALENDARIO + NOTICIAS ============ -->
+<section>
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <div class="linea"></div>
+        <h2 class="mb-4">Calendario</h2>
+        {% for ev in eventos_home %}
+        <div class="item-calendario">
+          <div class="fecha-badge">
+            <div class="mes">{{ ev.mes }}</div>
+            <div class="dia">{{ ev.dia }}</div>
+          </div>
+          <div>
+            <span class="badge-institucional mb-1 d-inline-block">{{ ev.categoria }}</span>
+            <div class="fw-semibold">{{ ev.titulo }}</div>
+            <div class="small text-muted">{{ ev.sede }}</div>
+          </div>
+        </div>
+        {% endfor %}
+        <a href="{{ url_for('eventos') }}" class="btn-outline-institucional mt-4 d-inline-block">Ver todos los eventos
+          →</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="linea"></div>
+        <h2 class="mb-4">Últimas Noticias</h2>
+        {% for n in noticias_home %}
+        <div class="d-flex gap-3 mb-4 pb-3 border-bottom">
+          <img src="{{ url_for('static', filename='imagenes nuevas/colegio 2.jpeg') }}" class="rounded-3"
+            style="width:110px;height:80px;object-fit:cover;flex-shrink:0" alt="{{ n.titulo }}">
+          <div>
+            <span class="badge-institucional">{{ n.categoria }}</span>
+            <span class="small text-muted ms-2">{{ n.fecha }}</span>
+            <h4 class="h6 mt-1 mb-1">{{ n.titulo }}</h4>
+            <p class="small text-muted mb-1">{{ n.resumen }}</p>
+            <a href="{{ url_for('noticias') }}" class="enlace small fw-semibold text-verde">Leer más →</a>
+          </div>
+        </div>
+        {% endfor %}
+        <a href="{{ url_for('noticias') }}" class="btn-outline-institucional">Ver todas las noticias →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

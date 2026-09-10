@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block titulo %}Pagaduría — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina encabezado-pagaduria">
+  <div class="container">
+    <h1>Pagaduría</h1>
+    <p>Gestión documental y archivística institucional</p>
+  </div>
+</header>
+<section>
+  <div class="container pagaduria-info">
+    <div class="row g-3 mb-5">
+      <div class="col-md-4">
+        <div class="tarjeta acento-verde text-center">
+          <div class="icono mx-auto"><i class="bi bi-folder2-open"></i></div>
+          <h3 class="h6">¿Qué hace Pagaduría?</h3>
+          <p class="small text-muted mb-0">Administra y organiza los expedientes institucionales, clasificándolos por
+            series y subseries documentales.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tarjeta acento-amarillo text-center">
+          <div class="icono mx-auto"><i class="bi bi-clock-history"></i></div>
+          <h3 class="h6">Ciclo de vida documental</h3>
+          <p class="small text-muted mb-0">Cada expediente se controla según su estado — activo, semiactivo o inactivo —
+            y su tiempo de conservación.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="tarjeta acento-rojo text-center">
+          <div class="icono mx-auto"><i class="bi bi-shield-lock"></i></div>
+          <h3 class="h6">Niveles de acceso</h3>
+          <p class="small text-muted mb-0">La información se clasifica según su nivel de acceso, garantizando la
+            confidencialidad que corresponda a cada documento.</p>
+        </div>
+      </div>
+    </div>
+    <div class="linea"></div>
+    <h3 class="h5 mt-4 mb-4">¿Qué es la gestión documental?</h3>
+    <p class="text-muted">
+      La Pagaduría del Instituto Técnico Distrital Julio Flórez es responsable de la gestión documental y
+      archivística de la institución: organiza, clasifica y conserva los expedientes institucionales a lo
+      largo de su ciclo de vida — desde que un documento se genera (activo), pasa por un periodo de consulta
+      frecuente decreciente (semiactivo), hasta llegar a su fase final de conservación permanente o disposición
+      (inactivo).
+    </p>
+    <div class="row g-4 mt-4">
+      <div class="col-md-6">
+        <div class="tarjeta acento-oscuro">
+          <h4 class="h6 mb-2"><i class="bi bi-diagram-3 text-verde me-1"></i> Series y Subseries</h4>
+          <p class="small text-muted mb-0">Los expedientes se agrupan por series y subseries documentales, siguiendo la
+            estructura de clasificación institucional.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tarjeta acento-verde">
+          <h4 class="h6 mb-2"><i class="bi bi-geo-alt text-verde me-1"></i> Ubicación física y digital</h4>
+          <p class="small text-muted mb-0">Cada expediente tiene registrada su ubicación física (archivo físico) y,
+            cuando aplica, su ubicación digital.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tarjeta acento-amarillo">
+          <h4 class="h6 mb-2"><i class="bi bi-patch-check text-verde me-1"></i> Estado de conservación</h4>
+          <p class="small text-muted mb-0">Se hace seguimiento al estado de conservación de cada expediente para
+            garantizar su integridad en el tiempo.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tarjeta acento-rojo">
+          <h4 class="h6 mb-2"><i class="bi bi-calendar-check text-verde me-1"></i> Disposición final</h4>
+          <p class="small text-muted mb-0">Cada expediente tiene una fecha estimada de disposición final, conforme a las
+            tablas de retención documental.</p>
+        </div>
+      </div>
+    </div>
+    <!-- ============ ARCHIVO — vive dentro de Pagaduría ============ -->
+    <div class="tarjeta-archivo-callout mt-5">
+      <div class="d-flex align-items-center gap-4">
+        <div class="archivo-icono"><i class="bi bi-archive-fill"></i></div>
+          <div>
+            <h3 class="h5 mb-2">Archivo</h3>
+              <p class="small mb-0">Archivo es el área especializada de Pagaduría encargada de la gestión física e interna de los expedientes institucionales.</p>
+        </div>
+      </div>
+          <a href="{{ url_for('archivo') }}" class="btn-rojo text-nowrap">Consultar Archivo →</a>
+    </div>
+</section>
+{% endblock %}

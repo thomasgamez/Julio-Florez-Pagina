@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block titulo %}Perfil de la Comunidad de Aprendizaje — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
+    <h1>{{ info.titulo }}</h1>
+  </div>
+</header>
+
+
+<section>
+  <div class="container">
+    <div class="encabezado-seccion">
+      <p>Diez atributos valorados por los Colegios del Mundo del IB, que ayudan a las personas a ser miembros responsables de las comunidades locales, nacionales y mundiales</p>
+    </div>
+    <div class="row g-3">
+      {% for p in perfil_ib %}
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="tarjeta text-center h-100">
+          <div class="icono mx-auto"><i class="bi {{ p.icono }}"></i></div>
+          <h3 class="h6">{{ p.nombre }}</h3>
+          <p class="small text-muted mb-0">{{ p.desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="small text-muted text-center mt-4 mb-0">Fuente: Organización del Bachillerato Internacional, 2015</p>
+  </div>
+</section>
+
+<section class="section-alt">
+  <div class="container">
+    <div class="encabezado-seccion"><div class="linea"></div><h2>Habilidades que Desarrollarán</h2></div>
+    <div class="row g-3">
+      {% for h in habilidades_ib %}
+      <div class="col-6 col-md-3">
+        <div class="rounded-3 text-white text-center py-4 fw-semibold h-100 d-flex align-items-center justify-content-center caja-habilidad" style="--color-bg: {{ h.color }}">{{ h.nombre }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

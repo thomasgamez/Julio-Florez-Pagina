@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block titulo %}Noticias — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Noticias</h1>
+    <p>Mantente informado sobre todo lo que ocurre en nuestra comunidad</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
+      <div class="input-group" style="max-width:320px">
+        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control" placeholder="Buscar noticias...">
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-sm rounded-pill btn-institucional">Todos</button>
+        <button class="btn btn-sm rounded-pill btn-outline-institucional">Académico</button>
+        <button class="btn btn-sm rounded-pill btn-outline-institucional">Orientación</button>
+        <button class="btn btn-sm rounded-pill btn-outline-institucional">Bienestar</button>
+        <button class="btn btn-sm rounded-pill btn-outline-institucional">Institucional</button>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      {% for n in noticias %}
+      <div class="col-md-6 col-lg-4">
+        <div class="tarjeta-especialidad h-100">
+          <img src="{{ url_for('static', filename='images/' + n.imagen) }}" alt="{{ n.titulo }}">
+          <div class="contenido">
+            <span class="badge-institucional">{{ n.categoria }}</span>
+            <span class="small text-muted ms-1">{{ n.fecha }}</span>
+            <h3 class="h6 mt-2">{{ n.titulo }}</h3>
+            <p class="small text-muted">{{ n.resumen }}</p>
+            <p class="small text-muted mb-2">Por: {{ n.autor }}</p>
+            <a href="#" class="enlace">Leer más →</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

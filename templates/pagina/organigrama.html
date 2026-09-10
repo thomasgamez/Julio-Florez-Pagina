@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% block titulo %}Organigrama — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Organigrama Institucional</h1>
+    <p>Conoce el equipo humano que hace posible la formación de nuestros estudiantes</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+
+    <!-- NIVEL 1: RECTORÍA -->
+    <div class="organigrama-nivel">
+      <div class="tarjeta-cargo nivel-1">
+        <div class="avatar"><i class="bi bi-mortarboard-fill"></i></div>
+        <div class="cargo">Rectoría</div>
+        <div class="nombre">Rector(a)</div>
+        <div class="area">Dirección General de la Institución</div>
+      </div>
+    </div>
+
+    <!-- NIVEL 2: COORDINACIONES -->
+    <div class="organigrama-nivel">
+      {% for c in coordinaciones %}
+      <div class="tarjeta-cargo">
+        <div class="avatar"><i class="bi {{ c.icono }}"></i></div>
+        <div class="cargo">{{ c.cargo }}</div>
+        <div class="nombre">{{ c.nombre }}</div>
+        <div class="area">{{ c.area }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- NIVEL 3: DOCENTES DE ESPECIALIDAD -->
+    <div class="organigrama-nivel">
+      {% for d in docentes_especialidad %}
+      <div class="tarjeta-cargo">
+        <div class="avatar"><i class="bi {{ d.icono }}"></i></div>
+        <div class="cargo">Docente de Especialidad</div>
+        <div class="nombre">{{ d.nombre }}</div>
+        <div class="area">{{ d.area }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- NIVEL 4: DOCENTES DE CAMPOS DE FORMACIÓN + ORIENTACIÓN -->
+    <div class="organigrama-nivel">
+      {% for d in docentes_campos %}
+      <div class="tarjeta-cargo">
+        <div class="avatar"><i class="bi {{ d.icono }}"></i></div>
+        <div class="cargo">Docente</div>
+        <div class="nombre">{{ d.nombre }}</div>
+        <div class="area">{{ d.area }}</div>
+      </div>
+      {% endfor %}
+      <div class="tarjeta-cargo" style="border-color:var(--rojo)">
+        <div class="avatar" style="background:#fde8e6;color:var(--rojo)"><i class="bi bi-heart-pulse"></i></div>
+        <div class="cargo">Orientación Escolar</div>
+        <div class="nombre">Equipo de Orientación</div>
+        <div class="area">Acompañamiento psicosocial y vocacional</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section-alt text-center">
+  <div class="container">
+    <h2 class="h4 mb-2">¿Necesitas contactar a algún cargo?</h2>
+    <p class="text-muted">Escríbenos a través del formulario de PQR o Contacto y te dirigiremos a la dependencia correcta</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('contacto') }}" class="btn-institucional">Ir a Contacto →</a>
+      <a href="{{ url_for('pqr') }}" class="btn-outline-institucional">Radicar PQR →</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}{{ 'Editar' if noticia else 'Nueva' }} Noticia{% endblock %}
+{% block encabezado %}{{ 'Editar' if noticia else 'Nueva' }} Noticia{% endblock %}
+{% block contenido_admin %}
+
+<div class="tarjeta" style="max-width:720px">
+  <form method="POST" enctype="multipart/form-data">
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label small fw-semibold">Título *</label>
+        <input type="text" name="titulo" class="form-control" required value="{{ noticia.titulo if noticia else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Categoría *</label>
+        <select name="categoria" class="form-select" required>
+          {% for cat in ['Académico','Orientación','Bienestar','Institucional'] %}
+          <option {{ 'selected' if noticia and noticia.categoria==cat }}>{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Fecha *</label>
+        <input type="text" name="fecha" class="form-control" placeholder="Ej: 12 de agosto de 2026" required value="{{ noticia.fecha if noticia else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Autor / Dependencia</label>
+        <input type="text" name="autor" class="form-control" value="{{ noticia.autor if noticia else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label small fw-semibold">Imagen</label>
+        <input type="file" name="imagen_archivo" class="form-control" accept="image/*">
+        {% if noticia and noticia.imagen %}<p class="small text-muted mt-1 mb-0">Actual: {{ noticia.imagen }}</p>{% endif %}
+      </div>
+      <div class="col-12">
+        <label class="form-label small fw-semibold">Resumen (aparece en las tarjetas) *</label>
+        <textarea name="resumen" class="form-control" rows="2" required>{{ noticia.resumen if noticia else '' }}</textarea>
+      </div>
+      <div class="col-12">
+        <label class="form-label small fw-semibold">Contenido completo</label>
+        <textarea name="contenido" class="form-control" rows="6">{{ noticia.contenido if noticia else '' }}</textarea>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="publicado" id="publicado" {{ 'checked' if not noticia or noticia.publicado }}>
+          <label class="form-check-label small" for="publicado">Publicar de inmediato en el sitio</label>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-4">
+      <button type="submit" class="btn-institucional">Guardar noticia</button>
+      <a href="{{ url_for('admin_noticias') }}" class="btn-outline-institucional">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

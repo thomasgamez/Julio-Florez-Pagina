@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block titulo %}Media Técnica Internacional — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
+    <h1>{{ info.titulo }}</h1>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <p>La Media Técnica Internacional del CITD Julio Flórez está dirigida a estudiantes de <strong>décimo y undécimo grado</strong>. Su propósito es fortalecer una formación integral que les permita convertirse en ciudadanos seguros, competentes y preparados para continuar estudios posteriores, ingresar a la educación superior o asumir los retos del mundo laboral.</p>
+        <p>Esta propuesta formativa incorpora al horizonte institucional los valores y principios del Bachillerato Internacional, y responde a las necesidades de los estudiantes promoviendo el desarrollo de competencias personales, académicas y laborales. En este proceso, se busca que los estudiantes:</p>
+        <div class="row g-4 mt-2">
+          <div class="col-md-4">
+            <div class="tarjeta h-100"><i class="bi bi-briefcase text-amarillo fs-4"></i><p class="small text-muted mt-2 mb-0">Desarrollen competencias laborales generales y fortalezcan sus habilidades en áreas específicas de formación.</p></div>
+          </div>
+          <div class="col-md-4">
+            <div class="tarjeta h-100"><i class="bi bi-lightbulb text-amarillo fs-4"></i><p class="small text-muted mt-2 mb-0">Cultiven aptitudes y hábitos mentales que favorezcan el aprendizaje continuo.</p></div>
+          </div>
+          <div class="col-md-4">
+            <div class="tarjeta h-100"><i class="bi bi-shield-check text-amarillo fs-4"></i><p class="small text-muted mt-2 mb-0">Se preparen para actuar con seguridad y responsabilidad en contextos académicos, profesionales y laborales.</p></div>
+          </div>
+        </div>
+        <p class="mt-3 small text-muted">La Media Técnica Internacional se desarrolla en concordancia con la propuesta educativa institucional y tiene en cuenta los parámetros de planeación, seguimiento y valoración propuestos por el Bachillerato Internacional para las asignaturas PD, los componentes troncales y la formación técnica en cada uno de los Estudios de Formación Profesional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

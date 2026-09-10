@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block titulo %}Asignaturas PD — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
+    <h1>{{ info.titulo }}</h1>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="encabezado-seccion">
+      <p>Las asignaturas del plan de estudios institucional concuerdan con tres asignaturas ofertadas por el Programa de Diploma, lo que facilita la implementación del programa en el ciclo V (décimo y undécimo)</p>
+    </div>
+    <div class="row g-3 justify-content-center">
+      {% for a in asignaturas_pd %}
+      <div class="col-md-4">
+        <div class="tarjeta text-center h-100">
+          <div class="icono mx-auto"><i class="bi {{ a.icono }}"></i></div>
+          <h3 class="h6 mb-0">{{ a.nombre }}</h3>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

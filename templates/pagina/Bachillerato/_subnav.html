@@ -1,0 +1,10 @@
+<div class="container mt-4 mb-2">
+  <div class="d-flex gap-2 flex-wrap justify-content-center">
+    {% for clave, dato in secciones.items() %}
+    <a href="{{ url_for('bachillerato_seccion', seccion=clave) }}"
+       class="btn btn-sm rounded-pill {{ 'btn-institucional' if clave == seccion_actual else 'btn-outline-institucional' }}">
+      <i class="bi {{ dato.icono }}"></i> {{ dato.corto }}
+    </a>
+    {% endfor %}
+  </div>
+</div>

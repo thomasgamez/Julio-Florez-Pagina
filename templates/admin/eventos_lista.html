@@ -1,0 +1,37 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Eventos{% endblock %}
+{% block encabezado %}Gestión de Eventos{% endblock %}
+{% block acciones_topbar %}
+<a href="{{ url_for('admin_evento_nuevo') }}" class="btn-institucional"><i class="bi bi-plus-lg"></i> Nuevo evento</a>
+{% endblock %}
+{% block contenido_admin %}
+
+<div class="tabla-admin">
+  <table class="table mb-0">
+    <thead><tr><th>Título</th><th>Categoría</th><th>Fecha</th><th>Sede</th><th>Estado</th><th class="text-end">Acciones</th></tr></thead>
+    <tbody>
+      {% for ev in eventos %}
+      <tr>
+        <td class="fw-semibold">{{ ev.titulo }}</td>
+        <td><span class="badge-institucional">{{ ev.categoria }}</span></td>
+        <td>{{ ev.fecha_completa }}</td>
+        <td>{{ ev.sede }}</td>
+        <td>
+          <span class="badge {{ 'bg-success' if ev.estado=='Programado' else 'bg-secondary' }}">{{ ev.estado }}</span>
+          {% if not ev.publicado %}<span class="badge bg-warning text-dark">Oculto</span>{% endif %}
+        </td>
+        <td class="text-end">
+          <a href="{{ url_for('admin_evento_editar', id_evento=ev.id) }}" class="btn btn-sm btn-outline-institucional"><i class="bi bi-pencil"></i></a>
+          <form method="POST" action="{{ url_for('admin_evento_eliminar', id_evento=ev.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este evento?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="text-center text-muted py-4">Aún no hay eventos. Crea el primero.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

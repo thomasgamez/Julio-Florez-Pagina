@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block titulo %}Campos de Formación — Julio Flórez{% endblock %}
+
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Campos de Formación</h1>
+    <p>En nuestra Institución educativa los espacios curriculares se encuentran organizados, regulados y articulados por Campos de Formación que tienen un carácter interactivo entre sí, y son congruentes con las competencias para la vida anteriormente descritas y los rasgos del perfil del egresado: joven líder transformador de la realidad.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    {% for campo in campos %}
+    <div class="row align-items-center g-5 {% if not loop.last %}mb-5 pb-3 border-bottom{% endif %}">
+      <div class="col-lg-6 {% if loop.index is even %}order-lg-2{% endif %}">
+        <div class="linea"></div>
+        <h2 class="h3"><i class="bi {{ campo.icono }} text-verde"></i> {{ campo.nombre }}</h2>
+        <p class="text-muted">{{ campo.descripcion }}</p>
+        <div class="row">
+          {% for punto in campo.puntos %}
+          <div class="col-6 small mb-2"><i class="bi bi-check2 text-verde"></i> {{ punto }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-lg-6 {% if loop.index is even %}order-lg-1{% endif %}">
+        <img src="{{ url_for('static', filename='imagenes nuevas/' ~ campo.imagen) }}" class="img-fluid rounded-3" alt="{{ campo.nombre }}">
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- PRINCIPIOS -->
+<section class="section-oscura">
+  <div class="container">
+    <div class="encabezado-seccion"><div class="linea"></div><h2>Principios de Formación</h2>
+      <p style="color:#dfe6e1">En el Instituto Técnico Distrital Julio Flórez concebimos la educación como un proceso integral que desarrolla al ser humano en todas sus dimensiones: cognitiva, emocional, social, artística y técnica.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="text-center">
+          <i class="bi bi-heart-fill text-amarillo fs-2"></i>
+          <h3 class="h6 text-white mt-2">Inclusión y Diversidad</h3>
+          <p class="small" style="color:#c4cfc8">Educamos para y desde la diferencia, reconociendo la riqueza de cada persona.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center">
+          <i class="bi bi-trophy-fill text-amarillo fs-2"></i>
+          <h3 class="h6 text-white mt-2">Desarrollo Sostenible</h3>
+          <p class="small" style="color:#c4cfc8">Formamos ciudadanos conscientes de su responsabilidad con el planeta.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center">
+          <i class="bi bi-lightbulb-fill text-amarillo fs-2"></i>
+          <h3 class="h6 text-white mt-2">Innovación Pedagógica</h3>
+          <p class="small" style="color:#c4cfc8">Renovamos constantemente nuestras prácticas para responder a los retos del siglo XXI.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

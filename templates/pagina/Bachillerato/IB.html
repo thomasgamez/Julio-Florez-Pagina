@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block titulo %}¿Qué es el Bachillerato Internacional? — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="hero-ib">
+  <img src="{{ url_for('static', filename='images/ESTUDIANTES CERTIFICADOS IB.jpeg') }}" alt="Estudiantes IB con diplomas">
+  <div class="container">
+    <div class="icono-circulo"><i class="bi bi-globe-americas"></i></div>
+    <span class="eyebrow">Programa del Diploma · IB</span>
+    <h1>Bachillerato Internacional</h1>
+    <p>Colegio Distrital de Bogotá con el Programa del Diploma IB</p>
+  </div>
+</header>
+
+
+<section>
+  <div class="container">
+    <div class="row align-items-start g-5">
+      <div class="col-md-6">
+        <h2>¿Qué es el Bachillerato Internacional?</h2>
+        <p>El Bachillerato Internacional (IB) es una organización educativa global que ofrece programas académicos para estudiantes en más de 160 países. Permite que los alumnos agencien su propio aprendizaje y desarrollen habilidades de pensamiento, comunicación, autogestión, sociales e indagación que les da la confianza en sí mismos para progresar y hacer la diferencia.</p>
+        <p>Para los colegios públicos del Distrito, es una propuesta educativa orientada a transformar la educación y fortalecer la formación integral de los estudiantes, formando personas con mentalidad internacional, conscientes de los vínculos que comparten como seres humanos y su responsabilidad en el cuidado del planeta.</p>
+        <p><strong>Desde diciembre de 2023</strong>, somos la única institución educativa de Suba que implementa uno de los Programas del Bachillerato Internacional, estrategia orientada al cierre de brechas educativas dentro del sistema educativo oficial del Distrito Capital.</p>
+      </div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename='imagenes nuevas/Ib_2026.png') }}" class="img-ib" alt="Estudiantes con diplomas" loading="lazy" style="width: 100%; height: 400px; object-fit: cover; display: block; border-radius: 12px;">
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

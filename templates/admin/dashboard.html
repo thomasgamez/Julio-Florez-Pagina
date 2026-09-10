@@ -1,0 +1,77 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Dashboard{% endblock %}
+{% block encabezado %}Dashboard{% endblock %}
+{% block contenido_admin %}
+
+{% set nombres_rol = {'admin':'Administrador','rector':'Rector','secretaria':'Secretaría Académica','pagaduria':'Pagaduría'} %}
+<div class="alert border-0 rounded-3 mb-4" style="background:var(--verde-claro);color:var(--verde-oscuro)">
+  <i class="bi bi-person-badge"></i> Rol conectado: <strong>{{ nombres_rol.get(rol, rol) }}</strong>
+</div>
+
+<div class="row g-3">
+  {% if ver_noticias %}
+  <div class="col-md-3 col-6">
+    <div class="tarjeta">
+      <div class="icono"><i class="bi bi-newspaper"></i></div>
+      <h3 class="h2 mb-0">{{ total_noticias }}</h3>
+      <p class="small text-muted mb-2">Noticias publicadas</p>
+      <a href="{{ url_for('admin_noticias') }}" class="enlace">Gestionar →</a>
+    </div>
+  </div>
+  {% endif %}
+  {% if ver_eventos %}
+  <div class="col-md-3 col-6">
+    <div class="tarjeta">
+      <div class="icono"><i class="bi bi-calendar-event"></i></div>
+      <h3 class="h2 mb-0">{{ total_eventos }}</h3>
+      <p class="small text-muted mb-2">Eventos activos</p>
+      <a href="{{ url_for('admin_eventos') }}" class="enlace">Gestionar →</a>
+    </div>
+  </div>
+  {% endif %}
+  {% if ver_logros %}
+  <div class="col-md-3 col-6">
+    <div class="tarjeta">
+      <div class="icono"><i class="bi bi-trophy"></i></div>
+      <h3 class="h2 mb-0">{{ total_logros }}</h3>
+      <p class="small text-muted mb-2">Logros publicados</p>
+      <a href="{{ url_for('admin_logros') }}" class="enlace">Gestionar →</a>
+    </div>
+  </div>
+  {% endif %}
+  {% if ver_biblioteca %}
+  <div class="col-md-3 col-6">
+    <div class="tarjeta">
+      <div class="icono"><i class="bi bi-book"></i></div>
+      <h3 class="h2 mb-0">{{ total_libros }}</h3>
+      <p class="small text-muted mb-2">Títulos en biblioteca</p>
+      <a href="{{ url_for('admin_biblioteca') }}" class="enlace">Gestionar →</a>
+    </div>
+  </div>
+  {% endif %}
+  {% if ver_pagaduria %}
+  <div class="col-md-3 col-6">
+    <div class="tarjeta">
+      <div class="icono"><i class="bi bi-cash-coin"></i></div>
+      <h3 class="h2 mb-0">{{ total_conceptos }}</h3>
+      <p class="small text-muted mb-2">Conceptos de pago</p>
+      <a href="{{ url_for('admin_pagaduria') }}" class="enlace">Gestionar →</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<div class="tarjeta mt-4">
+  <h3 class="h6"><i class="bi bi-info-circle text-verde"></i> Bienvenido/a al panel</h3>
+  <p class="small text-muted mb-0">
+    {% if rol in ('admin','rector') %}
+      Tienes acceso completo: noticias, eventos, biblioteca y pagaduría.
+    {% elif rol == 'secretaria' %}
+      Tu panel te permite publicar y gestionar noticias y eventos en vivo — se reflejan de inmediato en el sitio público.
+    {% elif rol == 'pagaduria' %}
+      Tu panel te permite administrar los conceptos de pago autorizados y consultar los pagos registrados.
+    {% endif %}
+  </p>
+</div>
+
+{% endblock %}

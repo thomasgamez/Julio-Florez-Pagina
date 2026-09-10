@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block titulo %}Matrículas — Julio Flórez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Proceso de Matrículas</h1>
+    <p>Haz parte de la comunidad del Instituto Técnico Distrital Julio Flórez</p>
+  </div>
+</header>
+
+<div class="bg-amarillo py-2">
+  <div class="container d-flex justify-content-between flex-wrap gap-2 align-items-center">
+    <span class="small fw-semibold text-verde-oscuro"><i class="bi bi-clock"></i> Inscripciones: 5 de marzo de 2026 &nbsp;|&nbsp; <i class="bi bi-calendar-check"></i> Inicio de clases: 6 de abril de 2026</span>
+    <a href="#" class="btn btn-sm btn-institucional">Inscribirse en Edupage →</a>
+  </div>
+</div>
+
+<!-- PROCESO -->
+<section>
+  <div class="container">
+    <div class="encabezado-seccion"><div class="linea"></div><h2>Proceso de Inscripción</h2><p>Seis pasos para hacer parte de nuestra comunidad</p></div>
+    <div class="row g-4">
+      {% for paso in pasos_matricula %}
+      <div class="col-md-6 col-lg-4">
+        <div class="tarjeta">
+          <div class="rounded-3 bg-verde text-white d-flex align-items-center justify-content-center fw-bold mb-3" style="width:38px;height:38px">{{ '%02d'|format(loop.index) }}</div>
+          <h3 class="h6">{{ paso.titulo }}</h3>
+          <p class="small text-muted mb-0">{{ paso.descripcion }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- DOCUMENTOS -->
+<section class="section-alt">
+  <div class="container">
+    <div class="encabezado-seccion"><div class="linea"></div><h2>Documentos Requeridos</h2><p>Según el nivel educativo al que deseas ingresar</p></div>
+    <div class="row g-4">
+      {% for nivel in niveles_matricula %}
+      <div class="col-md-6">
+        <div class="tarjeta">
+          <h3 class="h6"><i class="bi bi-person-badge text-verde"></i> {{ nivel.nombre }}</h3>
+          <ul class="small text-muted mb-0">
+            {% for doc in nivel.documentos %}<li>{{ doc }}</li>{% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- IB CTA -->
+<section class="section-oscura text-center">
+  <div class="container">
+    <i class="bi bi-globe-americas fs-3 text-amarillo"></i>
+    <h2 class="text-white mt-2">¿Interesado en el Bachillerato Internacional?</h2>
+    <p style="color:#dfe6e1">El Programa del Diploma IB está disponible para estudiantes de grado 10° y 11°. Aplica a tiempo y haz parte de una comunidad de líderes globales.</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('bachillerato_internacional') }}" class="btn-institucional">Conocer el programa IB →</a>
+      <a href="#" class="btn-rojo">Inscribirse en Edupage</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
