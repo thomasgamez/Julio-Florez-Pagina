@@ -1331,3 +1331,9 @@ footer.footer-institucional .franja-final{
 
 /* Badges */
 [data-theme="oscuro"] .badge-institucional{ background:#2a2a2a; color:var(--amarillo); }
+
+/* Badges */
+[data-theme="oscuro"] .badge-institucional{ background:#2a2a2a; color:var(--amarillo); }
+
+/* Corrige el texto casi invisible de Bootstrap .text-muted en modo oscuro */
+[data-theme="oscuro"] .text-muted{ color: var(--texto-suave) !important; }
