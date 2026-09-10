@@ -2,8 +2,7 @@
 {% block titulo %}{{ info.titulo }} — Julio Flórez{% endblock %}
 {% block contenido %}
 
-<header class="encabezado-pagina"
-  style="background:linear-gradient(120deg, {{ info.color }}cc, {{ info.color }}99), url('{{ url_for('static', filename='images/' ~ info.imagen) }}');background-size:cover;background-position:center">
+<header class="encabezado-pagina">
   <div class="container">
     <a href="{{ url_for('nuestra_institucion_seccion', seccion='vida-escolar') }}" class="volver"><i class="bi bi-arrow-left"></i> Vida Escolar y Bienestar</a>
     <div class="icono-circulo mt-3"><i class="bi {{ info.icono }}"></i></div>

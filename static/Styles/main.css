@@ -740,18 +740,66 @@ section{ padding:4.5rem 0; }
   background-color: #555;
 }
 
-
-
-/* Timeline reseña histórica */
-.timeline{ position:relative; padding-left:2rem; border-left:2px solid var(--borde); }
-.timeline-item{ position:relative; margin-bottom:2.2rem; }
-.timeline-item::before{
-  content:"";
-  position:absolute; left:-2.42rem; top:.3rem;
-  width:12px;height:12px;border-radius:50%;
-  background:var(--verde);
+/* =====================================================
+   RESEÑA HISTÓRICA — timeline compacta (una sola columna)
+   ===================================================== */
+.timeline-compacta{
+  position:relative;
+  max-width:720px;
+  margin:0 auto;
+  padding-left:2.2rem;
 }
-.timeline-item .anio{ color:var(--rojo); font-weight:700; font-size:.85rem; }
+.timeline-compacta::before{
+  content:"";
+  position:absolute;
+  left:8px;
+  top:6px;
+  bottom:6px;
+  width:3px;
+  background:linear-gradient(to bottom, var(--verde), var(--amarillo), var(--rojo));
+  border-radius:10px;
+}
+.timeline-compacta-item{
+  position:relative;
+  padding-bottom:1.8rem;
+}
+.timeline-compacta-item:last-child{ padding-bottom:0; }
+.timeline-compacta-punto{
+  position:absolute;
+  left:-2.2rem;
+  top:.3rem;
+  width:19px;height:19px;
+  border-radius:50%;
+  background:var(--verde);
+  border:3px solid #fff;
+  box-shadow:0 0 0 2px var(--verde);
+}
+.timeline-compacta-contenido{
+  background:#fff;
+  border:1px solid var(--borde);
+  border-left:4px solid var(--verde);
+  border-radius:var(--radio);
+  padding:1rem 1.3rem;
+}
+.timeline-compacta-anio{
+  display:inline-block;
+  background:var(--verde-claro);
+  color:var(--verde);
+  font-weight:700;
+  font-size:.8rem;
+  padding:.2rem .7rem;
+  border-radius:20px;
+  margin-bottom:.4rem;
+}
+.timeline-compacta-contenido h3{
+  font-size:1.05rem;
+  margin-bottom:.3rem;
+}
+.timeline-compacta-contenido p{
+  color:var(--texto-suave);
+  font-size:.9rem;
+  margin-bottom:0;
+}
 
 /* Calendario / noticias en home */
 .item-calendario{

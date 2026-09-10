@@ -533,11 +533,27 @@ def bachillerato_seccion(seccion):
     )
 
 
+    return render_template(
+        BACHILLERATO_TEMPLATES[seccion],
+        info=info,
+        seccion_actual=seccion,
+        secciones=BACHILLERATO_SECCIONES,
+        perfil_ib=PERFIL_IB,
+        habilidades_ib=HABILIDADES_IB,
+        especialidades=ESPECIALIDADES,
+        asignaturas_pd=ASIGNATURAS_PD,
+        componentes_troncales=COMPONENTES_TRONCALES_POP,
+    )
+
+
+@app.route("/bachillerato-internacional/zoe")
+def zoe():
+    return render_template("pagina/zoe.html")
+
+
 @app.route("/campos-de-formacion")
 def campos_formacion():
     return render_template("pagina/campos_formacion.html", campos=CAMPOS)
-
-
 @app.route("/noticias")
 def noticias():
     return render_template("pagina/noticias.html", noticias=log_noticia.listar_publicadas())

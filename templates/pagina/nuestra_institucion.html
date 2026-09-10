@@ -50,51 +50,19 @@
   </div>
 </section>
 
-<!-- RESEÑA HISTÓRICA -->
-<section id="resena-historica" class="resena-historica">
-  <div class="container">
-
-    <div class="encabezado-seccion">
-      <div class="linea"></div>
-      <h2>Reseña Histórica</h2>
-      <p>
-        Conoce los principales acontecimientos que han marcado
-        la historia del Instituto Técnico Distrital Julio Flórez.
-      </p>
+<!-- RESEÑA HISTORIA -->
+<div class="timeline-compacta">
+  {% for h in hitos %}
+  <div class="timeline-compacta-item">
+    <div class="timeline-compacta-punto"></div>
+    <div class="timeline-compacta-contenido">
+      <span class="timeline-compacta-anio">{{ h.anio }}</span>
+      <h3>{{ h.titulo }}</h3>
+      <p>{{ h.descripcion }}</p>
     </div>
-
-    <div class="timeline-nueva">
-
-      {% for h in hitos %}
-
-      <div class="timeline-card">
-
-        <div class="timeline-punto">
-          <span>{{ h.anio }}</span>
-        </div>
-
-        <div class="timeline-contenido">
-
-          <div class="timeline-anio">
-            {{ h.anio }}
-          </div>
-
-          <h3>{{ h.titulo }}</h3>
-
-          <p>
-            {{ h.descripcion }}
-          </p>
-
-        </div>
-
-      </div>
-
-      {% endfor %}
-
-    </div>
-
   </div>
-</section>
+  {% endfor %}
+</div>
 
 <!-- SÍMBOLOS -->
 <section class="section-alt" id="simbolos">
@@ -134,16 +102,26 @@
           <p class="mb-1"><i class="bi bi-telephone"></i> 300 207 2701</p>
           <p class="mb-1"><i class="bi bi-envelope"></i> cedjulioflorez11@educacionbogota.edu.co</p>
           <p class="mb-0"><i class="bi bi-clock"></i> Lunes a Viernes: 6:30 a.m. – 4:00 p.m.</p>
-        </div>
+          <div class="mapa-embed mt-3">
+            <iframe src="https://www.google.com/maps?q=Calle+102A+%2370-40,+Bogot%C3%A1&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          </div> 
+       </div>
+      </div>
+    </div>
+    </div> 
+  </div>
       </div>
       <div class="col-md-6">
         <div class="tarjeta">
           <div class="icono bg-verde text-white"><i class="bi bi-geo-alt-fill"></i></div>
-          <h3>Principal Sede Bachillerato Julio Flórez</h3>
+          <h3>Sede B - Bachillerato Julio Flórez</h3>
           <p class="mb-1"><i class="bi bi-geo-alt"></i> Carrera 68B # 94-12 Bogotá - Colombia</p>
           <p class="mb-1"><i class="bi bi-telephone"></i> 305 792 3922</p>
           <p class="mb-1"><i class="bi bi-envelope"></i> cedjulioflorez11@educacionbogota.edu.co</p>
           <p class="mb-0"><i class="bi bi-clock"></i> Lunes a Viernes: 6:30 a.m. – 4:00 p.m.</p>
+          <div class="mapa-embed mt-3">
+            <iframe src="https://www.google.com/maps?q=Carrera+68B+%2394-12,+Bogot%C3%A1&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
