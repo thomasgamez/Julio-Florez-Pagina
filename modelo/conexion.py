@@ -110,7 +110,17 @@ def inicializar_bd():
         publicado INTEGER NOT NULL DEFAULT 1,
         creado_en TEXT DEFAULT CURRENT_TIMESTAMP
     );
+
+        CREATE TABLE IF NOT EXISTS galeria (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        titulo TEXT,
+        categoria TEXT NOT NULL DEFAULT 'Institucional',
+        imagen TEXT NOT NULL,
+        publicado INTEGER NOT NULL DEFAULT 1,
+        creado_en TEXT DEFAULT CURRENT_TIMESTAMP
+    );
     """)
+    
     conexion.commit()
 
     # --- Sembrar datos de ejemplo solo si las tablas están vacías ---
@@ -207,6 +217,18 @@ def inicializar_bd():
                  "10°-11°", "logro-ib.jpg", "15 de agosto de 2025"),
             ],
         )
-
+    if cur.execute("SELECT COUNT(*) FROM galeria").fetchone()[0] == 0:
+        cur.executemany(
+            "INSERT INTO galeria (titulo, categoria, imagen, publicado) VALUES (?,?,?,1)",
+            [
+                ("Actividad institucional", "Institucional", "images/actividades.jpeg"),
+                ("Comunidad Julio Flórez", "Institucional", "imagenes nuevas/comunidad.jpeg"),
+                ("Comunidad — encuentro 2", "Institucional", "imagenes nuevas/comunidad 2.jpeg"),
+                ("Comunidad — encuentro 3", "Cultural", "imagenes nuevas/comunidad 3.jpeg"),
+                ("Comunidad — encuentro 4", "Cultural", "imagenes nuevas/comunidad 4.jpeg"),
+                ("Comunidad — encuentro 5", "Académico", "imagenes nuevas/comunidad 5.jpeg"),
+                ("Comunidad — segunda sede", "Institucional", "imagenes nuevas/comunidad n2.jpeg"),
+            ],
+        )
     conexion.commit()
     conexion.close()
