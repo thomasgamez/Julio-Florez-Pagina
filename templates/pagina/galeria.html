@@ -11,25 +11,48 @@
 
 <section>
   <div class="container">
-    <div class="d-flex gap-2 flex-wrap mb-4">
-      <button class="btn btn-sm rounded-pill btn-institucional">Todas</button>
-      <button class="btn btn-sm rounded-pill btn-outline-institucional">Académico</button>
-      <button class="btn btn-sm rounded-pill btn-outline-institucional">Cultural</button>
-      <button class="btn btn-sm rounded-pill btn-outline-institucional">Deportivo</button>
-      <button class="btn btn-sm rounded-pill btn-outline-institucional">Institucional</button>
-      <button class="btn btn-sm rounded-pill btn-outline-institucional">Especialidades</button>
-      <button class="btn btn-sm rounded-pill btn-outline-institucional">Bienestar</button>
+    <div class="d-flex gap-2 flex-wrap mb-4" id="filtros-galeria">
+      <button class="btn btn-sm rounded-pill btn-institucional filtro-btn activo" data-filtro="Todas">Todas</button>
+      {% for cat in ['Académico','Cultural','Deportivo','Institucional','Especialidades','Bienestar'] %}
+      <button class="btn btn-sm rounded-pill btn-outline-institucional filtro-btn" data-filtro="{{ cat }}">{{ cat }}</button>
+      {% endfor %}
     </div>
 
-    <div class="row g-3">
+    <div class="row g-3" id="grilla-galeria">
       {% for foto in galeria %}
-      <div class="col-6 col-md-3">
-        <img src="{{ url_for('static', filename=foto) }}" class="img-fluid rounded-3 w-100"
-          style="height:180px;object-fit:cover" alt="Foto de galería">
+      <div class="col-6 col-md-3 item-galeria" data-categoria="{{ foto.categoria }}">
+        <img src="{{ url_for('static', filename=foto.imagen) }}" class="img-fluid rounded-3 w-100"
+          style="height:180px;object-fit:cover" alt="{{ foto.titulo or 'Foto de galería' }}">
       </div>
+      {% else %}
+      <p class="text-muted text-center py-5">Aún no hay fotos publicadas en la galería.</p>
       {% endfor %}
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var botones = document.querySelectorAll('#filtros-galeria .filtro-btn');
+  var items = document.querySelectorAll('#grilla-galeria .item-galeria');
+
+  botones.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      botones.forEach(function (b) {
+        b.classList.remove('btn-institucional', 'activo');
+        b.classList.add('btn-outline-institucional');
+      });
+      btn.classList.remove('btn-outline-institucional');
+      btn.classList.add('btn-institucional', 'activo');
+
+      var filtro = btn.getAttribute('data-filtro');
+      items.forEach(function (item) {
+        var coincide = (filtro === 'Todas' || item.getAttribute('data-categoria') === filtro);
+        item.style.display = coincide ? '' : 'none';
+      });
+    });
+  });
+});
+</script>
 
 {% endblock %}
