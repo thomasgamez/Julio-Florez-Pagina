@@ -19,6 +19,7 @@
     <a href="{{ url_for('admin_noticias') }}" class="{{ 'activo' if activo=='noticias' else '' }}"><i class="bi bi-newspaper"></i> Noticias</a>
     <a href="{{ url_for('admin_eventos') }}" class="{{ 'activo' if activo=='eventos' else '' }}"><i class="bi bi-calendar-event"></i> Eventos</a>
     <a href="{{ url_for('admin_logros') }}" class="{{ 'activo' if activo=='logros' else '' }}"><i class="bi bi-trophy"></i> Logros</a>
+    <a href="{{ url_for('admin_galeria') }}" class="{{ 'activo' if activo=='galeria' else '' }}"><i class="bi bi-images"></i> Galería</a>
     {% endif %}
     {% if rol in ('admin','rector') %}
     <a href="{{ url_for('admin_biblioteca') }}" class="{{ 'activo' if activo=='biblioteca' else '' }}"><i class="bi bi-book"></i> Biblioteca</a>

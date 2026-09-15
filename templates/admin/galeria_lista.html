@@ -1,0 +1,36 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Galería{% endblock %}
+{% block encabezado %}Gestión de Galería{% endblock %}
+{% block acciones_topbar %}
+<a href="{{ url_for('admin_galeria_nueva') }}" class="btn-institucional"><i class="bi bi-plus-lg"></i> Nueva foto</a>
+{% endblock %}
+{% block contenido_admin %}
+
+<div class="tabla-admin">
+  <table class="table mb-0 align-middle">
+    <thead><tr><th>Foto</th><th>Título</th><th>Categoría</th><th>Estado</th><th class="text-end">Acciones</th></tr></thead>
+    <tbody>
+      {% for f in fotos %}
+      <tr>
+        <td style="width:110px">
+          <img src="{{ url_for('static', filename=f.imagen) }}" alt="{{ f.titulo }}"
+            style="width:90px;height:65px;object-fit:cover;border-radius:.5rem">
+        </td>
+        <td class="fw-semibold">{{ f.titulo or '—' }}</td>
+        <td><span class="badge-institucional">{{ f.categoria }}</span></td>
+        <td>{% if f.publicado %}<span class="badge bg-success">Publicada</span>{% else %}<span class="badge bg-secondary">Oculta</span>{% endif %}</td>
+        <td class="text-end">
+          <a href="{{ url_for('admin_galeria_editar', id_foto=f.id) }}" class="btn btn-sm btn-outline-institucional"><i class="bi bi-pencil"></i></a>
+          <form method="POST" action="{{ url_for('admin_galeria_eliminar', id_foto=f.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar esta foto de la galería?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-center text-muted py-4">Aún no hay fotos en la galería. Sube la primera.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
