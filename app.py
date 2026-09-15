@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 
 from modelo.conexion import inicializar_bd
-from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro
+from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria
 
 app = Flask(__name__)
 app.secret_key = "cambia-esta-clave-en-produccion"
@@ -307,11 +307,6 @@ EVENTOS = [
      "fecha_completa": "5 de marzo de 2026", "sede": "Ambas"},
 ]
 
-GALERIA = (
-    [f"images/actividades-{i}.jpeg" for i in range(1, 9)] +
-    [f"imagenes_nuevas/comunidad n2-{i}.jpeg" for i in range(9, 17)]
-)
-
 PERFIL_IB = [
     {"nombre": "Indagación", "icono": "bi-search", "desc": "Cultivamos nuestra curiosidad y desarrollamos habilidades de indagación e investigación. Aprendemos de manera autónoma y junto con otros, con entusiasmo, durante toda la vida."},
     {"nombre": "Conocimiento", "icono": "bi-book", "desc": "Desarrollamos y usamos nuestra comprensión conceptual explorando el conocimiento en diversas disciplinas, comprometiéndonos con ideas y cuestiones de importancia local y mundial."},
@@ -566,7 +561,7 @@ def eventos():
 
 @app.route("/galeria")
 def galeria():
-    return render_template("pagina/galeria.html", galeria=GALERIA)
+    return render_template("pagina/galeria.html", galeria=log_galeria.listar_publicadas())
 
 
 @app.route("/logros")
@@ -690,11 +685,13 @@ def admin_dashboard():
         ver_noticias=acceso_total or rol == "secretaria",
         ver_eventos=acceso_total or rol == "secretaria",
         ver_logros=acceso_total or rol == "secretaria",
+        ver_galeria=acceso_total or rol == "secretaria",
         ver_biblioteca=acceso_total,
         ver_pagaduria=acceso_total or rol == "pagaduria",
         total_noticias=len(log_noticia.listar_todas()),
         total_eventos=len(log_evento.listar_todos()),
         total_logros=len(log_logro.listar_todos()),
+        total_galeria=len(log_galeria.listar_todas()),
         total_libros=len(log_libro.listar()),
         total_conceptos=len(log_pago.listar_conceptos()),
     )
@@ -707,6 +704,7 @@ SECCIONES_POR_ROL = {
     "noticias": ["admin", "rector", "secretaria"],
     "eventos": ["admin", "rector", "secretaria"],
     "logros": ["admin", "rector", "secretaria"],
+    "galeria": ["admin", "rector", "secretaria"],
     "biblioteca": ["admin", "rector"],
     "pagaduria": ["admin", "rector", "pagaduria"],
 }
@@ -893,6 +891,56 @@ def admin_logro_eliminar(id_logro):
     flash("Logro eliminado.")
     return redirect(url_for("admin_logros"))
 
+# ---------------- GALERÍA ----------------
+
+@app.route("/admin/galeria")
+@login_requerido
+def admin_galeria():
+    return render_template("admin/galeria_lista.html", activo="galeria", fotos=log_galeria.listar_todas())
+
+
+@app.route("/admin/galeria/nueva", methods=["GET", "POST"])
+@login_requerido
+def admin_galeria_nueva():
+    if request.method == "POST":
+        imagen = guardar_imagen_subida(request.files.get("imagen_archivo"))
+        if not imagen:
+            flash("Debes subir una imagen.", "error")
+            return render_template("admin/galeria_form.html", activo="galeria", foto=None)
+        log_galeria.crear({
+            "titulo": request.form.get("titulo", ""), "categoria": request.form["categoria"],
+            "imagen": imagen, "publicado": 1 if request.form.get("publicado") else 0,
+        })
+        flash("Foto agregada a la galería.")
+        return redirect(url_for("admin_galeria"))
+    return render_template("admin/galeria_form.html", activo="galeria", foto=None)
+
+
+@app.route("/admin/galeria/<int:id_foto>/editar", methods=["GET", "POST"])
+@login_requerido
+def admin_galeria_editar(id_foto):
+    foto = log_galeria.obtener(id_foto)
+    if not foto:
+        flash("Foto no encontrada.", "error")
+        return redirect(url_for("admin_galeria"))
+    if request.method == "POST":
+        imagen_nueva = guardar_imagen_subida(request.files.get("imagen_archivo"))
+        log_galeria.actualizar(id_foto, {
+            "titulo": request.form.get("titulo", ""), "categoria": request.form["categoria"],
+            "imagen": imagen_nueva or foto["imagen"],
+            "publicado": 1 if request.form.get("publicado") else 0,
+        })
+        flash("Foto actualizada correctamente.")
+        return redirect(url_for("admin_galeria"))
+    return render_template("admin/galeria_form.html", activo="galeria", foto=foto)
+
+
+@app.route("/admin/galeria/<int:id_foto>/eliminar", methods=["POST"])
+@login_requerido
+def admin_galeria_eliminar(id_foto):
+    log_galeria.eliminar(id_foto)
+    flash("Foto eliminada de la galería.")
+    return redirect(url_for("admin_galeria"))
 
 # ---------------- BIBLIOTECA ----------------
 
