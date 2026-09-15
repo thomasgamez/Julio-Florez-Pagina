@@ -93,14 +93,14 @@
           <div class="contenido">
             <span class="etiqueta"><i class="bi bi-mortarboard-fill"></i> {{ esp.nombre }}</span>
             <p class="small text-muted mb-2">{{ esp.descripcion }}</p>
-            <a href="{{ url_for('bachillerato_internacional') }}#estudios-formacion" class="enlace">Ver más →</a>
+            <a href="{{ url_for('Estudios_formacion', id_especialidad=esp.id) }}" class="btn-institucional">Ver más</a>
           </div>
         </div>
       </div>
       {% endfor %}
     </div>
     <div class="text-center mt-4">
-      <a href="{{ url_for('bachillerato_internacional') }}#estudios-formacion" class="btn-outline-institucional">Ver más →</a>
+      <a href="{{ url_for('Estudios_formacion') }}" class="btn-outline-institucional">Ver más →</a>
     </div>
   </div>
 </section>
