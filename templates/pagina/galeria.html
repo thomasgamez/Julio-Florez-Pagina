@@ -21,8 +21,10 @@
     <div class="row g-3" id="grilla-galeria">
       {% for foto in galeria %}
       <div class="col-6 col-md-3 item-galeria" data-categoria="{{ foto.categoria }}">
-        <img src="{{ url_for('static', filename=foto.imagen) }}" class="img-fluid rounded-3 w-100"
-          style="height:180px;object-fit:cover" alt="{{ foto.titulo or 'Foto de galería' }}">
+        <img src="{{ url_for('static', filename=foto.imagen) }}" class="img-fluid rounded-3 w-100 foto-galeria"
+          style="height:180px;object-fit:cover;cursor:pointer"
+          alt="{{ foto.titulo or 'Foto de galería' }}"
+          data-titulo="{{ foto.titulo or '' }}">
       </div>
       {% else %}
       <p class="text-muted text-center py-5">Aún no hay fotos publicadas en la galería.</p>
@@ -30,6 +32,17 @@
     </div>
   </div>
 </section>
+
+<!-- ============ LIGHTBOX (modal de imagen ampliada) ============ -->
+<div class="modal fade" id="modalGaleria" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-transparent border-0">
+      <button type="button" class="btn-close btn-close-white ms-auto mb-2" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      <img id="imagenLightbox" src="" alt="" class="img-fluid rounded-3 w-100">
+      <p id="tituloLightbox" class="text-white text-center mt-2 mb-0"></p>
+    </div>
+  </div>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -50,6 +63,21 @@ document.addEventListener('DOMContentLoaded', function () {
         var coincide = (filtro === 'Todas' || item.getAttribute('data-categoria') === filtro);
         item.style.display = coincide ? '' : 'none';
       });
+    });
+  });
+
+  // --- Lightbox: ampliar imagen al hacer clic ---
+  var modalEl = document.getElementById('modalGaleria');
+  var modal = new bootstrap.Modal(modalEl);
+  var imgLightbox = document.getElementById('imagenLightbox');
+  var tituloLightbox = document.getElementById('tituloLightbox');
+
+  document.querySelectorAll('.foto-galeria').forEach(function (img) {
+    img.addEventListener('click', function () {
+      imgLightbox.src = img.src;
+      imgLightbox.alt = img.alt;
+      tituloLightbox.textContent = img.getAttribute('data-titulo') || '';
+      modal.show();
     });
   });
 });
