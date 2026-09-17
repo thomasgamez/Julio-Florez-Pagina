@@ -909,7 +909,7 @@ def admin_galeria_nueva():
             return render_template("admin/galeria_form.html", activo="galeria", foto=None)
         log_galeria.crear({
             "titulo": request.form.get("titulo", ""), "categoria": request.form["categoria"],
-            "imagen": imagen, "publicado": 1 if request.form.get("publicado") else 0,
+            "imagen": f"images/{imagen}", "publicado": 1 if request.form.get("publicado") else 0,
         })
         flash("Foto agregada a la galería.")
         return redirect(url_for("admin_galeria"))
@@ -927,7 +927,7 @@ def admin_galeria_editar(id_foto):
         imagen_nueva = guardar_imagen_subida(request.files.get("imagen_archivo"))
         log_galeria.actualizar(id_foto, {
             "titulo": request.form.get("titulo", ""), "categoria": request.form["categoria"],
-            "imagen": imagen_nueva or foto["imagen"],
+            "imagen": f"images/{imagen_nueva}" if imagen_nueva else foto["imagen"],
             "publicado": 1 if request.form.get("publicado") else 0,
         })
         flash("Foto actualizada correctamente.")
