@@ -1418,11 +1418,16 @@ footer.footer-institucional .franja-final{
 [data-theme="oscuro"] .tl-btn:hover:not(:disabled){ background:var(--amarillo); color:#151515; border-color:var(--amarillo); }
 
 /* Cabeceras internas y organigrama */
-[data-theme="oscuro"] .icono-badge-oscuro{ background:#1e1e1e; }
-[data-theme="oscuro"] .navbar-institucional .dropdown-menu{ background:#1e1e1e; }
-[data-theme="oscuro"] .navbar-institucional .dropdown-item .titulo{ color:var(--amarillo); }
-[data-theme="oscuro"] .navbar-institucional .dropdown-item .desc{ color:var(--texto-suave); }
-[data-theme="oscuro"] .navbar-institucional .dropdown-item:hover{ background:#2a2a2a; }
+[data-theme="oscuro"] .icono-badge-oscuro 
+{ background:#1e1e1e; }
+[data-theme="oscuro"] .navbar-institucional .dropdown-menu  
+{ background:#1e1e1e; }
+[data-theme="oscuro"] .navbar-institucional .dropdown-item .titulo  
+{ color:var(--amarillo); }
+[data-theme="oscuro"] .navbar-institucional .dropdown-item .desc  
+{ color:var(--texto-suave); }
+[data-theme="oscuro"] .navbar-institucional .dropdown-item:hover  
+{ background:#2a2a2a; }
 
 /* Panel administrativo */
 [data-theme="oscuro"] .admin-content{ background:#151515; }
