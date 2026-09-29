@@ -68,6 +68,16 @@ nav, .navbar, button, h1, h2, h3, a.btn{
   line-height: 1.15;
 }0.
 *{box-sizing:border-box}
+html{ overflow-x:hidden; }
+body{
+  font-family:var(--fuente-texto);
+  color:var(--texto);
+  background:var(--blanco);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+/* Ninguna imagen debe desbordar su contenedor en pantallas chicas */
+img{ max-width:100%; height:auto; }
 
 body{
   font-family:var(--fuente-texto);
@@ -135,6 +145,12 @@ a{ text-decoration:none; }
   display:block;
   color:var(--rojo);
   font-size:.95rem;
+}
+@media (max-width:420px){
+  .navbar-institucional .navbar-brand img{ height:34px; }
+  .navbar-institucional .marca-titulo{ font-size:.85rem; }
+  .navbar-institucional .marca-titulo span{ font-size:.78rem; }
+  .navbar-pill{ padding:.5rem .6rem; }
 }
 .navbar-institucional .nav-link{
   color:#eef3ef !important;
