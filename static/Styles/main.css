@@ -4,21 +4,6 @@
    Paleta institucional: verde (escudo), rojo, blanco, amarillo
    ========================================================= */
 
-/* Justificado global de textos de contenido */
-body{
-  text-align: justify;
-  hyphens: auto;
-}
-nav, .navbar, button, h1, h2, h3, a.btn{
-  text-align: left;
-}
-/* Párrafos dentro de bloques centrados/alineados: forzar justificado */
-.encabezado-seccion p,
-.quick-access-header p,
-.timeline-contenido p{
-  text-align: justify;
-}
-
 :root{
   --verde-oscuro:#0f2e22;
   --verde:#1a3d2e;
@@ -27,6 +12,8 @@ nav, .navbar, button, h1, h2, h3, a.btn{
   --rojo-oscuro:#9c2a1e;
   --amarillo:#d4af37;
   --amarillo-claro:#f4e4b0;
+  --amarillo-texto:#8a6d1c;
+  --dorado-texto:#9a7a25;
   --texto:#2b2b2b;
   --texto-suave:#6b6b6b;
   --borde:#e2e2e2;
@@ -57,27 +44,17 @@ nav, .navbar, button, h1, h2, h3, a.btn{
 }
 .hero-contenido .nombre-institucion,
 .nombre-institucion {
-  font-size: clamp(1.6rem, 4.6vw, 2.9rem) !important;
+  font-size: 2.2rem !important;
   font-weight: 700;
   color: #d4af37 !important;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  white-space: normal;
+  white-space: nowrap;
   margin-bottom: 0.75rem;
-  line-height: 1.15;
-}0.
-*{box-sizing:border-box}
-html{ overflow-x:hidden; }
-body{
-  font-family:var(--fuente-texto);
-  color:var(--texto);
-  background:var(--blanco);
-  line-height:1.6;
-  overflow-x:hidden;
+  line-height: 1.1;
 }
-/* Ninguna imagen debe desbordar su contenedor en pantallas chicas */
-img{ max-width:100%; height:auto; }
+*{box-sizing:border-box}
 
 body{
   font-family:var(--fuente-texto);
@@ -145,12 +122,6 @@ a{ text-decoration:none; }
   display:block;
   color:var(--rojo);
   font-size:.95rem;
-}
-@media (max-width:420px){
-  .navbar-institucional .navbar-brand img{ height:34px; }
-  .navbar-institucional .marca-titulo{ font-size:.85rem; }
-  .navbar-institucional .marca-titulo span{ font-size:.78rem; }
-  .navbar-pill{ padding:.5rem .6rem; }
 }
 .navbar-institucional .nav-link{
   color:#eef3ef !important;
@@ -226,11 +197,10 @@ a{ text-decoration:none; }
   z-index:1;
 }
 .hero::before{
-   content:"";
+  content:"";
   position:absolute;
   inset:0;
   z-index:-1;
-  pointer-events:none;
   background:linear-gradient(180deg, rgba(6,14,11,.05) 0%, rgba(8,20,16,.5) 55%, rgba(10,26,20,.92) 100%);
 }
 .hero-contenido{
@@ -243,8 +213,7 @@ a{ text-decoration:none; }
 .hero .container.hero-contenido{
   margin-left:0;
   margin-right:auto;
-  padding-left:clamp(1rem, 9vw, 15rem);
-  padding-right:1rem;
+  padding-left:15rem;
 }
 .hero .icono-circulo{
   width:56px;height:56px;border-radius:14px;
@@ -621,7 +590,150 @@ section{ padding:4.5rem 0; }
     font-size: 1.6rem;
   }
 }
+/* ---- Carousel.css ---- */
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #555;
+  border-radius: 24px;
+  padding: 16px;
+  --outer-r: 24px;
+  --p-distance: 12px;
+}
 
+.carousel-track {
+  display: flex;
+}
+
+.carousel-item {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 1px solid #555;
+  border-radius: calc(var(--outer-r) - var(--p-distance));
+  background-color: #1B1722;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.carousel-item:active {
+  cursor: grabbing;
+}
+
+.carousel-container.round {
+  border: 1px solid #555;
+}
+
+.carousel-item.round {
+  background-color: #1B1722;
+  position: relative;
+  bottom: 0.1em;
+  border: 1px solid #555;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.carousel-item-header.round {
+  padding: 0;
+  margin: 0;
+}
+
+.carousel-indicators-container.round {
+  position: absolute;
+  z-index: 2;
+  bottom: 3em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.carousel-indicator.active {
+  background-color: #333333;
+}
+
+.carousel-indicator.inactive {
+  background-color: rgba(51, 51, 51, 0.4);
+}
+
+.carousel-item-header {
+  margin-bottom: 16px;
+  padding: 20px;
+  padding-top: 20px;
+}
+
+.carousel-icon-container {
+  display: flex;
+  height: 28px;
+  width: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.carousel-icon {
+  height: 16px;
+  width: 16px;
+  color: #120F17;
+}
+
+.carousel-item-content {
+  padding: 20px;
+  padding-bottom: 20px;
+}
+
+.carousel-item-title {
+  margin-bottom: 4px;
+  font-weight: 900;
+  font-size: 18px;
+  color: #fff;
+}
+
+.carousel-item-description {
+  font-size: 14px;
+  color: #fff;
+}
+
+.carousel-indicators-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.carousel-indicators {
+  margin-top: 16px;
+  display: flex;
+  width: 150px;
+  justify-content: space-between;
+  padding: 0 32px;
+}
+
+.carousel-indicator {
+  height: 8px;
+  width: 8px;
+  border: none;
+  padding: 0;
+  appearance: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 150ms;
+}
+
+.carousel-indicator:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.carousel-indicator.active {
+  background-color: #fff;
+}
+
+.carousel-indicator.inactive {
+  background-color: #555;
+}
 
 /* =====================================================
    RESEÑA HISTÓRICA — timeline compacta (una sola columna)
@@ -799,167 +911,167 @@ footer.footer-institucional .franja-final{
     color: #666;
 }
 
-/* Contenedor de la línea */
-
-.timeline-nueva {
-    position: relative;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px 0;
+/* ---------- Encabezado de la sección ---------- */
+.resena-historica .encabezado-seccion{ margin-bottom:3.5rem; }
+.resena-historica .encabezado-seccion .linea{ background:var(--amarillo); }
+.resena-historica .qa-eyebrow-min{
+  display:block;
+  font-size:.75rem;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--dorado-texto);
+  margin-bottom:.6rem;
+}
+.resena-historica .encabezado-seccion h2{ font-size:2.4rem; letter-spacing:-.01em; }
+.resena-historica .encabezado-seccion p{
+  max-width:620px;
+  margin:.8rem auto 0;
+  text-align:center;
+  text-wrap:pretty;
 }
 
-/* Línea central */
-
-.timeline-nueva::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 4px;
-    transform: translateX(-50%);
-    background: linear-gradient(
-        to bottom,
-        var(--verde),
-        var(--amarillo),
-        var(--rojo)
-    );
-    border-radius: 10px;
+/* ---------- Línea de tiempo ---------- */
+.timeline-nueva{
+  position:relative;
+  max-width:1000px;
+  margin:0 auto;
+  padding:10px 0;
+}
+.timeline-nueva::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0; left:50%;
+  width:2px;
+  transform:translateX(-50%);
+  background:linear-gradient(to bottom, transparent, var(--verde) 6%, var(--amarillo) 94%, transparent);
 }
 
-/* Cada acontecimiento */
-
-.timeline-card {
-    position: relative;
-    width: 50%;
-    padding: 15px 45px;
-    box-sizing: border-box;
+.timeline-card{
+  position:relative;
+  width:50%;
+  padding:14px 56px;
+  margin-bottom:.4rem;
 }
+.timeline-card:nth-child(odd){ left:0; }
+.timeline-card:nth-child(even){ left:50%; }
 
-/* Alternar izquierda / derecha */
-
-.timeline-card:nth-child(odd) {
-    left: 0;
-    text-align: right;
+/* Conector horizontal tarjeta → nodo */
+.timeline-card::after{
+  content:"";
+  position:absolute;
+  top:41px;
+  width:56px; height:1px;
+  background:linear-gradient(90deg, var(--borde), var(--amarillo));
 }
+.timeline-card:nth-child(odd)::after{ right:0; }
+.timeline-card:nth-child(even)::after{ left:0; transform:scaleX(-1); }
 
-.timeline-card:nth-child(even) {
-    left: 50%;
-    text-align: left;
+/* Nodo */
+.timeline-punto{
+  position:absolute;
+  top:33px;
+  width:17px; height:17px;
+  border-radius:50%;
+  background:var(--blanco);
+  border:2px solid var(--amarillo);
+  z-index:2;
+  transition:background .3s ease, box-shadow .3s ease;
 }
-
-/* Punto central */
-
-.timeline-punto {
-    position: absolute;
-    top: 25px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--verde);
-    border: 4px solid white;
-    box-shadow: 0 0 0 3px var(--verde);
-    z-index: 2;
+.timeline-card:nth-child(odd) .timeline-punto{ right:-8px; }
+.timeline-card:nth-child(even) .timeline-punto{ left:-8px; }
+.timeline-card:hover .timeline-punto{
+  background:var(--amarillo);
+  box-shadow:0 0 0 6px rgba(212,175,55,.18);
 }
-
-.timeline-card:nth-child(odd) .timeline-punto {
-    right: -11px;
-}
-
-.timeline-card:nth-child(even) .timeline-punto {
-    left: -11px;
-}
-
-/* Año */
-
-.timeline-punto span {
-    display: none;
-}
+.timeline-punto span{ display:none; }
 
 /* Tarjeta */
-
-.timeline-contenido {
-    background: #fff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border-top: 4px solid var(--verde);
-    transition: all 0.3s ease;
+.timeline-contenido{
+  background:#fff;
+  border:1px solid #ebe6da;
+  border-radius:14px;
+  padding:1.6rem 1.8rem 1.7rem;
+  box-shadow:0 6px 24px rgba(15,46,34,.06);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.timeline-contenido:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 34px rgba(15,46,34,.11);
 }
 
-.timeline-card:nth-child(even) .timeline-contenido {
-    border-top-color: var(--rojo);
+/* Año protagonista (serif grande, sin píldora) */
+.timeline-anio{
+  font-family:var(--fuente-titulo);
+  font-size:2.5rem;
+  font-weight:700;
+  line-height:1;
+  color:var(--dorado-texto);
+  letter-spacing:-.01em;
+  margin-bottom:.9rem;
+  padding-bottom:.8rem;
+  border-bottom:1px solid #efeadf;
 }
 
-.timeline-contenido:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+/* Hitos dentro de una misma tarjeta */
+.timeline-hito + .timeline-hito{
+  margin-top:1.1rem;
+  padding-top:1.1rem;
+  border-top:1px dashed #e6e0d2;
+}
+.timeline-contenido h3{
+  font-size:1.15rem;
+  line-height:1.3;
+  margin:0 0 .4rem;
+  color:var(--verde-oscuro);
+}
+.timeline-contenido p,
+.timeline-hito p{
+  margin:0;
+  color:#5f6863;
+  font-size:.96rem;
+  line-height:1.65;
+  text-align:left;
+  hyphens:none;
+  text-wrap:pretty;
 }
 
-/* Año grande */
-
-.timeline-anio {
-    display: inline-block;
-    padding: 6px 14px;
-    margin-bottom: 10px;
-    border-radius: 20px;
-    background: var(--verde);
-    color: white;
-    font-weight: 700;
-    font-size: 0.9rem;
+/* ---------- Animación de entrada (solo si hay JS) ---------- */
+.timeline-nueva.js-reveal .timeline-card{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.timeline-nueva.js-reveal .timeline-card.visible{
+  opacity:1;
+  transform:none;
+}
+@media (prefers-reduced-motion: reduce){
+  .timeline-nueva.js-reveal .timeline-card{ opacity:1; transform:none; transition:none; }
+  .timeline-contenido, .timeline-punto{ transition:none; }
 }
 
-.timeline-card:nth-child(even) .timeline-anio {
-    background: var(--rojo);
-}
-
-/* Título */
-
-.timeline-contenido h3 {
-    margin-bottom: 10px;
-    font-size: 1.25rem;
-    color: #173a63;
-}
-
-/* Descripción */
-
-.timeline-contenido p {
-    margin: 0;
-    color: #666;
-    line-height: 1.7;
-}
-
-/* =====================================================
-   RESPONSIVE
-   ===================================================== */
-
-@media (max-width: 768px) {
-
-    .timeline-nueva::before {
-        left: 20px;
-        transform: none;
-    }
-
-    .timeline-card,
-    .timeline-card:nth-child(even),
-    .timeline-card:nth-child(odd) {
-        width: 100%;
-        left: 0;
-        padding-left: 55px;
-        padding-right: 10px;
-        text-align: left;
-    }
-
-    .timeline-card .timeline-punto,
-    .timeline-card:nth-child(even) .timeline-punto,
-    .timeline-card:nth-child(odd) .timeline-punto {
-        left: 9px;
-        right: auto;
-    }
-
-    .timeline-contenido {
-        margin-bottom: 25px;
-    }
+/* ---------- Responsive ---------- */
+@media (max-width:768px){
+  .resena-historica{ padding:56px 0; }
+  .resena-historica .encabezado-seccion h2{ font-size:1.9rem; }
+  .timeline-nueva::before{ left:18px; transform:none; }
+  .timeline-card,
+  .timeline-card:nth-child(odd),
+  .timeline-card:nth-child(even){
+    width:100%;
+    left:0;
+    padding:10px 0 10px 52px;
+  }
+  .timeline-card::after,
+  .timeline-card:nth-child(odd)::after,
+  .timeline-card:nth-child(even)::after{
+    left:26px; right:auto; width:26px; top:37px; transform:none;
+  }
+  .timeline-card .timeline-punto,
+  .timeline-card:nth-child(odd) .timeline-punto,
+  .timeline-card:nth-child(even) .timeline-punto{ left:10px; right:auto; top:29px; }
+  .timeline-anio{ font-size:2rem; }
 }
 
 /* =========================================================
@@ -1135,6 +1247,8 @@ footer.footer-institucional .franja-final{
   --rojo-oscuro:#c0392b;
   --amarillo:#e4bf5c;
   --amarillo-claro:#3a3220;
+  --amarillo-texto:#e4bf5c;
+  --dorado-texto:#e4bf5c;
   --texto:#e8e8e8;
   --texto-suave:#a8a8a8;
   --borde:#333333;
@@ -1173,7 +1287,7 @@ footer.footer-institucional .franja-final{
 [data-theme="oscuro"] .tarjeta h3,
 [data-theme="oscuro"] .tarjeta-especialidad h3,
 [data-theme="oscuro"] .tarjeta-cargo .nombre,
-[data-theme="oscuro"] .timeline-contenido h3{ color:var(--amarillo); }
+[data-theme="oscuro"] .timeline-contenido h3{ color:var(--texto); }
 [data-theme="oscuro"] .tarjeta p,
 [data-theme="oscuro"] .tarjeta-especialidad p,
 [data-theme="oscuro"] .timeline-contenido p,
@@ -1196,8 +1310,12 @@ footer.footer-institucional .franja-final{
 [data-theme="oscuro"] .btn-outline-institucional:hover{ background:var(--amarillo); color:#151515; }
 
 /* Timeline reseña histórica */
-[data-theme="oscuro"] .timeline-nueva::before{ opacity:.8; }
-[data-theme="oscuro"] .timeline-punto{ border-color:#151515; }
+[data-theme="oscuro"] .timeline-punto{ background:#151515; }
+[data-theme="oscuro"] .timeline-card:hover .timeline-punto{ background:var(--amarillo); }
+[data-theme="oscuro"] .timeline-anio{ border-bottom-color:#333; }
+[data-theme="oscuro"] .timeline-hito + .timeline-hito{ border-top-color:#333; }
+[data-theme="oscuro"] .timeline-contenido p{ color:var(--texto-suave); }
+[data-theme="oscuro"] .resena-historica{ background:var(--blanco); }
 
 /* Cabeceras internas y organigrama */
 [data-theme="oscuro"] .icono-badge-oscuro{ background:#1e1e1e; }
