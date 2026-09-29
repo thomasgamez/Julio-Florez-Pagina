@@ -49,6 +49,7 @@
   </div>
 </section>
 
+<!-- ================= LÍNEA DE TIEMPO INSTITUCIONAL ================= -->
 <section class="resena-historica">
   <div class="container">
     <div class="encabezado-seccion">
@@ -57,33 +58,109 @@
       <h2>Línea de tiempo institucional</h2>
       <p>Conoce los principales acontecimientos que han marcado la historia del Instituto Técnico Distrital Julio Flórez</p>
     </div>
-    <div class="timeline-nueva" id="timeline">
-      {% for anio, items in hitos|groupby('anio') %}
-      <div class="timeline-card">
-        <div class="timeline-punto"></div>
-        <div class="timeline-contenido">
-          <div class="timeline-anio">{{ anio }}</div>
-          {% for h in items %}
-          <div class="timeline-hito">
-            <h3>{{ h.titulo }}</h3>
-            <p>{{ h.descripcion }}</p>
-          </div>
+
+    {# Agrupa los hitos por año: si hay 2 hitos de 1995, quedan en UNA sola tarjeta.
+       Si prefieres una tarjeta por hito, usa "hitos" en lugar de "grupos". #}
+    {% set grupos = hitos|groupby('anio') %}
+    {# --n y --max le dicen al CSS cuántos años hay (para ubicar la línea de progreso) #}
+    <div class="tl" id="timeline" style="--n:{{ grupos|length }}; --max:{{ [grupos|length - 1, 1]|max }};">
+
+      <!-- 1) REGLA DE AÑOS: un botón por año -->
+      <div class="tl-rail" role="tablist" aria-label="Años de la historia institucional">
+        <div class="tl-rail-inner">
+          <div class="tl-track"><div class="tl-progress"></div></div>
+          {% for anio, items in grupos %}
+          <button type="button" class="tl-node" role="tab" aria-selected="false" data-i="{{ loop.index0 }}">
+            <span class="tl-dot"></span>
+            <span class="tl-year">{{ anio }}</span>
+          </button>
           {% endfor %}
         </div>
       </div>
-      {% endfor %}
+
+      <!-- 2) TARJETAS DE DETALLE: una por año (el JS muestra solo la activa) -->
+      <div class="tl-stage">
+        {% for anio, items in grupos %}
+        <article class="tl-panel" role="tabpanel" data-i="{{ loop.index0 }}">
+          <div class="tl-panel-year">
+            <strong>{{ anio }}</strong>
+            <span>Hito {{ loop.index }} de {{ loop.length }}</span>
+          </div>
+          <div class="tl-panel-body">
+            {% for h in items %}
+            <div class="tl-hito">
+              <h3>{{ h.titulo }}</h3>
+              <p>{{ h.descripcion }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <!-- 3) CONTROLES: anterior / contador / siguiente -->
+      <div class="tl-controls">
+        <button type="button" class="tl-btn" id="tl-prev" aria-label="Hito anterior"><i class="bi bi-chevron-left"></i></button>
+        <span class="tl-count" id="tl-count"></span>
+        <button type="button" class="tl-btn" id="tl-next" aria-label="Hito siguiente"><i class="bi bi-chevron-right"></i></button>
+      </div>
     </div>
   </div>
 </section>
+<!-- 4) COMPORTAMIENTO (JavaScript) -->
 <script>
 (function(){
   var tl=document.getElementById('timeline');
-  if(!tl||!('IntersectionObserver' in window)) return;
-  tl.classList.add('js-reveal');
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
-  },{threshold:.15});
-  tl.querySelectorAll('.timeline-card').forEach(function(c){ io.observe(c); });
+  if(!tl) return;
+  // Elementos que vamos a controlar
+  var nodes=[].slice.call(tl.querySelectorAll('.tl-node'));
+  var panels=[].slice.call(tl.querySelectorAll('.tl-panel'));
+  var prev=document.getElementById('tl-prev'), next=document.getElementById('tl-next'), count=document.getElementById('tl-count');
+  var rail=tl.querySelector('.tl-rail');
+  var cur=0, total=nodes.length;   // cur = índice del año que se está viendo
+  tl.classList.add('js');         // avisa al CSS que hay JS (activa el modo "una tarjeta a la vez")
+
+  // Muestra el año número i (lo limita entre 0 y el último)
+  function go(i, fromUser){
+    cur=Math.max(0, Math.min(total-1, i));
+    tl.style.setProperty('--i', cur);   // el CSS usa --i para llenar la barra de progreso
+    // Marca cada nodo: activo (el actual) o pasado (los anteriores)
+    nodes.forEach(function(n,k){
+      n.classList.toggle('activo', k===cur);
+      n.classList.toggle('pasado', k<cur);
+      n.setAttribute('aria-selected', k===cur ? 'true':'false');
+      n.setAttribute('tabindex', k===cur ? '0':'-1');
+    });
+    // Muestra solo la tarjeta del año activo
+    panels.forEach(function(p,k){ p.classList.toggle('activo', k===cur); });
+    // Desactiva las flechas en los extremos y actualiza el contador
+    prev.disabled = cur===0;
+    next.disabled = cur===total-1;
+    count.textContent = (cur+1)+' / '+total;
+    // Centra el año activo en la regla (útil en celular)
+    var n=nodes[cur];
+    rail.scrollTo({left:n.offsetLeft - rail.clientWidth/2 + n.offsetWidth/2, behavior:'smooth'});
+    if(fromUser) n.focus({preventScroll:true});
+  }
+
+  // Clic en un año / en las flechas
+  nodes.forEach(function(n,k){ n.addEventListener('click', function(){ go(k,true); }); });
+  prev.addEventListener('click', function(){ go(cur-1); });
+  next.addEventListener('click', function(){ go(cur+1); });
+  // Flechas ← → del teclado
+  tl.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'){ e.preventDefault(); go(cur+1,true); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); go(cur-1,true); }
+  });
+  // Deslizar con el dedo en celular (más de 50px = cambia de hito)
+  var x0=null, stage=tl.querySelector('.tl-stage');
+  stage.addEventListener('touchstart', function(e){ x0=e.touches[0].clientX; }, {passive:true});
+  stage.addEventListener('touchend', function(e){
+    if(x0===null) return;
+    var dx=e.changedTouches[0].clientX-x0; x0=null;
+    if(Math.abs(dx)>50) go(cur + (dx<0?1:-1));
+  });
+  go(0);   // arranca mostrando el primer año
 })();
 </script>
 
@@ -120,4 +197,4 @@
 </section>
 
 
-{% endblock %} 
+{% endblock %}
