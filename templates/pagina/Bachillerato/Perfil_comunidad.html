@@ -15,14 +15,12 @@
     <div class="encabezado-seccion">
       <p>Diez atributos valorados por los Colegios del Mundo del IB, que ayudan a las personas a ser miembros responsables de las comunidades locales, nacionales y mundiales</p>
     </div>
-    <div class="row g-3">
+    <div class="grid-perfil-ib">
       {% for p in perfil_ib %}
-      <div class="col-6 col-md-4 col-lg-2">
-        <div class="tarjeta text-center h-100">
-          <div class="icono mx-auto"><i class="bi {{ p.icono }}"></i></div>
+      <div class="tarjeta tarjeta-perfil">
+        <div class="icono mx-auto"><i class="bi {{ p.icono }}"></i></div>
           <h3 class="h6">{{ p.nombre }}</h3>
-          <p class="small text-muted mb-0">{{ p.desc }}</p>
-        </div>
+        <p class="small text-muted mb-0">{{ p.desc }}</p>
       </div>
       {% endfor %}
     </div>
