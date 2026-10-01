@@ -57,19 +57,91 @@
       <p>Conoce los principales acontecimientos que han marcado la historia del Instituto Técnico Distrital Julio Flórez</p>
     </div>
     <div class="timeline-nueva">
-      {% for h in hitos %}
-      <div class="timeline-card">
-        <div class="timeline-punto"><span>{{ h.anio }}</span></div>
-        <div class="timeline-contenido">
-          <div class="timeline-anio">{{ h.anio }}</div>
-          <h3>{{ h.titulo }}</h3>
-          <p>{{ h.descripcion }}</p>
+    {% set anios_unicos = hitos|map(attribute='anio')|unique|list %}
+    <div class="tl" id="timelineInstitucional" style="--n:{{ anios_unicos|length }}; --max:{{ anios_unicos|length - 1 }};">
+      <div class="tl-rail">
+        <div class="tl-rail-inner">
+          <div class="tl-track"><div class="tl-progress"></div></div>
+          {% for anio, hitos_anio in hitos|groupby('anio') %}
+          <button type="button" class="tl-node{{ ' activo' if loop.first else '' }}" data-index="{{ loop.index0 }}">
+            <span class="tl-dot"></span>
+            <span class="tl-year">{{ anio }}</span>
+          </button>
+          {% endfor %}
         </div>
       </div>
-      {% endfor %}
+
+      <div class="tl-stage">
+        {% for anio, hitos_anio in hitos|groupby('anio') %}
+        <div class="tl-panel{{ ' activo' if loop.first else '' }}" data-index="{{ loop.index0 }}">
+          <div class="tl-panel-year">
+            <strong>{{ anio }}</strong>
+            <span>Año</span>
+          </div>
+          <div class="tl-panel-body">
+            {% for h in hitos_anio %}
+            <div class="tl-hito">
+              <h3>{{ h.titulo }}</h3>
+              <p>{{ h.descripcion }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="tl-controls">
+        <button type="button" class="tl-btn" id="tlPrev" aria-label="Año anterior"><i class="bi bi-chevron-left"></i></button>
+        <span class="tl-count" id="tlCount">1 / {{ anios_unicos|length }}</span>
+        <button type="button" class="tl-btn" id="tlNext" aria-label="Año siguiente"><i class="bi bi-chevron-right"></i></button>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+  var tl = document.getElementById('timelineInstitucional');
+  if (!tl) return;
+  tl.classList.add('js');
+
+  var nodos = Array.prototype.slice.call(tl.querySelectorAll('.tl-node'));
+  var paneles = Array.prototype.slice.call(tl.querySelectorAll('.tl-panel'));
+  var total = nodos.length;
+  var indiceActual = 0;
+
+  var btnPrev = document.getElementById('tlPrev');
+  var btnNext = document.getElementById('tlNext');
+  var contador = document.getElementById('tlCount');
+
+  function irA(indice) {
+    indiceActual = Math.max(0, Math.min(indice, total - 1));
+    tl.style.setProperty('--i', indiceActual);
+
+    nodos.forEach(function (n, i) {
+      n.classList.toggle('activo', i === indiceActual);
+      n.classList.toggle('pasado', i < indiceActual);
+    });
+    paneles.forEach(function (p, i) {
+      p.classList.toggle('activo', i === indiceActual);
+    });
+
+    contador.textContent = (indiceActual + 1) + ' / ' + total;
+    btnPrev.disabled = indiceActual === 0;
+    btnNext.disabled = indiceActual === total - 1;
+
+    nodos[indiceActual].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  nodos.forEach(function (n) {
+    n.addEventListener('click', function () { irA(parseInt(n.dataset.index, 10)); });
+  });
+  btnPrev.addEventListener('click', function () { irA(indiceActual - 1); });
+  btnNext.addEventListener('click', function () { irA(indiceActual + 1); });
+
+  irA(0);
+})();
+</script>
 
 <section>
   <div class="container">
