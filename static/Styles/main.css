@@ -1601,3 +1601,45 @@ img, video, iframe{ max-width:100%; }
   .quick-access-section{ padding:48px 14px; }
   footer.footer-institucional{ padding-top:2rem; text-align:left; }
 }
+
+/* ===== NAVBAR: arreglo para celular y tablet ===== */
+@media (max-width:1399.98px){            /* mismo corte que navbar-expand-xxl */
+  .navbar-institucional .navbar-pill{
+    flex-wrap:wrap;                      /* deja que el menú baje a su propia fila */
+  }
+  .navbar-institucional .navbar-brand{
+    min-width:0;
+    flex:1 1 auto;                       /* el logo se encoge en vez de empujar */
+    margin-right:.5rem;
+  }
+  .navbar-institucional .navbar-toggler{
+    margin-left:auto;
+    flex-shrink:0;
+    border:0;
+    padding:.4rem .6rem;
+    border-radius:10px;
+  }
+  .navbar-institucional .navbar-toggler:focus{
+    box-shadow:0 0 0 3px rgba(212,175,55,.5);   /* aro dorado en vez del borde negro */
+  }
+  .navbar-institucional .navbar-collapse{
+    flex-basis:100%;                     /* el menú ocupa todo el ancho, debajo */
+    width:100%;
+    max-height:calc(100vh - 120px);
+    overflow-y:auto;
+    padding:.8rem 0 .4rem;
+  }
+  .navbar-institucional .navbar-nav{ align-items:stretch; }
+  .navbar-institucional .nav-link{ padding:.7rem .4rem !important; }
+  .navbar-institucional .dropdown-menu{
+    background:rgba(255,255,255,.06);
+    box-shadow:none;
+  }
+  .navbar-institucional .dropdown-item .titulo{ color:#fff; }
+  .navbar-institucional .dropdown-item .desc{ color:#c7d4cb; }
+  .navbar-institucional .dropdown-item:hover{ background:rgba(255,255,255,.1); }
+
+  /* Botones al final del menú */
+  .btn-matriculas{ display:block; text-align:center; margin:.6rem 0 .3rem; }
+  .btn-acceso-admin{ margin:.3rem 0; }
+}
