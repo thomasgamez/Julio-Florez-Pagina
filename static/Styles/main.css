@@ -1443,3 +1443,36 @@ footer.footer-institucional .franja-final{
 
 /* Corrige el texto casi invisible de Bootstrap .text-muted en modo oscuro */
 [data-theme="oscuro"] .text-muted{ color: var(--texto-suave) !important; }
+
+/* Justificar párrafos largos de todo el sitio */
+section p{
+  text-align:justify;
+  hyphens:auto;            /* corta palabras con guion para evitar huecos grandes */
+}
+
+/* Excepciones: textos que deben quedar centrados o a la izquierda */
+.encabezado-seccion p,
+.quick-access-header p,
+.text-center p,
+.hero-contenido p,
+.encabezado-pagina p,
+.tarjeta p,
+.tarjeta-especialidad p,
+.tl-hito p{
+  text-align:left;
+  hyphens:none;
+}
+.encabezado-seccion p,
+.quick-access-header p,
+.text-center p{ text-align:center; }
+
+/* Opcional: sangría en la primera línea de cada párrafo */
+section p{ text-indent:1.5rem; }
+.encabezado-seccion p,
+.quick-access-header p,
+.text-center p,
+.hero-contenido p,
+.encabezado-pagina p,
+.tarjeta p,
+.tarjeta-especialidad p,
+.tl-hito p{ text-indent:0; }
