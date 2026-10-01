@@ -1505,3 +1505,99 @@ section p{ text-indent:1.5rem; }
 .tarjeta p,
 .tarjeta-especialidad p,
 .tl-hito p{ text-indent:0; }
+
+/* =========================================================
+   ADAPTABLE (responsive) — pegar AL FINAL de static/Styles/main.css
+   Va al final a propósito: así sobreescribe lo que rompía en celular.
+   Puntos de corte (los mismos de Bootstrap):
+     ≤991px  tablet · ≤768px tablet pequeña · ≤575px celular
+   ========================================================= */
+
+/* Que ninguna imagen o video se salga de su caja */
+img, video, iframe{ max-width:100%; }
+
+/* ---------- TABLET (≤991px) ---------- */
+@media (max-width:991px){
+  /* Portada: el padding-left:15rem empujaba el texto fuera de pantalla */
+  .hero .container.hero-contenido{
+    padding-left:2rem;
+    padding-right:2rem;
+    margin-left:0;
+  }
+  .hero-contenido{ max-width:100%; padding-bottom:5rem; }
+  .hero-contenido h1{ font-size:2.4rem; }
+
+  /* Nombre de la institución: antes era una sola línea fija de 2.2rem */
+  .hero-contenido .nombre-institucion,
+  .nombre-institucion{
+    font-size:1.7rem !important;
+    white-space:normal !important;
+    letter-spacing:1px;
+  }
+
+  /* Menú desplegado: si es largo, que se pueda desplazar */
+  .navbar-institucional .navbar-collapse{
+    max-height:calc(100vh - 110px);
+    overflow-y:auto;
+    padding-top:.6rem;
+  }
+  .navbar-institucional .dropdown-menu{ box-shadow:none; background:rgba(255,255,255,.06); }
+  .navbar-institucional .dropdown-item .titulo{ color:#fff; }
+  .navbar-institucional .dropdown-item .desc{ color:#c7d4cb; }
+
+  /* Panel administrativo: la barra lateral pasa arriba */
+  .admin-shell{ flex-direction:column; }
+  .admin-sidebar{ width:100%; padding:1rem; }
+  .admin-content{ padding:1.2rem; }
+  .tabla-admin{ overflow-x:auto; }
+}
+
+/* ---------- TABLET PEQUEÑA (≤768px) ---------- */
+@media (max-width:768px){
+  .hero-ib h1{ font-size:1.8rem; }          /* corrige el "h    1" mal escrito */
+  .hero-ib .container{ padding-bottom:1.8rem; }
+  .encabezado-pagaduria h1{ font-size:2.4rem; }
+  .tarjeta-cargo{ min-width:140px; }
+  .tarjeta-cargo.nivel-1{ min-width:0; width:100%; }
+  .topbar{ font-size:.75rem; text-align:center; }
+  .topbar .container{ justify-content:center !important; gap:.3rem; }
+}
+
+/* ---------- CELULAR (≤575px) ---------- */
+@media (max-width:575px){
+  section{ padding:2.4rem 0; }
+
+  .navbar-institucional{ padding:.6rem 0; }
+  .navbar-institucional .marca-titulo{ font-size:.85rem; }
+  .navbar-institucional .marca-titulo span{ font-size:.8rem; }
+  .navbar-institucional .navbar-brand img{ height:34px; }
+
+  .hero{ min-height:480px; }
+  .hero .container.hero-contenido{ padding-left:1.25rem; padding-right:1.25rem; }
+  .hero-contenido{ padding-bottom:3rem; }
+  .hero-contenido h1{ font-size:1.9rem; }
+  .hero-contenido p{ font-size:.98rem; }
+  .hero-contenido .nombre-institucion,
+  .nombre-institucion{ font-size:1.25rem !important; }
+
+  .encabezado-seccion{ margin-bottom:1.8rem; }
+  .encabezado-seccion h2{ font-size:1.5rem; }
+  .encabezado-pagina{ padding:3rem 0 2.2rem; }
+  .encabezado-pagina h1{ font-size:1.8rem; }
+  .encabezado-pagaduria h1{ font-size:2rem; }
+
+  .tarjeta{ padding:1.2rem; }
+  .tarjeta-archivo-callout{ padding:1.1rem 1.2rem; }
+  .tarjeta-archivo-callout h3{ font-size:1.3rem; }
+
+  /* Botones cómodos para el dedo */
+  .btn-institucional, .btn-rojo, .btn-outline-institucional{
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .quick-access-section{ padding:48px 14px; }
+  footer.footer-institucional{ padding-top:2rem; text-align:left; }
+}
