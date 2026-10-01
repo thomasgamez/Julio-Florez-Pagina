@@ -310,7 +310,7 @@ a{ text-decoration:none; }
 }
 @media (max-width:768px){
   .hero-ib{ min-height:320px; }
-  .hero-ib h1{ font-size:1.8rem; }
+  .hero-ib h    1{ font-size:1.8rem; }
 }
 
 /* iconos ib */
