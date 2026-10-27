@@ -183,22 +183,6 @@
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% block scripts_extra %}{% endblock %}
 
-<!-- ================= SELECTOR DE TEMA CLARO/OSCURO ================= -->
-<script>
-  const toggleBtn = document.getElementById('theme-toggle');
-  const root = document.documentElement;
-
-  // Cargar tema guardado (o "claro" por defecto)
-  const temaGuardado = localStorage.getItem('tema') || 'claro';
-  root.setAttribute('data-theme', temaGuardado);
-
-  toggleBtn.addEventListener('click', () => {
-    const temaActual = root.getAttribute('data-theme');
-    const nuevoTema = temaActual === 'oscuro' ? 'claro' : 'oscuro';
-    root.setAttribute('data-theme', nuevoTema);
-    localStorage.setItem('tema', nuevoTema);
-  });
-</script>
 
 </body>
 </html>
