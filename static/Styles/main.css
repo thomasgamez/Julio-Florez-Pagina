@@ -249,7 +249,7 @@ a{ text-decoration:none; }
 /* Hero premium — solo para Bachillerato Internacional */
 .hero-ib{
   position:relative;
-  min-height:600px;
+  padding: 5rem 0 4rem;;
   display:flex;
   align-items:flex-end;
   border-radius:0 0 24px 24px;
