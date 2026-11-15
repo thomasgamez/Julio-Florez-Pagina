@@ -6,6 +6,10 @@ from modelo.conexion import obtener_conexion, SECCIONES
 
 # El rol "admin" no se puede borrar y siempre conserva estos permisos,
 # para que nadie pueda dejar el panel sin un administrador.
+# Únicos roles que pueden tener el permiso "usuarios" y asignar el rol admin.
+ROLES_GESTORES = ("admin", "rector")
+
+# El rol "admin" siempre conserva estos permisos (así nadie deja el panel sin administrador).
 ROL_PROTEGIDO = "admin"
 PERMISOS_OBLIGATORIOS_ADMIN = ("usuarios", "roles")
 
@@ -55,6 +59,12 @@ def _validas(secciones):
     """Se queda solo con secciones que existen en SECCIONES (evita datos inventados)."""
     return [s for s in secciones if s in SECCIONES]
 
+def _secciones_permitidas(nombre_rol, secciones):
+    """Valida las secciones y quita 'usuarios' si el rol no es admin ni rector."""
+    validas = set(_validas(secciones))
+    if nombre_rol not in ROLES_GESTORES:
+        validas.discard("usuarios")
+    return validas
 
 def crear(nombre, etiqueta, secciones):
     """Crea un rol con sus permisos. Devuelve el id nuevo, o None si el nombre ya existe."""
@@ -64,7 +74,7 @@ def crear(nombre, etiqueta, secciones):
         cur = con.execute("INSERT INTO roles (nombre, etiqueta) VALUES (?,?)", (nombre, etiqueta.strip()))
         con.executemany(
             "INSERT INTO permisos_rol (rol_id, seccion) VALUES (?,?)",
-            [(cur.lastrowid, s) for s in _validas(secciones)],
+            [(cur.lastrowid, s) for s in _secciones_permitidas(nombre, secciones)],
         )
         con.commit()
         return cur.lastrowid
@@ -77,7 +87,7 @@ def actualizar(id_rol, etiqueta, secciones):
     rol = obtener(id_rol)
     if not rol:
         return False
-    secciones = set(_validas(secciones))
+    secciones = _secciones_permitidas(rol["nombre"], secciones)
     if rol["nombre"] == ROL_PROTEGIDO:
         secciones |= set(PERMISOS_OBLIGATORIOS_ADMIN)  # el admin nunca pierde estos permisos
     con = obtener_conexion()
@@ -97,8 +107,8 @@ def eliminar(id_rol):
     rol = obtener(id_rol)
     if not rol:
         return False, "Rol no encontrado."
-    if rol["nombre"] == ROL_PROTEGIDO:
-        return False, "El rol admin no se puede eliminar."
+    if rol["nombre"] in ROLES_GESTORES:
+        return False, "Los roles admin y rector no se pueden eliminar."
     n = contar_usuarios(rol["nombre"])
     if n:
         return False, f"No se puede eliminar: hay {n} usuario(s) con este rol. Cámbialos de rol primero."

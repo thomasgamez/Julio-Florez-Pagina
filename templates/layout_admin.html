@@ -29,6 +29,9 @@
     {% if 'usuarios' in permisos %}
     <a href="{{ url_for('admin_usuarios') }}" class="{{ 'activo' if activo=='usuarios' else '' }}"><i class="bi bi-people"></i> Usuarios</a>
     {% endif %}
+    {% if 'roles' in permisos %}
+    <a href="{{ url_for('admin_roles') }}" class="{{ 'activo' if activo=='roles' else '' }}"><i class="bi bi-shield-check"></i> Roles y permisos</a>
+    {% endif %}
     <hr style="border-color:rgba(255,255,255,.15)">
     <a href="{{ url_for('inicio') }}" target="_blank"><i class="bi bi-globe"></i> Ver sitio público</a>
     <a href="{{ url_for('admin_logout') }}"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>

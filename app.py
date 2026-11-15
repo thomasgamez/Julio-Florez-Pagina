@@ -1036,6 +1036,7 @@ def admin_usuarios():
             request.form.get("password", ""),
             request.form.get("nombre", ""),
             request.form.get("rol", ""),
+            session.get("admin_rol"),
         )
         flash(mensaje, "success" if ok else "error")
         return redirect(url_for("admin_usuarios"))
@@ -1051,7 +1052,8 @@ def admin_usuarios():
 @login_requerido
 def admin_usuario_editar(id_usuario):
     ok, mensaje = log_usuario.actualizar(
-        id_usuario, request.form.get("nombre", ""), request.form.get("rol", "")
+        id_usuario, request.form.get("nombre", ""), request.form.get("rol", ""),
+        session.get("admin_rol"),
     )
     flash(mensaje, "success" if ok else "error")
 
@@ -1068,6 +1070,53 @@ def admin_usuario_eliminar(id_usuario):
     ok, mensaje = log_usuario.eliminar(id_usuario, session.get("admin_id"))
     flash(mensaje, "success" if ok else "error")
     return redirect(url_for("admin_usuarios"))
+
+# ---------------- ROLES ----------------
+
+@app.route("/admin/roles", methods=["GET", "POST"])
+@login_requerido
+def admin_roles():
+    if request.method == "POST":
+        nombre = request.form.get("etiqueta", "").strip()
+        if not nombre:
+            flash("El nombre del rol es obligatorio.", "error")
+        elif log_rol.crear(nombre, nombre, request.form.getlist("secciones")):
+            flash("Rol creado correctamente.", "success")
+        else:
+            flash("Ya existe un rol con ese nombre.", "error")
+        return redirect(url_for("admin_roles"))
+
+    roles = log_rol.listar()
+    return render_template(
+        "admin/roles_lista.html",
+        activo="roles",
+        roles=roles,
+        permisos_por_rol=log_rol.permisos_de_todos(),
+        secciones=SECCIONES,
+        roles_gestores=log_rol.ROLES_GESTORES,
+        usuarios_por_rol={r["nombre"]: log_rol.contar_usuarios(r["nombre"]) for r in roles},
+    )
+
+
+@app.route("/admin/roles/<int:id_rol>/editar", methods=["POST"])
+@login_requerido
+def admin_rol_editar(id_rol):
+    etiqueta = request.form.get("etiqueta", "").strip()
+    if not etiqueta:
+        flash("El nombre del rol es obligatorio.", "error")
+    elif log_rol.actualizar(id_rol, etiqueta, request.form.getlist("secciones")):
+        flash("Rol actualizado.", "success")
+    else:
+        flash("Rol no encontrado.", "error")
+    return redirect(url_for("admin_roles"))
+
+
+@app.route("/admin/roles/<int:id_rol>/eliminar", methods=["POST"])
+@login_requerido
+def admin_rol_eliminar(id_rol):
+    ok, mensaje = log_rol.eliminar(id_rol)
+    flash(mensaje, "success" if ok else "error")
+    return redirect(url_for("admin_roles"))
 
 if __name__ == "__main__":
     app.run(debug=True)

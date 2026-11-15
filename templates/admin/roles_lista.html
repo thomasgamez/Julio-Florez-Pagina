@@ -1,0 +1,84 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Roles y permisos{% endblock %}
+{% block encabezado %}Roles y permisos{% endblock %}
+{% block acciones_topbar %}
+<button class="btn-institucional" data-bs-toggle="modal" data-bs-target="#modalNuevo"><i class="bi bi-plus-lg"></i> Nuevo rol</button>
+{% endblock %}
+{% block contenido_admin %}
+
+<div class="tabla-admin">
+  <table class="table mb-0">
+    <thead><tr><th>Rol</th><th>Usuarios</th><th>Puede gestionar</th><th class="text-end">Acciones</th></tr></thead>
+    <tbody>
+      {% for r in roles %}
+      {% set sus_permisos = permisos_por_rol.get(r.id, []) %}
+      {% set es_gestor = r.nombre in roles_gestores %}
+      <tr>
+        <td class="fw-semibold">{{ r.etiqueta }}</td>
+        <td>{{ usuarios_por_rol[r.nombre] }}</td>
+        <td>
+          {% for clave, etiqueta in secciones.items() if clave in sus_permisos %}
+            <span class="badge-institucional">{{ etiqueta }}</span>
+          {% else %}
+            <span class="text-muted small">Sin secciones</span>
+          {% endfor %}
+        </td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-institucional" data-bs-toggle="modal" data-bs-target="#editar{{ r.id }}"><i class="bi bi-pencil"></i></button>
+          <form method="POST" action="{{ url_for('admin_rol_eliminar', id_rol=r.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar el rol {{ r.etiqueta }}?');">
+            <button class="btn btn-sm btn-outline-danger" {{ 'disabled' if es_gestor else '' }}><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+
+      <!-- Ventana para editar este rol -->
+      <div class="modal fade" id="editar{{ r.id }}" tabindex="-1">
+        <div class="modal-dialog"><div class="modal-content">
+          <form method="POST" action="{{ url_for('admin_rol_editar', id_rol=r.id) }}">
+            <div class="modal-header"><h5 class="modal-title">Editar rol</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+              <label class="form-label">Nombre del rol</label>
+              <input name="etiqueta" class="form-control mb-3" value="{{ r.etiqueta }}" required>
+              <label class="form-label">Secciones que puede gestionar</label>
+              {% for clave, etiqueta in secciones.items() %}
+                {% if clave != 'usuarios' or es_gestor %}
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="secciones" value="{{ clave }}" id="r{{ r.id }}_{{ clave }}"
+                    {{ 'checked' if clave in sus_permisos else '' }}
+                    {{ 'disabled' if r.nombre == 'admin' and clave in ('usuarios', 'roles') else '' }}>
+                  <label class="form-check-label" for="r{{ r.id }}_{{ clave }}">{{ etiqueta }}</label>
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="modal-footer"><button class="btn-institucional">Guardar cambios</button></div>
+          </form>
+        </div></div>
+      </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Ventana para crear rol -->
+<div class="modal fade" id="modalNuevo" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="POST" action="{{ url_for('admin_roles') }}">
+      <div class="modal-header"><h5 class="modal-title">Nuevo rol</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <label class="form-label">Nombre del rol</label>
+        <input name="etiqueta" class="form-control mb-3" placeholder="Ej: Coordinación" required>
+        <label class="form-label">Secciones que puede gestionar</label>
+        {% for clave, etiqueta in secciones.items() if clave != 'usuarios' %}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="secciones" value="{{ clave }}" id="nuevo_{{ clave }}">
+          <label class="form-check-label" for="nuevo_{{ clave }}">{{ etiqueta }}</label>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer"><button class="btn-institucional">Crear rol</button></div>
+    </form>
+  </div></div>
+</div>
+
+{% endblock %}

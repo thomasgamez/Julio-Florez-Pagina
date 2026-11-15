@@ -61,7 +61,11 @@ def contar_admins():
 def _rol_existe(nombre_rol):
     return any(r["nombre"] == nombre_rol for r in log_rol.listar())
 
-def crear(usuario, password, nombre, rol):
+def _puede_asignar(rol_actor, rol_nuevo):
+    """Solo admin y rector pueden asignar el rol admin."""
+    return rol_nuevo != ROL_ADMIN or rol_actor in log_rol.ROLES_GESTORES
+
+def crear(usuario, password, nombre, rol, rol_actor):
     usuario = usuario.strip().lower()
     nombre = nombre.strip()
     if not usuario or not nombre:
@@ -70,6 +74,8 @@ def crear(usuario, password, nombre, rol):
         return False, f"La contraseña debe tener al menos {LONGITUD_MINIMA_PASSWORD} caracteres."
     if not _rol_existe(rol):
         return False, "El rol seleccionado no existe."
+    if not _puede_asignar(rol_actor, rol):
+        return False, "Solo el administrador o el rector pueden asignar el rol admin."
 
     con = obtener_conexion()
     try:
@@ -84,7 +90,7 @@ def crear(usuario, password, nombre, rol):
     finally:
         con.close()
 
-def actualizar(id_usuario, nombre, rol):
+def actualizar(id_usuario, nombre, rol, rol_actor):
     u = obtener_por_id(id_usuario)
     if not u:
         return False, "Usuario no encontrado."
@@ -92,6 +98,8 @@ def actualizar(id_usuario, nombre, rol):
         return False, "El nombre es obligatorio."
     if not _rol_existe(rol):
         return False, "El rol seleccionado no existe."
+    if not _puede_asignar(rol_actor, rol):
+        return False, "Solo el administrador o el rector pueden asignar el rol admin."
     if u["rol"] == ROL_ADMIN and rol != ROL_ADMIN and contar_admins() <= 1:
         return False, "Debe quedar al menos un administrador. Asigna el rol admin a otra persona primero."
 
