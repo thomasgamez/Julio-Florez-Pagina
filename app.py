@@ -1025,6 +1025,49 @@ def admin_pagaduria_eliminar(id_concepto):
     flash("Concepto eliminado.")
     return redirect(url_for("admin_pagaduria"))
 
+# ---------------- USUARIOS ----------------
+
+@app.route("/admin/usuarios", methods=["GET", "POST"])
+@login_requerido
+def admin_usuarios():
+    if request.method == "POST":
+        ok, mensaje = log_usuario.crear(
+            request.form.get("usuario", ""),
+            request.form.get("password", ""),
+            request.form.get("nombre", ""),
+            request.form.get("rol", ""),
+        )
+        flash(mensaje, "success" if ok else "error")
+        return redirect(url_for("admin_usuarios"))
+    return render_template(
+        "admin/usuarios_lista.html",
+        activo="usuarios",
+        usuarios=log_usuario.listar(),
+        roles=log_rol.listar(),
+    )
+
+
+@app.route("/admin/usuarios/<int:id_usuario>/editar", methods=["POST"])
+@login_requerido
+def admin_usuario_editar(id_usuario):
+    ok, mensaje = log_usuario.actualizar(
+        id_usuario, request.form.get("nombre", ""), request.form.get("rol", "")
+    )
+    flash(mensaje, "success" if ok else "error")
+
+    nueva = request.form.get("password", "")
+    if ok and nueva:  # solo cambia la contraseña si escribieron una nueva
+        ok, mensaje = log_usuario.cambiar_password(id_usuario, nueva)
+        flash(mensaje, "success" if ok else "error")
+    return redirect(url_for("admin_usuarios"))
+
+
+@app.route("/admin/usuarios/<int:id_usuario>/eliminar", methods=["POST"])
+@login_requerido
+def admin_usuario_eliminar(id_usuario):
+    ok, mensaje = log_usuario.eliminar(id_usuario, session.get("admin_id"))
+    flash(mensaje, "success" if ok else "error")
+    return redirect(url_for("admin_usuarios"))
 
 if __name__ == "__main__":
     app.run(debug=True)

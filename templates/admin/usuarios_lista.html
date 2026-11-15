@@ -1,0 +1,76 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Usuarios{% endblock %}
+{% block encabezado %}Gestión de Usuarios{% endblock %}
+{% block acciones_topbar %}
+<button class="btn-institucional" data-bs-toggle="modal" data-bs-target="#modalNuevo"><i class="bi bi-plus-lg"></i> Nuevo usuario</button>
+{% endblock %}
+{% block contenido_admin %}
+
+<div class="tabla-admin">
+  <table class="table mb-0">
+    <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th class="text-end">Acciones</th></tr></thead>
+    <tbody>
+      {% for u in usuarios %}
+      <tr>
+        <td class="fw-semibold">{{ u.nombre }}</td>
+        <td>{{ u.usuario }}</td>
+        <td><span class="badge-institucional">{{ u.rol_etiqueta }}</span></td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-institucional" data-bs-toggle="modal" data-bs-target="#editar{{ u.id }}"><i class="bi bi-pencil"></i></button>
+          <form method="POST" action="{{ url_for('admin_usuario_eliminar', id_usuario=u.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar a {{ u.nombre }}?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+
+      <!-- Ventana para editar este usuario -->
+      <div class="modal fade" id="editar{{ u.id }}" tabindex="-1">
+        <div class="modal-dialog"><div class="modal-content">
+          <form method="POST" action="{{ url_for('admin_usuario_editar', id_usuario=u.id) }}">
+            <div class="modal-header"><h5 class="modal-title">Editar a {{ u.usuario }}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+              <label class="form-label">Nombre</label>
+              <input name="nombre" class="form-control mb-3" value="{{ u.nombre }}" required>
+              <label class="form-label">Rol</label>
+              <select name="rol" class="form-select mb-3">
+                {% for r in roles %}
+                <option value="{{ r.nombre }}" {{ 'selected' if r.nombre == u.rol else '' }}>{{ r.etiqueta }}</option>
+                {% endfor %}
+              </select>
+              <label class="form-label">Nueva contraseña <span class="text-muted small">(déjala vacía para no cambiarla)</span></label>
+              <input name="password" type="password" class="form-control" minlength="8" autocomplete="new-password">
+            </div>
+            <div class="modal-footer"><button class="btn-institucional">Guardar cambios</button></div>
+          </form>
+        </div></div>
+      </div>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-muted py-4">No hay usuarios.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Ventana para crear usuario -->
+<div class="modal fade" id="modalNuevo" tabindex="-1">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="POST" action="{{ url_for('admin_usuarios') }}">
+      <div class="modal-header"><h5 class="modal-title">Nuevo usuario</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <label class="form-label">Nombre completo</label>
+        <input name="nombre" class="form-control mb-3" required>
+        <label class="form-label">Usuario (para iniciar sesión)</label>
+        <input name="usuario" class="form-control mb-3" required autocomplete="off">
+        <label class="form-label">Rol</label>
+        <select name="rol" class="form-select mb-3">
+          {% for r in roles %}<option value="{{ r.nombre }}">{{ r.etiqueta }}</option>{% endfor %}
+        </select>
+        <label class="form-label">Contraseña <span class="text-muted small">(mínimo 8 caracteres)</span></label>
+        <input name="password" type="password" class="form-control" minlength="8" required autocomplete="new-password">
+      </div>
+      <div class="modal-footer"><button class="btn-institucional">Crear usuario</button></div>
+    </form>
+  </div></div>
+</div>
+
+{% endblock %}
