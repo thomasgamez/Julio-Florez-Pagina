@@ -8,8 +8,8 @@ from datetime import date
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 
-from modelo.conexion import inicializar_bd
-from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria
+from modelo.conexion import inicializar_bd, SECCIONES
+from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol
 
 app = Flask(__name__)
 app.secret_key = "cambia-esta-clave-en-produccion"
@@ -696,45 +696,42 @@ def admin_dashboard():
         total_conceptos=len(log_pago.listar_conceptos()),
     )
 
-# ---- Control de acceso por ROL ----
-# admin y rector -> acceso total (todas las secciones)
-# secretaria     -> solo noticias y eventos
-# pagaduria      -> solo pagaduría
-SECCIONES_POR_ROL = {
-    "noticias": ["admin", "rector", "secretaria"],
-    "eventos": ["admin", "rector", "secretaria"],
-    "logros": ["admin", "rector", "secretaria"],
-    "galeria": ["admin", "rector", "secretaria"],
-    "biblioteca": ["admin", "rector"],
-    "pagaduria": ["admin", "rector", "pagaduria"],
-}
+# ---- Control de acceso por ROL (los permisos viven en la base de datos) ----
+
+def permisos_actuales():
+    """Secciones que puede ver el usuario con sesión iniciada."""
+    return log_rol.permisos_de(session.get("admin_rol"))
 
 
 @app.before_request
 def verificar_permisos_por_rol():
     ruta = request.path
-    if not ruta.startswith("/admin/") and ruta != "/admin":
+    if ruta != "/admin" and not ruta.startswith("/admin/"):
         return  # ruta pública, no aplica control de roles
 
-    if ruta == "/admin/login" or ruta == "/admin/logout":
+    if ruta in ("/admin/login", "/admin/logout"):
         return  # login/logout siempre accesibles
 
     if not session.get("admin_id"):
         flash("Debes iniciar sesión para acceder al panel administrativo.", "error")
         return redirect(url_for("admin_login"))
 
-    rol = session.get("admin_rol")
-    if rol in ("admin", "rector"):
-        return  # acceso total, sin restricciones
+    # Releer el usuario en cada petición: si lo eliminaron o le cambiaron el rol,
+    # el cambio se aplica de inmediato sin esperar a que cierre sesión.
+    usuario = log_usuario.obtener_por_id(session["admin_id"])
+    if not usuario:
+        session.clear()
+        flash("Tu usuario ya no existe.", "error")
+        return redirect(url_for("admin_login"))
+    session["admin_rol"] = usuario["rol"]
 
-    for seccion, roles_permitidos in SECCIONES_POR_ROL.items():
-        if ruta.startswith(f"/admin/{seccion}"):
-            if rol not in roles_permitidos:
-                flash("No tienes permisos para acceder a esta sección.", "error")
-                return redirect(url_for("admin_dashboard"))
-            return
-    # rutas admin genéricas (ej. /admin dashboard) -> cualquier rol logueado entra
-    return
+    if ruta == "/admin":
+        return  # el dashboard lo ve cualquier usuario con sesión
+
+    seccion = ruta.split("/")[2]  # "/admin/noticias/nueva" -> "noticias"
+    if seccion not in permisos_actuales():
+        flash("No tienes permisos para acceder a esta sección.", "error")
+        return redirect(url_for("admin_dashboard"))
 
 # ---------------- NOTICIAS ----------------
 
