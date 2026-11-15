@@ -1094,6 +1094,7 @@ def admin_roles():
         permisos_por_rol=log_rol.permisos_de_todos(),
         secciones=SECCIONES,
         roles_gestores=log_rol.ROLES_GESTORES,
+        permisos_reservados=log_rol.PERMISOS_RESERVADOS,
         usuarios_por_rol={r["nombre"]: log_rol.contar_usuarios(r["nombre"]) for r in roles},
     )
 

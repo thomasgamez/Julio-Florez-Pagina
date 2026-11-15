@@ -8,6 +8,8 @@ from modelo.conexion import obtener_conexion, SECCIONES
 # para que nadie pueda dejar el panel sin un administrador.
 # Únicos roles que pueden tener el permiso "usuarios" y asignar el rol admin.
 ROLES_GESTORES = ("admin", "rector")
+# Permisos que solo pueden tener los roles gestores.
+PERMISOS_RESERVADOS = ("usuarios", "roles")
 
 # El rol "admin" siempre conserva estos permisos (así nadie deja el panel sin administrador).
 ROL_PROTEGIDO = "admin"
@@ -60,10 +62,10 @@ def _validas(secciones):
     return [s for s in secciones if s in SECCIONES]
 
 def _secciones_permitidas(nombre_rol, secciones):
-    """Valida las secciones y quita 'usuarios' si el rol no es admin ni rector."""
+    """Valida las secciones y quita los permisos reservados si el rol no es admin ni rector."""
     validas = set(_validas(secciones))
     if nombre_rol not in ROLES_GESTORES:
-        validas.discard("usuarios")
+        validas -= set(PERMISOS_RESERVADOS)
     return validas
 
 def crear(nombre, etiqueta, secciones):

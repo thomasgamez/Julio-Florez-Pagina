@@ -41,7 +41,7 @@
               <input name="etiqueta" class="form-control mb-3" value="{{ r.etiqueta }}" required>
               <label class="form-label">Secciones que puede gestionar</label>
               {% for clave, etiqueta in secciones.items() %}
-                {% if clave != 'usuarios' or es_gestor %}
+                {% if clave not in permisos_reservados or es_gestor %}
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" name="secciones" value="{{ clave }}" id="r{{ r.id }}_{{ clave }}"
                     {{ 'checked' if clave in sus_permisos else '' }}
@@ -69,7 +69,7 @@
         <label class="form-label">Nombre del rol</label>
         <input name="etiqueta" class="form-control mb-3" placeholder="Ej: Coordinación" required>
         <label class="form-label">Secciones que puede gestionar</label>
-        {% for clave, etiqueta in secciones.items() if clave != 'usuarios' %}
+        {% for clave, etiqueta in secciones.items() if clave not in permisos_reservados %}
         <div class="form-check">
           <input class="form-check-input" type="checkbox" name="secciones" value="{{ clave }}" id="nuevo_{{ clave }}">
           <label class="form-check-label" for="nuevo_{{ clave }}">{{ etiqueta }}</label>
