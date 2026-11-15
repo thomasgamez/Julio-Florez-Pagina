@@ -3,16 +3,63 @@
 # Aplicación Flask principal
 # =========================================================
 import os
+import hmac
+import secrets
+import uuid
 from functools import wraps
 from datetime import date
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, abort
 
 from modelo.conexion import inicializar_bd, SECCIONES
-from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol
+from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos
 
 app = Flask(__name__)
-app.secret_key = "cambia-esta-clave-en-produccion"
+def cargar_clave_secreta():
+    """Usa la variable de entorno SECRET_KEY si existe; si no, crea una clave aleatoria una sola vez."""
+    clave = os.environ.get("SECRET_KEY")
+    if clave:
+        return clave
+    ruta = os.path.join(app.root_path, "clave_secreta.txt")
+    if not os.path.exists(ruta):
+        with open(ruta, "w") as f:
+            f.write(secrets.token_hex(32))
+    with open(ruta) as f:
+        return f.read().strip()
+
+
+app.secret_key = cargar_clave_secreta()
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # máximo 10 MB por envío
+
+def token_csrf():
+    """Devuelve el código secreto de esta sesión (lo crea la primera vez)."""
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
+    return session["csrf_token"]
+
+
+app.jinja_env.globals["csrf_token"] = token_csrf
+
+
+@app.before_request
+def proteger_csrf():
+    """Rechaza cualquier formulario POST que no traiga el código secreto correcto."""
+    if request.method == "POST":
+        enviado = request.form.get("csrf_token", "")
+        esperado = session.get("csrf_token", "")
+        if not esperado or not hmac.compare_digest(enviado.encode(), esperado.encode()):
+            abort(400)
+
+
+@app.errorhandler(400)
+def solicitud_invalida(e):
+    return "La solicitud no es válida o la sesión expiró. Vuelve atrás, recarga la página e intenta de nuevo.", 400
+
+
+@app.errorhandler(413)
+def archivo_muy_grande(e):
+    return "El archivo es demasiado grande (máximo 10 MB). Vuelve atrás y sube una imagen más liviana.", 413
 
 CARPETA_IMAGENES = os.path.join(app.root_path, "static", "images")
 os.makedirs(CARPETA_IMAGENES, exist_ok=True)
@@ -31,13 +78,20 @@ def login_requerido(vista):
     return envoltura
 
 
+EXTENSIONES_PERMITIDAS = {"jpg", "jpeg", "png", "webp", "gif"}
+
+
 def guardar_imagen_subida(archivo):
-    """Guarda un archivo de imagen subido por un formulario y devuelve su nombre, o None."""
-    if archivo and archivo.filename:
-        nombre = secure_filename(archivo.filename)
-        archivo.save(os.path.join(CARPETA_IMAGENES, nombre))
-        return nombre
-    return None
+    """Guarda una imagen subida con nombre único. Devuelve el nombre, o None si falta o no es válida."""
+    if not archivo or not archivo.filename:
+        return None
+    extension = archivo.filename.rsplit(".", 1)[-1].lower() if "." in archivo.filename else ""
+    if extension not in EXTENSIONES_PERMITIDAS:
+        flash("Formato de imagen no permitido. Usa JPG, PNG, WEBP o GIF.", "error")
+        return None
+    nombre = f"{uuid.uuid4().hex}.{extension}"
+    archivo.save(os.path.join(CARPETA_IMAGENES, nombre))
+    return nombre
 
 
 # ---------------------------------------------------------
@@ -651,17 +705,31 @@ def contacto():
 # PANEL ADMINISTRATIVO
 # =========================================================
 
+def ip_cliente():
+    return request.headers.get("X-Real-IP") or request.remote_addr or "desconocida"
+
+
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
         usuario = request.form.get("usuario", "").strip()
         password = request.form.get("password", "")
+        clave = f"{ip_cliente()}|{usuario.lower()}"
+
+        if log_intentos.bloqueado(clave):
+            flash("Demasiados intentos fallidos. Espera 10 minutos e intenta de nuevo.", "error")
+            return render_template("inicio_sesion/login.html")
+
         fila = log_usuario.verificar_credenciales(usuario, password)
         if fila:
+            log_intentos.limpiar(clave)
+            session.clear()  # sesión nueva al entrar, para no reutilizar una anterior
             session["admin_id"] = fila["id"]
             session["admin_nombre"] = fila["nombre"]
             session["admin_rol"] = fila["rol"]
             return redirect(url_for("admin_dashboard"))
+
+        log_intentos.registrar_fallo(clave)
         flash("Usuario o contraseña incorrectos.", "error")
     return render_template("inicio_sesion/login.html")
 

@@ -1,2 +1,11 @@
-__pycache__/ *.pyc venv/ env/ database/*.db .env .vscode/ .DS_Store Thumbs.db
+__pycache__/
+*.pyc
+venv/
+env/
+database/*.db
+.env
+.vscode/
+.DS_Store
+Thumbs.db
 static/images.zip
+clave_secreta.txt

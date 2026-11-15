@@ -150,6 +150,12 @@ def inicializar_bd():
         seccion TEXT NOT NULL,
         PRIMARY KEY (rol_id, seccion)
     );
+
+        CREATE TABLE IF NOT EXISTS intentos_login (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        clave TEXT NOT NULL,
+        momento REAL NOT NULL
+    );
     """)
     
     conexion.commit()
