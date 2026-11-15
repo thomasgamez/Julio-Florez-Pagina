@@ -8,6 +8,25 @@ from werkzeug.security import generate_password_hash
 
 RUTA_BD = os.path.join(os.path.dirname(os.path.dirname(__file__)), "database", "julio_florez.db")
 
+# Secciones del panel que se pueden asignar a un rol.
+# La clave es el nombre interno (el que usan las rutas /admin/<clave>);
+# el valor es el texto que verá la gente en pantalla.
+SECCIONES = {
+    "noticias": "Noticias",
+    "eventos": "Eventos",
+    "logros": "Logros",
+    "galeria": "Galería",
+    "usuarios": "Usuarios",
+    "roles": "Roles y permisos",
+}
+
+# Roles que ya existen hoy, con las secciones que tenían en el código.
+PERMISOS_INICIALES = {
+    "admin": ("Administrador", list(SECCIONES)),
+    "rector": ("Rector", list(SECCIONES)),
+    "secretaria": ("Secretaría Académica", ["noticias", "eventos", "logros", "galeria"]),
+    "pagaduria": ("Pagaduría", []),
+}
 
 def obtener_conexion():
     conexion = sqlite3.connect(RUTA_BD)
@@ -118,6 +137,18 @@ def inicializar_bd():
         imagen TEXT NOT NULL,
         publicado INTEGER NOT NULL DEFAULT 1,
         creado_en TEXT DEFAULT CURRENT_TIMESTAMP
+    );
+
+        CREATE TABLE IF NOT EXISTS roles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT UNIQUE NOT NULL,
+        etiqueta TEXT NOT NULL
+    );
+
+        CREATE TABLE IF NOT EXISTS permisos_rol (
+        rol_id INTEGER NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
+        seccion TEXT NOT NULL,
+        PRIMARY KEY (rol_id, seccion)
     );
     """)
     
