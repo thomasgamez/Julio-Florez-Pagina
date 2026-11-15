@@ -154,6 +154,22 @@ def inicializar_bd():
     
     conexion.commit()
 
+    # --- Migrar los roles actuales a la base de datos (solo si la tabla está vacía) ---
+    if cur.execute("SELECT COUNT(*) FROM roles").fetchone()[0] == 0:
+        for nombre, (etiqueta, secciones) in PERMISOS_INICIALES.items():
+            cur.execute("INSERT INTO roles (nombre, etiqueta) VALUES (?,?)", (nombre, etiqueta))
+            rol_id = cur.lastrowid
+            cur.executemany(
+                "INSERT INTO permisos_rol (rol_id, seccion) VALUES (?,?)",
+                [(rol_id, s) for s in secciones],
+            )
+
+    # --- Limpiar permisos de secciones que ya no existen en el panel ---
+    cur.execute(
+        f"DELETE FROM permisos_rol WHERE seccion NOT IN ({','.join('?' * len(SECCIONES))})",
+        list(SECCIONES),
+    )
+
     # --- Sembrar datos de ejemplo solo si las tablas están vacías ---
     if cur.execute("SELECT COUNT(*) FROM usuarios_admin").fetchone()[0] == 0:
         cur.executemany(
