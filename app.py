@@ -676,24 +676,18 @@ def admin_logout():
 @app.route("/admin")
 @login_requerido
 def admin_dashboard():
-    rol = session.get("admin_rol")
-    acceso_total = rol in ("admin", "rector")
+    nombre_rol = session.get("admin_rol")
+    rol = log_rol.obtener_por_nombre(nombre_rol)
+    permisos = log_rol.permisos_de(nombre_rol)
     return render_template(
         "admin/dashboard.html",
         activo="dashboard",
-        rol=rol,
-        ver_noticias=acceso_total or rol == "secretaria",
-        ver_eventos=acceso_total or rol == "secretaria",
-        ver_logros=acceso_total or rol == "secretaria",
-        ver_galeria=acceso_total or rol == "secretaria",
-        ver_biblioteca=acceso_total,
-        ver_pagaduria=acceso_total or rol == "pagaduria",
+        rol_etiqueta=rol["etiqueta"] if rol else nombre_rol,
+        secciones_permitidas=[et for clave, et in SECCIONES.items() if clave in permisos],
         total_noticias=len(log_noticia.listar_todas()),
         total_eventos=len(log_evento.listar_todos()),
         total_logros=len(log_logro.listar_todos()),
         total_galeria=len(log_galeria.listar_todas()),
-        total_libros=len(log_libro.listar()),
-        total_conceptos=len(log_pago.listar_conceptos()),
     )
 
 # ---- Control de acceso por ROL (los permisos viven en la base de datos) ----
@@ -702,6 +696,11 @@ def permisos_actuales():
     """Secciones que puede ver el usuario con sesión iniciada."""
     return log_rol.permisos_de(session.get("admin_rol"))
 
+@app.context_processor
+def inyectar_permisos():
+    """Hace que la variable 'permisos' esté disponible en TODAS las plantillas."""
+    rol = session.get("admin_rol")
+    return {"permisos": log_rol.permisos_de(rol) if rol else set()}
 
 @app.before_request
 def verificar_permisos_por_rol():

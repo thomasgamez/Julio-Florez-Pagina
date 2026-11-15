@@ -107,3 +107,9 @@ def eliminar(id_rol):
     con.commit()
     con.close()
     return True, "Rol eliminado."        
+
+def obtener_por_nombre(nombre):
+    con = obtener_conexion()
+    fila = con.execute("SELECT * FROM roles WHERE nombre = ?", (nombre,)).fetchone()
+    con.close()
+    return fila
