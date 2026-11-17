@@ -6,7 +6,7 @@
   <div class="container">
     <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
     <h1>{{ info.titulo }}</h1>
-    <p>Profesionales que lideran y acompañan el Programa del Diploma</p>
+    <p>{{ c('bi.equipo.subtitulo') }}</p>
   </div>
 </header>
 
@@ -15,21 +15,21 @@
   <div class="container">
     <div class="row g-4 justify-content-center">
 
-      <div class="col-md-6 col-lg-5">
+            <div class="col-md-6 col-lg-5">
         <article class="equipo-card">
           <div class="equipo-card__cabecera">
             <div class="equipo-card__avatar"><i class="bi bi-compass-fill"></i></div>
-            <span class="equipo-card__rol">Coordinador IB</span>
+            <span class="equipo-card__rol">{{ c('bi.equipo.coord_rol') }}</span>
           </div>
           <div class="equipo-card__cuerpo">
-            <p class="equipo-card__area">Bachillerato Internacional</p>
-            <h3 class="equipo-card__nombre">Carlos Alberto Gil Vargas</h3>
-            <p class="equipo-card__desc">Lidera la implementación del Programa de Orientación Profesional (POP), articula el currículo institucional con los estándares IB y acompaña a los estudiantes en su trayectoria hacia el diploma.</p>
+            <p class="equipo-card__area">{{ c('bi.equipo.coord_area') }}</p>
+            <h3 class="equipo-card__nombre">{{ c('bi.equipo.coord_nombre') }}</h3>
+            <p class="equipo-card__desc">{{ ch('bi.equipo.coord_desc') }}</p>
           </div>
           <div class="equipo-card__pie">
-            <a href="mailto:ib.dp@ejulioflorez.edu.co" class="equipo-card__correo">
+            <a href="mailto:{{ c('bi.equipo.coord_correo') }}" class="equipo-card__correo">
               <i class="bi bi-envelope-fill"></i>
-              <span>ib.dp@ejulioflorez.edu.co</span>
+              <span>{{ c('bi.equipo.coord_correo') }}</span>
             </a>
           </div>
         </article>
@@ -38,31 +38,30 @@
         <article class="equipo-card">
           <div class="equipo-card__cabecera">
             <div class="equipo-card__avatar"><i class="bi bi-mortarboard-fill"></i></div>
-            <span class="equipo-card__rol">Docente de articulación</span>
+            <span class="equipo-card__rol">{{ c('bi.equipo.doc_rol') }}</span>
           </div>
           <div class="equipo-card__cuerpo">
-            <p class="equipo-card__area">Componentes troncales</p>
-            <h3 class="equipo-card__nombre">Stella Rincón Velandia</h3>
-            <p class="equipo-card__desc">Acompaña el proceso pedagógico del programa IB, gestiona la formación docente y articula las prácticas IB con los proyectos institucionales.</p>
+            <p class="equipo-card__area">{{ c('bi.equipo.doc_area') }}</p>
+            <h3 class="equipo-card__nombre">{{ c('bi.equipo.doc_nombre') }}</h3>
+            <p class="equipo-card__desc">{{ ch('bi.equipo.doc_desc') }}</p>
           </div>
           <div class="equipo-card__pie">
-            <a href="mailto:srinconv@educacionbogota.edu.co" class="equipo-card__correo">
+            <a href="mailto:{{ c('bi.equipo.doc_correo') }}" class="equipo-card__correo">
               <i class="bi bi-envelope-fill"></i>
-              <span>srinconv@educacionbogota.edu.co</span>
+              <span>{{ c('bi.equipo.doc_correo') }}</span>
             </a>
           </div>
         </article>
       </div>
-
     </div>
   </div>
 </section>
 
 <section class="text-center">
   <div class="container">
-    <h2 class="mb-2">¿Interesado en el Programa IB?</h2>
-    <p class="text-muted">Inscríbete al proceso de matrículas y haz parte de la comunidad de líderes globales del Julio Flórez</p>
-    <a href="{{ url_for('matriculas') }}" class="btn-institucional" style="background:#173a63">Iniciar proceso de inscripción →</a>
+    <h2 class="mb-2">{{ c('bi.equipo.cta_titulo') }}</h2>
+    <p class="text-muted">{{ ch('bi.equipo.cta_texto') }}</p>
+    <a href="{{ url_for('matriculas') }}" class="btn-institucional" style="background:#173a63">{{ c('bi.equipo.cta_boton') }}</a>
   </div>
 </section>
 

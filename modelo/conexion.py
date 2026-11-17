@@ -16,6 +16,7 @@ SECCIONES = {
     "eventos": "Eventos",
     "logros": "Logros",
     "galeria": "Galería",
+    "contenido": "Contenido del sitio",
     "usuarios": "Usuarios",
     "roles": "Roles y permisos",
 }
@@ -155,6 +156,12 @@ def inicializar_bd():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         clave TEXT NOT NULL,
         momento REAL NOT NULL
+    );
+
+        CREATE TABLE IF NOT EXISTS contenido (
+        clave TEXT PRIMARY KEY,
+        valor TEXT NOT NULL,
+        actualizado TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
     """)
     

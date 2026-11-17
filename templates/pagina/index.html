@@ -31,10 +31,9 @@
   </div>
 
   <div class="container hero-contenido">
-    <p class="nombre-institucion">INSTITUTO TECNICO DISTRITAL JULIO FLOREZ</p>
-    <h1>Jóvenes Líderes<br><span class="resalte">Transformadores</span><br>de la Realidad</h1>
-    <p>Institución educativa oficial de carácter técnico, comprometida con una educación innovadora y de calidad.
-      Formamos ciudadanos del mundo...</p>
+    <p class="nombre-institucion">{{ c('inicio.hero_institucion') }}</p>
+    <h1>{{ c('inicio.hero_titulo_1') }}<br><span class="resalte">{{ c('inicio.hero_resalte') }}</span><br>{{ c('inicio.hero_titulo_3') }}</h1>
+    <p>{{ ch('inicio.hero_texto') }}</p>
   </div>
 </header>
 
@@ -45,17 +44,13 @@
       <div class="col-lg-6">
         <div class="encabezado-seccion text-lg-start">
           <div class="linea ms-lg-0 mx-auto"></div> 
-          <p class="hero-resolucion">Resolución de Aprobación N° 002348 de 2023 — Secretaría de Educación del Distrito</p>
-          <h1>Nuestra Institución</h1>
+          <p class="hero-resolucion">{{ c('sitio.resolucion') }}</p>
+          <h1>{{ c('inicio.inst_titulo') }}</h1>
         </div>
-        <p class="text-muted">Formando ciudadanos del mundo desde el corazón de Bogotá</p>
-        <p>El colegio es una institución educativa oficial de carácter técnico (Programación de Software, Administración de Empresas,
-          Diseño e integración multimedia y Manejo Ambiental), 
-          ubicada en la localidad de Suba, Bogotá D.C. 
-          Siendo los pioneros en la implementación de la <strong>jornada única</strong> en el Distrito Capital desde el año 2015.</p>
-        <p>Hacemos parte de los 5 primeros colegios públicos de Bogotá en graduar y certificar estudiantes 
-          del <strong>Programa de Orientación Profesional del Bachillerato Internacional (IB).</strong></p>
-        <a href="{{ url_for('nuestra_institucion') }}" class="btn-institucional">Conocer más →</a>
+        <p class="text-muted">{{ c('inicio.inst_lema') }}</p>
+        <p>{{ ch('inicio.inst_parrafo_1') }}</p>
+        <p>{{ ch('inicio.inst_parrafo_2') }}</p>
+        <a href="{{ url_for('nuestra_institucion') }}" class="btn-institucional">{{ c('inicio.inst_boton') }}</a>
       </div>
       <div class="col-lg-6">
         <div class="row g-3">
@@ -77,9 +72,8 @@
   <div class="container">
     <div class="encabezado-seccion">
       <div class="linea"></div>
-      <h2>Estudios de Formación Profesional o Especialidades Técnicas</h2>
-      <p>Cuatro programas articulados que preparan a nuestros estudiantes para el mundo laboral y
-        universitario</p>
+      <h2>{{ c('inicio.esp_titulo') }}</h2>
+      <p>{{ ch('inicio.esp_texto') }}</p>
     </div>
     <div class="row g-4">
       {% for esp in especialidades %}
@@ -96,7 +90,7 @@
       {% endfor %}
     </div>
     <div class="text-center mt-4">
-      <a href="{{ url_for('bachillerato_seccion', seccion='estudios-formacion') }}" class="btn-institucional">Ver más</a>
+      <a href="{{ url_for('bachillerato_seccion', seccion='estudios-formacion') }}" class="btn-institucional">{{ c('inicio.esp_boton') }}</a>
     </div>
   </div>
 </section>
@@ -109,14 +103,12 @@
           <img src="{{ url_for('static', filename='images/LOGO IB.png') }}" alt="Logo Bachillerato Internacional (IB)">
         </span>
         <div class="linea mt-3"></div>
-        <h2>Bachillerato Internacional</h2>
-        <p class="mb-3">El Bachillerato Internacional (IB) es una organización educativa global que ofrece programas académicos para estudiantes en más de 160 países. Permite que los alumnos agencien su propio aprendizaje y desarrollen habilidades de pensamiento, 
-          comunicación, autogestión, sociales e indagación que les da la confianza en sí mismos para progresar y hacer la diferencia.</p>
-        <p class="mb-4">Desde diciembre de 2023, somos la única institución educativa de Suba que implementa uno de los Programas del Bachillerato Internacional, estrategia orientada al cierre de brechas educativas dentro del sistema educativo oficial del 
-          Distrito Capital.</p>
+        <h2>{{ c('inicio.ib_titulo') }}</h2>
+        <p class="mb-3">{{ ch('inicio.ib_parrafo_1') }}</p>
+        <p class="mb-4">{{ ch('inicio.ib_parrafo_2') }}</p>
         <div class="d-flex gap-3 flex-wrap">
-          <a href="{{ url_for('bachillerato_internacional') }}" class="btn-institucional">Conocer el POP →</a>
-          <a href="{{ url_for('matriculas') }}" class="btn-rojo">Inscribirse</a>
+          <a href="{{ url_for('bachillerato_internacional') }}" class="btn-institucional">{{ c('inicio.ib_boton_1') }}</a>
+          <a href="{{ url_for('matriculas') }}" class="btn-rojo">{{ c('inicio.ib_boton_2') }}</a>
         </div>
       </div>
       <div class="col-lg-6">
@@ -134,8 +126,8 @@
   <div class="container">
     <div class="encabezado-seccion">
       <div class="linea"></div>
-      <h2>Campos de Formación</h2>
-      <p>Una propuesta pedagógica integral que articula el saber, el ser y el hacer en seis campos del conocimiento</p>
+      <h2>{{ c('inicio.campos_titulo') }}</h2>
+      <p>{{ ch('inicio.campos_texto') }}</p>
     </div>
     <div class="row g-4">
       {% for campo in campos_home %}
@@ -149,7 +141,7 @@
       {% endfor %}
     </div>
     <div class="text-center mt-4">
-      <a href="{{ url_for('campos_formacion') }}" class="btn-outline-institucional">Explorar campos →</a>
+      <a href="{{ url_for('campos_formacion') }}" class="btn-outline-institucional">{{ c('inicio.campos_boton') }}</a>
     </div>
   </div>
 </section>
@@ -158,8 +150,8 @@
 <section class="quick-access-section">
   <div class="quick-access-card">
     <div class="quick-access-header">
-      <span class="qa-eyebrow">Accesos Rápidos</span>
-      <p>Servicios y trámites al alcance de un clic</p>
+      <span class="qa-eyebrow">{{ c('inicio.accesos_etiqueta') }}</span>
+      <p>{{ c('inicio.accesos_texto') }}</p>
     </div>
 
     <div class="quick-access-grid">
@@ -167,42 +159,42 @@
         <span class="qa-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 10h18M3 6h18M5 14h4v4H5zM13 14h6v4h-6z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
         </span>
-        <span class="qa-label">Pagaduría</span>
+        <span class="qa-label">{{ c('inicio.acc_pagaduria') }}</span>
       </a>
 
-      <a href="https://biblioteca-final-1.onrender.com" class="quick-access-item">
+      <a href="{{ c('enlaces.biblioteca') }}" class="quick-access-item">
         <span class="qa-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 5h9v16H4zM13 5h7v16h-7z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
         </span>
-        <span class="qa-label">Biblioteca</span>
+        <span class="qa-label">{{ c('inicio.acc_biblioteca') }}</span>
       </a>
 
       <a href="{{ url_for('archivo') }}" class="quick-access-item">
         <span class="qa-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
         </span>
-        <span class="qa-label">Sistema de Archivo</span>
+        <span class="qa-label">{{ c('inicio.acc_archivo') }}</span>
       </a>
 
-      <a href="https://citdjulioflorez.edupage.org/login/index.php?out=1" class="quick-access-item" target="_blank" rel="noopener">
+      <a href="{{ c('enlaces.edupage') }}" class="quick-access-item" target="_blank" rel="noopener">
         <span class="qa-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9M5 5h6v0H5v14h14v-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
         </span>
-        <span class="qa-label">Edupage</span>
+        <span class="qa-label">{{ c('inicio.acc_edupage') }}</span>
       </a>
 
-      <a href="https://zoe-app-mimm.onrender.com" class="quick-access-item">
+      <a href="{{ c('enlaces.zoe') }}" class="quick-access-item">
         <span class="qa-icon">
           <svg xmlns="http://www.w3.org/2000/sv" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke="currentColor" stroke-width="1.5"/></svg>
         </span>
-        <span class="qa-label">ZOE</span>
+        <span class="qa-label">{{ c('inicio.acc_zoe') }}</span>
       </a>
 
       <a href="{{ url_for('contacto') }}" class="quick-access-item">
         <span class="qa-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 5l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
         </span>
-        <span class="qa-label">Contacto</span>
+        <span class="qa-label">{{ c('inicio.acc_contacto') }}</span>
       </a>
     </div>
   </div>
@@ -213,7 +205,7 @@
     <div class="row g-5">
       <div class="col-lg-5">
         <div class="linea"></div>
-        <h2 class="mb-4">Calendario</h2>
+        <h2 class="mb-4">{{ c('inicio.calendario_titulo') }}</h2>
         {% for ev in eventos_home %}
         <div class="item-calendario">
           <div class="fecha-badge">
@@ -227,12 +219,12 @@
           </div>
         </div>
         {% endfor %}
-        <a href="{{ url_for('eventos') }}" class="btn-outline-institucional mt-4 d-inline-block">Ver todos los eventos
+        <a href="{{ url_for('eventos') }}" class="btn-outline-institucional mt-4 d-inline-block">{{ c('inicio.calendario_boton') }}</a>
           →</a>
       </div>
       <div class="col-lg-7">
         <div class="linea"></div>
-        <h2 class="mb-4">Últimas Noticias</h2>
+        <h2 class="mb-4">{{ c('inicio.noticias_titulo') }}</h2>
         {% for n in noticias_home %}
         <div class="d-flex gap-3 mb-4 pb-3 border-bottom">
           <img src="{{ url_for('static', filename='images/' + n.imagen) }}" class="rounded-3"
@@ -242,11 +234,11 @@
             <span class="small text-muted ms-2">{{ n.fecha }}</span>
             <h4 class="h6 mt-1 mb-1">{{ n.titulo }}</h4>
             <p class="small text-muted mb-1">{{ n.resumen }}</p>
-            <a href="{{ url_for('noticias') }}" class="enlace small fw-semibold text-verde">Leer más →</a>
+            <a href="{{ url_for('noticias') }}" class="enlace small fw-semibold text-verde">{{ c('inicio.noticias_leer') }}</a>
           </div>
         </div>
         {% endfor %}
-        <a href="{{ url_for('noticias') }}" class="btn-outline-institucional">Ver todas las noticias →</a>
+        <a href="{{ url_for('noticias') }}" class="btn-outline-institucional">{{ c('inicio.noticias_boton') }}</a>
       </div>
     </div>
   </div>

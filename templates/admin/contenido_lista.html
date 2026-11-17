@@ -1,0 +1,70 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Contenido del sitio{% endblock %}
+{% block encabezado %}Contenido del sitio{% endblock %}
+{% block contenido_admin %}
+
+<p class="text-muted small mb-3">
+  Aquí cambias los textos de las páginas. Si no editas nada, el sitio muestra el texto original.
+  <strong>Restaurar original</strong> borra tu cambio y devuelve el texto que venía de base.
+</p>
+
+<div class="row g-4">
+
+  <!-- Lista de páginas -->
+  <div class="col-lg-3">
+    <div class="list-group">
+      {% for g in grupos %}
+      <a href="{{ url_for('admin_contenido', grupo=g) }}"
+         class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ 'active' if g == grupo else '' }}">
+        {{ g }}
+        {% if cambios[g] %}<span class="badge bg-warning text-dark">{{ cambios[g] }}</span>{% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Textos de la página elegida -->
+  <div class="col-lg-9">
+    {% for t in textos %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('admin_contenido_guardar') }}">
+          <input type="hidden" name="clave" value="{{ t.clave }}">
+
+          <label class="form-label fw-semibold">
+            {{ t.etiqueta }}
+            {% if t.editado %}<span class="badge bg-warning text-dark ms-1">Editado</span>{% endif %}
+          </label>
+
+          {% if t.tipo == 'parrafo' %}
+          <textarea name="valor" class="form-control" rows="5" maxlength="5000">{{ t.valor }}</textarea>
+          <div class="form-text">Para poner algo en negrita escríbelo entre dos asteriscos: **así**.</div>
+          {% elif t.tipo == 'url' %}
+          <input type="url" name="valor" class="form-control" value="{{ t.valor }}" maxlength="500" placeholder="https://...">
+          {% else %}
+          <input type="text" name="valor" class="form-control" value="{{ t.valor }}" maxlength="500">
+          {% endif %}
+
+          <div class="d-flex gap-2 mt-2">
+            <button class="btn-institucional">Guardar</button>
+            {% if t.editado %}
+            <button type="submit" formaction="{{ url_for('admin_contenido_restaurar') }}"
+                    class="btn btn-outline-secondary"
+                    onclick="return confirm('¿Volver al texto original?');">Restaurar original</button>
+            {% endif %}
+          </div>
+
+          {% if t.editado %}
+          <details class="mt-2 small text-muted">
+            <summary>Ver texto original</summary>
+            <div style="white-space: pre-line;">{{ t.base }}</div>
+          </details>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

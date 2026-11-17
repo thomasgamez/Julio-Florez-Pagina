@@ -6,13 +6,16 @@ import os
 import hmac
 import secrets
 import uuid
+import re
 from functools import wraps
 from datetime import date
+from markupsafe import Markup, escape
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, redirect, url_for, flash, session, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, g
 
 from modelo.conexion import inicializar_bd, SECCIONES
-from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos
+from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos, log_contenido
+from contenido_base import CONTENIDO_BASE
 
 app = Flask(__name__)
 def cargar_clave_secreta():
@@ -156,14 +159,14 @@ COMPONENTES_TRONCALES_POP = [
 ]
 
 BACHILLERATO_SECCIONES = {
-    "que-es-ib": {"titulo": "¿Qué es el Bachillerato Internacional?", "corto": "¿Qué es el BI?", "icono": "bi-globe-americas"},
-    "media-tecnica": {"titulo": "Media Técnica Internacional", "corto": "Media Técnica", "icono": "bi-mortarboard"},
-    "pop": {"titulo": "Programa de Orientación Profesional (POP)", "corto": "POP", "icono": "bi-compass"},
-    "asignaturas-pd": {"titulo": "Asignaturas PD", "corto": "Asignaturas PD", "icono": "bi-journal-text"},
-    "estudios-formacion": {"titulo": "Estudios de Formación Profesional", "corto": "Estudios de Formación", "icono": "bi-briefcase"},
-    "componentes-troncales": {"titulo": "Componentes Troncales del POP", "corto": "Componentes Troncales", "icono": "bi-diagram-3"},
-    "perfil-comunidad": {"titulo": "Perfil de la Comunidad de Aprendizaje", "corto": "Perfil Comunidad", "icono": "bi-people"},
-    "equipo-ib": {"titulo": "Equipo de Coordinación IB", "corto": "Equipo IB", "icono": "bi-person-badge"},
+    "que-es-ib": {"icono": "bi-globe-americas"},
+    "media-tecnica": {"icono": "bi-mortarboard"},
+    "pop": {"icono": "bi-compass"},
+    "asignaturas-pd": {"icono": "bi-journal-text"},
+    "estudios-formacion": {"icono": "bi-briefcase"},
+    "componentes-troncales": {"icono": "bi-diagram-3"},
+    "perfil-comunidad": {"icono": "bi-people"},
+    "equipo-ib": {"icono": "bi-person-badge"},
 }
 
 BACHILLERATO_TEMPLATES = {
@@ -564,36 +567,31 @@ def bachillerato_internacional():
     return redirect(url_for("bachillerato_seccion", seccion="que-es-ib"))
 
 
+def secciones_bi():
+    """Secciones del Bachillerato Internacional con títulos editables desde el panel."""
+    return {
+        clave: {**dato, "titulo": contenido(f"bi.{clave}.titulo"), "corto": contenido(f"bi.{clave}.corto")}
+        for clave, dato in BACHILLERATO_SECCIONES.items()
+    }
+
+
 @app.route("/bachillerato-internacional/<seccion>")
 def bachillerato_seccion(seccion):
-    info = BACHILLERATO_SECCIONES.get(seccion)
+    secciones = secciones_bi()
+    info = secciones.get(seccion)
     if not info:
         return redirect(url_for("bachillerato_seccion", seccion="que-es-ib"))
     return render_template(
         BACHILLERATO_TEMPLATES[seccion],
         info=info,
         seccion_actual=seccion,
-        secciones=BACHILLERATO_SECCIONES,
+        secciones=secciones,
         perfil_ib=PERFIL_IB,
         habilidades_ib=HABILIDADES_IB,
         especialidades=ESPECIALIDADES,
         asignaturas_pd=ASIGNATURAS_PD,
         componentes_troncales=COMPONENTES_TRONCALES_POP,
     )
-
-
-    return render_template(
-        BACHILLERATO_TEMPLATES[seccion],
-        info=info,
-        seccion_actual=seccion,
-        secciones=BACHILLERATO_SECCIONES,
-        perfil_ib=PERFIL_IB,
-        habilidades_ib=HABILIDADES_IB,
-        especialidades=ESPECIALIDADES,
-        asignaturas_pd=ASIGNATURAS_PD,
-        componentes_troncales=COMPONENTES_TRONCALES_POP,
-    )
-
 
 @app.route("/bachillerato-internacional/zoe")
 def zoe():
@@ -769,6 +767,30 @@ def inyectar_permisos():
     """Hace que la variable 'permisos' esté disponible en TODAS las plantillas."""
     rol = session.get("admin_rol")
     return {"permisos": log_rol.permisos_de(rol) if rol else set()}
+
+def contenido(clave):
+    """Devuelve el texto editado si existe; si no, el texto base del código."""
+    if "contenido_editado" not in g:
+        g.contenido_editado = log_contenido.todos()   # se lee una sola vez por petición
+    if clave in g.contenido_editado:
+        return g.contenido_editado[clave]
+    item = CONTENIDO_BASE.get(clave)
+    if not item:
+        app.logger.warning("Clave de contenido desconocida: %s", clave)
+        return ""
+    return item["base"]
+
+
+app.jinja_env.globals["c"] = contenido
+
+def contenido_html(clave):
+    """Como contenido(), pero para párrafos: **negrita** y saltos de línea."""
+    texto = str(escape(contenido(clave)))                      # 1) se neutraliza cualquier HTML
+    texto = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", texto)   # 2) **x** -> <strong>x</strong>
+    return Markup(texto.replace("\n", "<br>"))                 # 3) saltos de línea
+
+
+app.jinja_env.globals["ch"] = contenido_html
 
 @app.before_request
 def verificar_permisos_por_rol():
@@ -1186,6 +1208,72 @@ def admin_rol_eliminar(id_rol):
     ok, mensaje = log_rol.eliminar(id_rol)
     flash(mensaje, "success" if ok else "error")
     return redirect(url_for("admin_roles"))
+
+# ---------------- CONTENIDO DEL SITIO ----------------
+
+def grupo_de(clave):
+    """Página a la que pertenece un texto (None si la clave no existe)."""
+    return CONTENIDO_BASE.get(clave, {}).get("grupo")
+
+
+@app.route("/admin/contenido")
+@login_requerido
+def admin_contenido():
+    # Lista de páginas, en el orden en que aparecen en contenido_base.py
+    grupos = []
+    for it in CONTENIDO_BASE.values():
+        if it["grupo"] not in grupos:
+            grupos.append(it["grupo"])
+
+    grupo = request.args.get("grupo")
+    if grupo not in grupos:
+        grupo = grupos[0]
+
+    editados = log_contenido.todos()
+
+    # Cuántos textos editados hay en cada página (para la insignia amarilla)
+    cambios = {g: 0 for g in grupos}
+    for clave in editados:
+        if clave in CONTENIDO_BASE:
+            cambios[CONTENIDO_BASE[clave]["grupo"]] += 1
+
+    textos = [
+        {
+            "clave": clave,
+            "etiqueta": it["etiqueta"],
+            "tipo": it["tipo"],
+            "base": it["base"],
+            "valor": editados.get(clave, it["base"]),
+            "editado": clave in editados,
+        }
+        for clave, it in CONTENIDO_BASE.items()
+        if it["grupo"] == grupo
+    ]
+    return render_template(
+        "admin/contenido_lista.html",
+        activo="contenido", grupos=grupos, grupo=grupo, cambios=cambios, textos=textos,
+    )
+
+
+@app.route("/admin/contenido/guardar", methods=["POST"])
+@login_requerido
+def admin_contenido_guardar():
+    clave = request.form.get("clave", "")
+    ok, mensaje = log_contenido.guardar(clave, request.form.get("valor", ""))
+    flash(mensaje, "success" if ok else "error")
+    return redirect(url_for("admin_contenido", grupo=grupo_de(clave)))
+
+
+@app.route("/admin/contenido/restaurar", methods=["POST"])
+@login_requerido
+def admin_contenido_restaurar():
+    clave = request.form.get("clave", "")
+    if clave in CONTENIDO_BASE:
+        log_contenido.restaurar(clave)
+        flash("Texto restaurado al original.", "success")
+    else:
+        flash("Ese texto no existe.", "error")
+    return redirect(url_for("admin_contenido", grupo=grupo_de(clave)))
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -4,8 +4,8 @@
 
 <header class="encabezado-pagina">
   <div class="container">
-    <h1>Contacto</h1>
-    <p>Estamos para atenderte</p>
+    <h1>{{ c('contacto.titulo') }}</h1>
+    <p>{{ c('contacto.subtitulo') }}</p>
   </div>
 </header>
 
@@ -15,24 +15,24 @@
       <div class="col-lg-5">
         <div class="tarjeta mb-3">
           <div class="icono"><i class="bi bi-geo-alt-fill"></i></div>
-          <h3 class="h6">Sede Principal — Bachillerato Julio Flórez</h3>
+          <h3 class="h6">{{ c('sedes.principal_nombre') }}</h3>
           <p class="small text-muted mb-0">
-            Carrera 68B N° 94-12, Bogotá D.C. - Colombia<br>
-            <i class="bi bi-telephone-fill"></i> 305 792 3922 · 253 6376
+            {{ c('sedes.principal_direccion') }}<br>
+            <i class="bi bi-telephone-fill"></i> {{ c('sedes.principal_telefonos') }}
           </p>
         </div>
         <div class="tarjeta mb-3">
           <div class="icono"><i class="bi bi-geo-alt-fill"></i></div>
-          <h3 class="h6">Sede A — Primaria Santa Rosa</h3>
+          <h3 class="h6">{{ c('sedes.a_nombre') }}</h3>
           <p class="small text-muted mb-0">
-            Calle 102A N° 70-40, Bogotá D.C. - Colombia<br>
-            <i class="bi bi-telephone-fill"></i> 300 207 2701
+            {{ c('sedes.a_direccion') }}<br>
+            <i class="bi bi-telephone-fill"></i> {{ c('sedes.a_telefonos') }}
           </p>
         </div>
         <div class="tarjeta">
           <div class="icono"><i class="bi bi-envelope-fill"></i></div>
           <h3 class="h6">Correo institucional</h3>
-          <p class="small text-muted mb-0">cedjulioflorez11@educacionbogota.edu.co</p>
+          <p class="small text-muted mb-0">{{ c('contacto.correo_institucional') }}</p>
         </div>
       </div>
       <div class="col-lg-7">
