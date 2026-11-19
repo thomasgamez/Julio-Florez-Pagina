@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block titulo %}Documentos - Institucionales Julio FLorez{% endblock %}
+{% block contenido %}
+
+<header class="encabezado-pagina">
+  <div class="container">
+    <h1>Documentos Institucionales</h1>
+    <p>Consulta y descarga los documentos oficiales de la institución</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="row g-4">
+      {% for documento in documentos %}
+      <div class="col-md-6 col-lg-4">
+        <div class="tarjeta h-100">
+          <h3 class="h6">{{ documento.titulo }}</h3>
+          <p class="small text-muted mb-0">{{ documento.descripcion }}</p>
+          <a href="{{ url_for('static', filename=documento.archivo) }}" class="btn-institucional mt-3" target="_blank">Descargar</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %} 
