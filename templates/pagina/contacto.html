@@ -9,6 +9,8 @@
   </div>
 </header>
 
+{% include "_mensajes.html" %}
+
 <section>
   <div class="container">
     <div class="row g-4 align-items-start">
@@ -39,6 +41,7 @@
         <div class="tarjeta">
           <h3 class="h5 mb-3">Envíanos un mensaje</h3>
           <form method="POST" action="{{ url_for('contacto') }}">
+            <input type="text" name="sitio_web" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
             <div class="row g-3">
               <div class="col-md-6"><input type="text" class="form-control" name="nombre" placeholder="Nombre completo" required></div>
               <div class="col-md-6"><input type="email" class="form-control" name="correo" placeholder="Correo electrónico" required></div>

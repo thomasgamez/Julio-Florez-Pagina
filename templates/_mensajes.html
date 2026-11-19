@@ -1,0 +1,9 @@
+{% with mensajes = get_flashed_messages(with_categories=true) %}
+  {% if mensajes %}
+  <div class="container mt-4">
+    {% for categoria, mensaje in mensajes %}
+    <div class="alert alert-{{ 'danger' if categoria == 'error' else 'success' }} rounded-3">{{ mensaje }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}

@@ -30,6 +30,12 @@
     {% if 'contenido' in permisos %}
     <a href="{{ url_for('admin_contenido') }}" class="{{ 'activo' if activo=='contenido' else '' }}"><i class="bi bi-pencil-square"></i> Contenido del sitio</a>
     {% endif %}
+    {% if 'documentos' in permisos %}
+    <a href="{{ url_for('admin_documentos') }}" class="{{ 'activo' if activo=='documentos' else '' }}"><i class="bi bi-folder2-open"></i> Documentos</a>
+    {% endif %}
+    {% if 'solicitudes' in permisos %}
+    <a href="{{ url_for('admin_solicitudes') }}" class="{{ 'activo' if activo=='solicitudes' else '' }}"><i class="bi bi-inbox"></i> PQR y mensajes{% if solicitudes_nuevas %} <span class="badge bg-danger ms-1">{{ solicitudes_nuevas }}</span>{% endif %}</a>
+    {% endif %}
     {% if 'usuarios' in permisos %}
     <a href="{{ url_for('admin_usuarios') }}" class="{{ 'activo' if activo=='usuarios' else '' }}"><i class="bi bi-people"></i> Usuarios</a>
     {% endif %}

@@ -4,8 +4,8 @@
 
 <header class="encabezado-pagina encabezado-pagaduria">
   <div class="container">
-    <h1>Pagaduría</h1>
-    <p>Gestión documental y archivística institucional</p>
+    <h1>{{ c('pagaduria.titulo') }}</h1>
+    <p>{{ c('pagaduria.subtitulo') }}</p>
   </div>
 </header>
 <section>
@@ -14,64 +14,80 @@
       <div class="col-md-4">
         <div class="tarjeta acento-verde text-center">
           <div class="icono mx-auto"><i class="bi bi-folder2-open"></i></div>
-          <h3 class="h6">¿Qué hace Pagaduría?</h3>
-          <p class="small text-muted mb-0">Administra y organiza los expedientes institucionales, clasificándolos por
-            series y subseries documentales.</p>
+          <h3 class="h6">{{ c('pagaduria.card1_titulo') }}</h3>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.card1_texto') }}</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="tarjeta acento-amarillo text-center">
           <div class="icono mx-auto"><i class="bi bi-clock-history"></i></div>
-          <h3 class="h6">Ciclo de vida documental</h3>
-          <p class="small text-muted mb-0">Cada expediente se controla según su estado — activo, semiactivo o inactivo —
-            y su tiempo de conservación.</p>
+          <h3 class="h6">{{ c('pagaduria.card2_titulo') }}</h3>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.card2_texto') }}</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="tarjeta acento-rojo text-center">
           <div class="icono mx-auto"><i class="bi bi-shield-lock"></i></div>
-          <h3 class="h6">Niveles de acceso</h3>
-          <p class="small text-muted mb-0">La información se clasifica según su nivel de acceso, garantizando la
-            confidencialidad que corresponda a cada documento.</p>
+          <h3 class="h6">{{ c('pagaduria.card3_titulo') }}</h3>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.card3_texto') }}</p>
         </div>
       </div>
     </div>
+
+    <!-- ============ DOCUMENTOS (se suben desde el panel) ============ -->
+    <h3 class="h5 mb-2">{{ c('pagaduria.docs_titulo') }}</h3>
+    <p class="text-muted">{{ ch('pagaduria.docs_texto') }}</p>
+    {% set iconos = {'pdf': 'bi-file-earmark-pdf', 'doc': 'bi-file-earmark-word', 'docx': 'bi-file-earmark-word',
+                     'xls': 'bi-file-earmark-excel', 'xlsx': 'bi-file-earmark-excel',
+                     'ppt': 'bi-file-earmark-slides', 'pptx': 'bi-file-earmark-slides',
+                     'jpg': 'bi-file-earmark-image', 'jpeg': 'bi-file-earmark-image', 'png': 'bi-file-earmark-image'} %}
+    <div class="row g-3 mb-5">
+      {% for d in documentos %}
+      <div class="col-md-6">
+        <div class="tarjeta d-flex gap-3 align-items-start h-100">
+          <div class="icono"><i class="bi {{ iconos.get(d.extension, 'bi-file-earmark') }}"></i></div>
+          <div class="flex-grow-1">
+            <h4 class="h6 mb-1">{{ d.titulo }}</h4>
+            {% if d.descripcion %}<p class="small text-muted mb-1">{{ d.descripcion }}</p>{% endif %}
+            <p class="small text-muted mb-2">
+              {% if d.categoria %}<span class="badge-institucional">{{ d.categoria }}</span> · {% endif %}
+              {{ d.creado[8:10] }}/{{ d.creado[5:7] }}/{{ d.creado[:4] }} · {{ d.extension|upper }} · {{ d.tamano|tamano_legible }}
+            </p>
+            <a href="{{ url_for('documento_ver', id_documento=d.id) }}" target="_blank" rel="noopener" class="enlace small fw-semibold text-verde">{{ c('pagaduria.docs_boton') }}</a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="col-12"><p class="text-muted small mb-0">{{ c('pagaduria.docs_vacio') }}</p></div>
+      {% endfor %}
+    </div>
+
     <div class="linea"></div>
-    <h3 class="h5 mt-4 mb-4">¿Qué es la gestión documental?</h3>
-    <p class="text-muted">
-      La Pagaduría del Instituto Técnico Distrital Julio Flórez es responsable de la gestión documental y
-      archivística de la institución: organiza, clasifica y conserva los expedientes institucionales a lo
-      largo de su ciclo de vida — desde que un documento se genera (activo), pasa por un periodo de consulta
-      frecuente decreciente (semiactivo), hasta llegar a su fase final de conservación permanente o disposición
-      (inactivo).
-    </p>
+    <h3 class="h5 mt-4 mb-4">{{ c('pagaduria.gd_titulo') }}</h3>
+    <p class="text-muted">{{ ch('pagaduria.gd_texto') }}</p>
     <div class="row g-4 mt-4">
       <div class="col-md-6">
         <div class="tarjeta acento-oscuro">
-          <h4 class="h6 mb-2"><i class="bi bi-diagram-3 text-verde me-1"></i> Series y Subseries</h4>
-          <p class="small text-muted mb-0">Los expedientes se agrupan por series y subseries documentales, siguiendo la
-            estructura de clasificación institucional.</p>
+          <h4 class="h6 mb-2"><i class="bi bi-diagram-3 text-verde me-1"></i> {{ c('pagaduria.series_titulo') }}</h4>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.series_texto') }}</p>
         </div>
       </div>
       <div class="col-md-6">
         <div class="tarjeta acento-verde">
-          <h4 class="h6 mb-2"><i class="bi bi-geo-alt text-verde me-1"></i> Ubicación física y digital</h4>
-          <p class="small text-muted mb-0">Cada expediente tiene registrada su ubicación física (archivo físico) y,
-            cuando aplica, su ubicación digital.</p>
+          <h4 class="h6 mb-2"><i class="bi bi-geo-alt text-verde me-1"></i> {{ c('pagaduria.ubicacion_titulo') }}</h4>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.ubicacion_texto') }}</p>
         </div>
       </div>
       <div class="col-md-6">
         <div class="tarjeta acento-amarillo">
-          <h4 class="h6 mb-2"><i class="bi bi-patch-check text-verde me-1"></i> Estado de conservación</h4>
-          <p class="small text-muted mb-0">Se hace seguimiento al estado de conservación de cada expediente para
-            garantizar su integridad en el tiempo.</p>
+          <h4 class="h6 mb-2"><i class="bi bi-patch-check text-verde me-1"></i> {{ c('pagaduria.conservacion_titulo') }}</h4>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.conservacion_texto') }}</p>
         </div>
       </div>
       <div class="col-md-6">
         <div class="tarjeta acento-rojo">
-          <h4 class="h6 mb-2"><i class="bi bi-calendar-check text-verde me-1"></i> Disposición final</h4>
-          <p class="small text-muted mb-0">Cada expediente tiene una fecha estimada de disposición final, conforme a las
-            tablas de retención documental.</p>
+          <h4 class="h6 mb-2"><i class="bi bi-calendar-check text-verde me-1"></i> {{ c('pagaduria.disposicion_titulo') }}</h4>
+          <p class="small text-muted mb-0">{{ ch('pagaduria.disposicion_texto') }}</p>
         </div>
       </div>
     </div>
@@ -79,12 +95,13 @@
     <div class="tarjeta-archivo-callout mt-5">
       <div class="d-flex align-items-center gap-4">
         <div class="archivo-icono"><i class="bi bi-archive-fill"></i></div>
-          <div>
-            <h3 class="h5 mb-2">Archivo</h3>
-              <p class="small mb-0">Archivo es el área especializada de Pagaduría encargada de la gestión física e interna de los expedientes institucionales.</p>
+        <div>
+          <h3 class="h5 mb-2">{{ c('pagaduria.archivo_titulo') }}</h3>
+          <p class="small mb-0">{{ ch('pagaduria.archivo_texto') }}</p>
         </div>
       </div>
-          <a href="{{ url_for('archivo') }}" class="btn-rojo text-nowrap">Consultar Archivo →</a>
+      <a href="{{ url_for('archivo') }}" class="btn-rojo text-nowrap">{{ c('pagaduria.archivo_boton') }}</a>
     </div>
+  </div>
 </section>
 {% endblock %}

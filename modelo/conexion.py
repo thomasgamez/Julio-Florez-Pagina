@@ -17,6 +17,8 @@ SECCIONES = {
     "logros": "Logros",
     "galeria": "Galería",
     "contenido": "Contenido del sitio",
+    "documentos": "Documentos",
+    "solicitudes": "PQR y mensajes",
     "usuarios": "Usuarios",
     "roles": "Roles y permisos",
 }
@@ -26,7 +28,7 @@ PERMISOS_INICIALES = {
     "admin": ("Administrador", list(SECCIONES)),
     "rector": ("Rector", list(SECCIONES)),
     "secretaria": ("Secretaría Académica", ["noticias", "eventos", "logros", "galeria"]),
-    "pagaduria": ("Pagaduría", []),
+    "pagaduria": ("Pagaduría", ["documentos"]),
 }
 
 def obtener_conexion():
@@ -163,6 +165,36 @@ def inicializar_bd():
         valor TEXT NOT NULL,
         actualizado TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
+
+        CREATE TABLE IF NOT EXISTS documentos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        titulo TEXT NOT NULL,
+        descripcion TEXT NOT NULL DEFAULT '',
+        categoria TEXT NOT NULL DEFAULT '',
+        archivo TEXT NOT NULL,
+        nombre_original TEXT NOT NULL,
+        extension TEXT NOT NULL,
+        tamano INTEGER NOT NULL DEFAULT 0,
+        creado TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+        CREATE TABLE IF NOT EXISTS solicitudes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        origen TEXT NOT NULL,
+        radicado TEXT NOT NULL DEFAULT '',
+        tipo TEXT NOT NULL DEFAULT '',
+        nombre TEXT NOT NULL,
+        correo TEXT NOT NULL,
+        telefono TEXT NOT NULL DEFAULT '',
+        tipo_usuario TEXT NOT NULL DEFAULT '',
+        sede TEXT NOT NULL DEFAULT '',
+        asunto TEXT NOT NULL,
+        descripcion TEXT NOT NULL,
+        estado TEXT NOT NULL DEFAULT 'Nuevo',
+        nota TEXT NOT NULL DEFAULT '',
+        creado TEXT NOT NULL DEFAULT (datetime('now', '-5 hours')),
+        actualizado TEXT NOT NULL DEFAULT (datetime('now', '-5 hours'))
+    );
     """)
     
     conexion.commit()
@@ -177,11 +209,11 @@ def inicializar_bd():
                 [(rol_id, s) for s in secciones],
             )
 
-    # --- Limpiar permisos de secciones que ya no existen en el panel ---
-    cur.execute(
-        f"DELETE FROM permisos_rol WHERE seccion NOT IN ({','.join('?' * len(SECCIONES))})",
-        list(SECCIONES),
-    )
+    # --- Red de seguridad: el rol admin siempre conserva Usuarios y Roles ---
+    admin = cur.execute("SELECT id FROM roles WHERE nombre = 'admin'").fetchone()
+    if admin:
+        for seccion in ("usuarios", "roles"):
+            cur.execute("INSERT OR IGNORE INTO permisos_rol (rol_id, seccion) VALUES (?,?)", (admin[0], seccion))
 
     # --- Sembrar datos de ejemplo solo si las tablas están vacías ---
     if cur.execute("SELECT COUNT(*) FROM usuarios_admin").fetchone()[0] == 0:

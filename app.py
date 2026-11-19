@@ -11,10 +11,10 @@ from functools import wraps
 from datetime import date
 from markupsafe import Markup, escape
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, g
+from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, g, send_from_directory
 
 from modelo.conexion import inicializar_bd, SECCIONES
-from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos, log_contenido
+from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos, log_contenido, log_documento, log_solicitud
 from contenido_base import CONTENIDO_BASE
 
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def cargar_clave_secreta():
 
 app.secret_key = cargar_clave_secreta()
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # máximo 10 MB por envío
+app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024  # máximo 25 MB por envío
 
 def token_csrf():
     """Devuelve el código secreto de esta sesión (lo crea la primera vez)."""
@@ -67,6 +67,9 @@ def archivo_muy_grande(e):
 CARPETA_IMAGENES = os.path.join(app.root_path, "static", "images")
 os.makedirs(CARPETA_IMAGENES, exist_ok=True)
 
+CARPETA_DOCUMENTOS = os.path.join(app.root_path, "static", "documentos")
+os.makedirs(CARPETA_DOCUMENTOS, exist_ok=True)
+
 inicializar_bd()
 
 
@@ -95,6 +98,32 @@ def guardar_imagen_subida(archivo):
     nombre = f"{uuid.uuid4().hex}.{extension}"
     archivo.save(os.path.join(CARPETA_IMAGENES, nombre))
     return nombre
+
+
+EXTENSIONES_DOCUMENTOS = {"pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "jpg", "jpeg", "png"}
+
+
+def guardar_documento_subido(archivo):
+    """Guarda un documento. Devuelve (nombre_guardado, nombre_original, extension, tamano) o None si no es válido."""
+    if not archivo or not archivo.filename:
+        return None
+    extension = archivo.filename.rsplit(".", 1)[-1].lower() if "." in archivo.filename else ""
+    if extension not in EXTENSIONES_DOCUMENTOS:
+        flash("Formato no permitido. Usa PDF, Word, Excel, PowerPoint o imágenes (JPG/PNG).", "error")
+        return None
+    nombre = f"{uuid.uuid4().hex}.{extension}"
+    ruta = os.path.join(CARPETA_DOCUMENTOS, nombre)
+    archivo.save(ruta)
+    original = secure_filename(archivo.filename) or f"documento.{extension}"
+    return nombre, original, extension, os.path.getsize(ruta)
+
+
+@app.template_filter("tamano_legible")
+def tamano_legible(n):
+    """Convierte bytes en '2.4 MB' o '350 KB'."""
+    if n >= 1024 * 1024:
+        return f"{n / 1024 / 1024:.1f} MB"
+    return f"{max(1, round(n / 1024))} KB"
 
 
 # ---------------------------------------------------------
@@ -660,6 +689,7 @@ def pagaduria():
         "pagina/pagaduria.html",
         faq=FAQ_PAGADURIA,
         conceptos=log_pago.listar_conceptos_activos(),
+        documentos=log_documento.listar(),
     )
 
 
@@ -682,19 +712,91 @@ def matriculas():
     )
 
 
+def correo_valido(texto):
+    return bool(re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", texto))
+
+
+def recortar(campo, maximo):
+    """Lee un campo del formulario, quita espacios y lo limita a un largo máximo."""
+    return request.form.get(campo, "").strip()[:maximo]
+
+
 @app.route("/pqr", methods=["GET", "POST"])
 def pqr():
     if request.method == "POST":
-        # Aquí guardarías la solicitud en tu base de datos (carpeta /modelo)
-        flash("Tu solicitud PQR fue radicada correctamente. Te responderemos en máximo 15 días hábiles.")
+        if request.form.get("sitio_web"):  # campo trampa: solo los robots lo llenan
+            return redirect(url_for("pqr"))
+
+        clave = f"formulario|{ip_cliente()}"
+        if log_intentos.bloqueado(clave):
+            flash("Has enviado muchas solicitudes seguidas. Espera unos minutos e intenta de nuevo.", "error")
+            return redirect(url_for("pqr"))
+
+        tipo = request.form.get("tipo_solicitud", "")
+        nombre = recortar("nombre", 120)
+        correo = recortar("correo", 150)
+        asunto = recortar("asunto", 200)
+        descripcion = recortar("descripcion", 5000)
+        if (tipo not in log_solicitud.TIPOS_PQR or not (nombre and asunto and descripcion)
+                or not correo_valido(correo) or not request.form.get("autorizo")):
+            flash("Revisa el formulario: faltan datos obligatorios o el correo no es válido.", "error")
+            return redirect(url_for("pqr"))
+
+        log_intentos.registrar_fallo(clave)  # cuenta este envío para el límite
+        radicado = log_solicitud.crear(
+            "pqr", nombre, correo, asunto, descripcion, tipo=tipo,
+            telefono=recortar("telefono", 30),
+            tipo_usuario=recortar("tipo_usuario", 60),
+            sede=recortar("sede", 60),
+        )
+        flash(
+            f"Tu solicitud fue radicada con el número {radicado}. Guárdalo para consultar el estado. "
+            f"Te responderemos en máximo {contenido('pqr.tiempo')}.",
+            "success",
+        )
         return redirect(url_for("pqr"))
     return render_template("pagina/pqr.html")
+
+
+@app.route("/pqr/consultar", methods=["POST"])
+def pqr_consultar():
+    clave = f"consulta|{ip_cliente()}"
+    if log_intentos.bloqueado(clave):
+        flash("Demasiadas consultas seguidas. Espera unos minutos e intenta de nuevo.", "error")
+        return redirect(url_for("pqr"))
+    log_intentos.registrar_fallo(clave)
+
+    radicado = request.form.get("radicado", "").strip().upper()
+    correo = request.form.get("correo_consulta", "").strip()
+    fila = log_solicitud.buscar_por_radicado(radicado, correo)
+    if fila:
+        flash(f"Solicitud {fila['radicado']}: estado «{fila['estado']}».", "success")
+    else:
+        flash("No encontramos una solicitud con ese radicado y correo. Revisa los datos e intenta de nuevo.", "error")
+    return redirect(url_for("pqr"))
 
 
 @app.route("/contacto", methods=["GET", "POST"])
 def contacto():
     if request.method == "POST":
-        flash("Tu mensaje fue enviado. Gracias por contactarnos.")
+        if request.form.get("sitio_web"):  # campo trampa
+            return redirect(url_for("contacto"))
+
+        clave = f"formulario|{ip_cliente()}"
+        if log_intentos.bloqueado(clave):
+            flash("Has enviado muchos mensajes seguidos. Espera unos minutos e intenta de nuevo.", "error")
+            return redirect(url_for("contacto"))
+
+        nombre = recortar("nombre", 120)
+        correo = recortar("correo", 150)
+        asunto = recortar("asunto", 200)
+        mensaje = recortar("mensaje", 5000)
+        if not (nombre and asunto and mensaje) or not correo_valido(correo):
+            flash("Revisa el formulario: faltan datos obligatorios o el correo no es válido.", "error")
+        else:
+            log_intentos.registrar_fallo(clave)
+            log_solicitud.crear("contacto", nombre, correo, asunto, mensaje)
+            flash("Tu mensaje fue enviado. Gracias por contactarnos.", "success")
         return redirect(url_for("contacto"))
     return render_template("pagina/contacto.html")
 
@@ -764,9 +866,13 @@ def permisos_actuales():
 
 @app.context_processor
 def inyectar_permisos():
-    """Hace que la variable 'permisos' esté disponible en TODAS las plantillas."""
+    """Hace que 'permisos' y el contador de solicitudes nuevas estén disponibles en TODAS las plantillas."""
     rol = session.get("admin_rol")
-    return {"permisos": log_rol.permisos_de(rol) if rol else set()}
+    permisos = log_rol.permisos_de(rol) if rol else set()
+    return {
+        "permisos": permisos,
+        "solicitudes_nuevas": log_solicitud.contar_nuevas() if "solicitudes" in permisos else 0,
+    }
 
 def contenido(clave):
     """Devuelve el texto editado si existe; si no, el texto base del código."""
@@ -1274,6 +1380,120 @@ def admin_contenido_restaurar():
     else:
         flash("Ese texto no existe.", "error")
     return redirect(url_for("admin_contenido", grupo=grupo_de(clave)))
+
+# ---------------- DOCUMENTOS (Pagaduría) ----------------
+
+@app.route("/admin/documentos", methods=["GET", "POST"])
+@login_requerido
+def admin_documentos():
+    if request.method == "POST":
+        titulo = request.form.get("titulo", "").strip()
+        archivo = request.files.get("archivo")
+        if not titulo:
+            flash("El título es obligatorio.", "error")
+        elif not archivo or not archivo.filename:
+            flash("Debes seleccionar un archivo.", "error")
+        else:
+            guardado = guardar_documento_subido(archivo)
+            if guardado:
+                nombre, original, extension, tamano = guardado
+                log_documento.crear(
+                    titulo,
+                    request.form.get("descripcion", "").strip(),
+                    request.form.get("categoria", "").strip(),
+                    nombre, original, extension, tamano,
+                )
+                flash("Documento publicado.", "success")
+        return redirect(url_for("admin_documentos"))
+    return render_template("admin/documentos_lista.html", activo="documentos", documentos=log_documento.listar())
+
+
+@app.route("/admin/documentos/<int:id_documento>/editar", methods=["POST"])
+@login_requerido
+def admin_documento_editar(id_documento):
+    titulo = request.form.get("titulo", "").strip()
+    if not titulo:
+        flash("El título es obligatorio.", "error")
+    else:
+        log_documento.actualizar(
+            id_documento, titulo,
+            request.form.get("descripcion", "").strip(),
+            request.form.get("categoria", "").strip(),
+        )
+        flash("Documento actualizado.", "success")
+    return redirect(url_for("admin_documentos"))
+
+
+@app.route("/admin/documentos/<int:id_documento>/eliminar", methods=["POST"])
+@login_requerido
+def admin_documento_eliminar(id_documento):
+    nombre = log_documento.eliminar(id_documento)
+    if nombre:
+        try:
+            os.remove(os.path.join(CARPETA_DOCUMENTOS, nombre))
+        except FileNotFoundError:
+            pass
+        flash("Documento eliminado.", "success")
+    else:
+        flash("Documento no encontrado.", "error")
+    return redirect(url_for("admin_documentos"))
+
+
+@app.route("/documentos/<int:id_documento>")
+def documento_ver(id_documento):
+    """Ruta pública: abre el documento (PDF e imágenes en el navegador; el resto se descarga)."""
+    doc = log_documento.obtener(id_documento)
+    if not doc:
+        abort(404)
+    se_ve_en_navegador = doc["extension"] in ("pdf", "jpg", "jpeg", "png")
+    return send_from_directory(
+        CARPETA_DOCUMENTOS, doc["archivo"],
+        as_attachment=not se_ve_en_navegador,
+        download_name=doc["nombre_original"],
+    )
+
+# ---------------- PQR Y MENSAJES ----------------
+
+@app.route("/admin/solicitudes")
+@login_requerido
+def admin_solicitudes():
+    origen = request.args.get("origen", "")
+    estado = request.args.get("estado", "")
+    return render_template(
+        "admin/solicitudes_lista.html",
+        activo="solicitudes",
+        solicitudes=log_solicitud.listar(
+            origen if origen in ("pqr", "contacto") else None,
+            estado if estado in log_solicitud.ESTADOS else None,
+        ),
+        origen=origen, estado=estado, estados=log_solicitud.ESTADOS,
+    )
+
+
+@app.route("/admin/solicitudes/<int:id_solicitud>", methods=["GET", "POST"])
+@login_requerido
+def admin_solicitud_detalle(id_solicitud):
+    solicitud = log_solicitud.obtener(id_solicitud)
+    if not solicitud:
+        flash("Solicitud no encontrada.", "error")
+        return redirect(url_for("admin_solicitudes"))
+    if request.method == "POST":
+        ok, mensaje = log_solicitud.actualizar(
+            id_solicitud, request.form.get("estado", ""), request.form.get("nota", "").strip()[:2000]
+        )
+        flash(mensaje, "success" if ok else "error")
+        return redirect(url_for("admin_solicitud_detalle", id_solicitud=id_solicitud))
+    return render_template(
+        "admin/solicitud_detalle.html", activo="solicitudes", s=solicitud, estados=log_solicitud.ESTADOS
+    )
+
+
+@app.route("/admin/solicitudes/<int:id_solicitud>/eliminar", methods=["POST"])
+@login_requerido
+def admin_solicitud_eliminar(id_solicitud):
+    log_solicitud.eliminar(id_solicitud)
+    flash("Solicitud eliminada.", "success")
+    return redirect(url_for("admin_solicitudes"))
 
 if __name__ == "__main__":
     app.run(debug=True)

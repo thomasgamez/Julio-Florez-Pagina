@@ -273,6 +273,68 @@ CONTENIDO_BASE = {
     "enlaces.biblioteca": _t("Enlaces del sitio", "Biblioteca (enlace completo)", "https://biblioteca-final-1.onrender.com", "url"),
     "enlaces.edupage": _t("Enlaces del sitio", "Edupage (enlace completo)", "https://citdjulioflorez.edupage.org/login/index.php?out=1", "url"),
     "enlaces.zoe": _t("Enlaces del sitio", "ZOE (enlace completo)", "https://zoe-app-mimm.onrender.com", "url"),
+
+        # ---------- Pagaduría ----------
+    "pagaduria.titulo": _t("Pagaduría", "Título de la página", "Pagaduría"),
+    "pagaduria.subtitulo": _t("Pagaduría", "Subtítulo de la página", "Gestión documental y archivística institucional"),
+    "pagaduria.card1_titulo": _t("Pagaduría", "Tarjeta 1: título", "¿Qué hace Pagaduría?"),
+    "pagaduria.card1_texto": _t("Pagaduría", "Tarjeta 1: texto", (
+        "Administra y organiza los expedientes institucionales, clasificándolos por series y subseries documentales."), "parrafo"),
+    "pagaduria.card2_titulo": _t("Pagaduría", "Tarjeta 2: título", "Ciclo de vida documental"),
+    "pagaduria.card2_texto": _t("Pagaduría", "Tarjeta 2: texto", (
+        "Cada expediente se controla según su estado — activo, semiactivo o inactivo — y su tiempo de conservación."), "parrafo"),
+    "pagaduria.card3_titulo": _t("Pagaduría", "Tarjeta 3: título", "Niveles de acceso"),
+    "pagaduria.card3_texto": _t("Pagaduría", "Tarjeta 3: texto", (
+        "La información se clasifica según su nivel de acceso, garantizando la confidencialidad que corresponda a cada documento."), "parrafo"),
+
+    "pagaduria.docs_titulo": _t("Pagaduría", "Documentos: título de la sección", "Documentos institucionales"),
+    "pagaduria.docs_texto": _t("Pagaduría", "Documentos: texto introductorio", (
+        "Consulta y descarga los documentos publicados por la Pagaduría: informes, compras y otros soportes."), "parrafo"),
+    "pagaduria.docs_boton": _t("Pagaduría", "Documentos: texto del enlace de cada documento", "Ver / descargar →"),
+    "pagaduria.docs_vacio": _t("Pagaduría", "Documentos: mensaje cuando no hay ninguno", "Aún no hay documentos publicados."),
+
+    "pagaduria.gd_titulo": _t("Pagaduría", "«Gestión documental»: título", "¿Qué es la gestión documental?"),
+    "pagaduria.gd_texto": _t("Pagaduría", "«Gestión documental»: texto", (
+        "La Pagaduría del Instituto Técnico Distrital Julio Flórez es responsable de la gestión documental y "
+        "archivística de la institución: organiza, clasifica y conserva los expedientes institucionales a lo largo "
+        "de su ciclo de vida — desde que un documento se genera (activo), pasa por un periodo de consulta frecuente "
+        "decreciente (semiactivo), hasta llegar a su fase final de conservación permanente o disposición (inactivo)."), "parrafo"),
+    "pagaduria.series_titulo": _t("Pagaduría", "Recuadro «Series»: título", "Series y Subseries"),
+    "pagaduria.series_texto": _t("Pagaduría", "Recuadro «Series»: texto", (
+        "Los expedientes se agrupan por series y subseries documentales, siguiendo la estructura de clasificación institucional."), "parrafo"),
+    "pagaduria.ubicacion_titulo": _t("Pagaduría", "Recuadro «Ubicación»: título", "Ubicación física y digital"),
+    "pagaduria.ubicacion_texto": _t("Pagaduría", "Recuadro «Ubicación»: texto", (
+        "Cada expediente tiene registrada su ubicación física (archivo físico) y, cuando aplica, su ubicación digital."), "parrafo"),
+    "pagaduria.conservacion_titulo": _t("Pagaduría", "Recuadro «Conservación»: título", "Estado de conservación"),
+    "pagaduria.conservacion_texto": _t("Pagaduría", "Recuadro «Conservación»: texto", (
+        "Se hace seguimiento al estado de conservación de cada expediente para garantizar su integridad en el tiempo."), "parrafo"),
+    "pagaduria.disposicion_titulo": _t("Pagaduría", "Recuadro «Disposición»: título", "Disposición final"),
+    "pagaduria.disposicion_texto": _t("Pagaduría", "Recuadro «Disposición»: texto", (
+        "Cada expediente tiene una fecha estimada de disposición final, conforme a las tablas de retención documental."), "parrafo"),
+    "pagaduria.archivo_titulo": _t("Pagaduría", "Cuadro de Archivo: título", "Archivo"),
+    "pagaduria.archivo_texto": _t("Pagaduría", "Cuadro de Archivo: texto", (
+        "Archivo es el área especializada de Pagaduría encargada de la gestión física e interna de los expedientes institucionales."), "parrafo"),
+    "pagaduria.archivo_boton": _t("Pagaduría", "Cuadro de Archivo: texto del botón", "Consultar Archivo →"),
+
+        # ---------- PQR ----------
+    "pqr.titulo": _t("PQR", "Título de la página", "PQR"),
+    "pqr.subtitulo": _t("PQR", "Subtítulo de la página", "Peticiones, Quejas, Reclamos y Sugerencias — Tu voz importa"),
+    "pqr.form_titulo": _t("PQR", "Título del formulario", "Radicar solicitud"),
+    "pqr.autorizacion": _t("PQR", "Texto de autorización de datos", (
+        "Autorizo el tratamiento de mis datos personales para el trámite de mi solicitud, conforme a la Ley 1581 de "
+        "2012. La información será tratada de manera confidencial."), "parrafo"),
+    "pqr.boton": _t("PQR", "Texto del botón de envío", "Radicar solicitud PQR"),
+    "pqr.consulta_titulo": _t("PQR", "Cuadro «Consultar estado»: título", "Consultar estado"),
+    "pqr.info_titulo": _t("PQR", "Cuadro de información: título", "Información"),
+    "pqr.tiempo_etiqueta": _t("PQR", "Cuadro de información: etiqueta del tiempo", "Tiempo de respuesta:"),
+    "pqr.tiempo": _t("PQR", "Tiempo de respuesta (también sale en el aviso al enviar)", "15 días hábiles"),
+    "pqr.info_2": _t("PQR", "Cuadro de información: punto 2", "Tu información es tratada con confidencialidad"),
+    "pqr.info_3": _t("PQR", "Cuadro de información: punto 3", "Guarda el número de radicado para hacer seguimiento"),
+    "pqr.info_4": _t("PQR", "Cuadro de información: punto 4 (antes del enlace a Contacto)",
+        "Si tienes dudas generales, usa el formulario de"),
+
+    "enlaces.archivo": _t("Enlaces del sitio", "Sistema de Archivo (enlace completo)", "", "url"),
+
 }
 
 # Títulos y botones del submenú del Bachillerato Internacional: (título de la página, nombre corto del botón)
