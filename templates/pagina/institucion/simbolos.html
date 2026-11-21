@@ -13,24 +13,18 @@
   <div class="container">
     <div class="row align-items-center g-5">
       <div class="col-lg-7">
-        <h3 class="h5">El Escudo</h3>
-        <p>Producto de la unificación de los Colegios Santa Rosa y Julio Flórez, sus símbolos institucionales, 
-          luego de un ejercicio participativo de la comunidad educativa, resultaron de una mixtura entro los originales 
-          de cada uno de las instituciones. De esta forma el color gris presente en las dos se mantiene para el escudo 
-          y la bandera significando la responsabilidad y disciplina que caracterizan a la comunidad escolar. El rojo dado 
-          por el Colegio Julio Flórez como reflejo de la autonomía base de su apuesta formativa y el amarillo para 
-          representar la capacidad creativa de los estudiantes que se reflejan en la innovación y la ciencia del perfil 
-          técnico de sus estudiantes y que también puede evidenciarse en el libro y la representación del átomo.</p>
+        <h3 class="h5">{{ c('simbolos.escudo_titulo') }}</h3>
+        <p>{{ ch('simbolos.escudo_texto') }}</p>
       </div>
       <div class="col-lg-5 text-center">
         <img src="{{ url_for('static', filename='images/ESCUDO CITD JF.png') }}" style="max-width:150px" alt="Escudo" onerror="this.style.display='none'">
-        <p class="fw-semibold mt-3">La Bandera</p>
+        <p class="fw-semibold mt-3">{{ c('simbolos.bandera_titulo') }}</p>
         <div class="d-flex justify-content-center gap-1">
           <div style="width:50px;height:34px;background:#c0392b"></div>
           <div style="width:50px;height:34px;background:#858484;border:1px solid #858383"></div>
           <div style="width:50px;height:34px;background:#d4af37"></div>
         </div>
-        <p class="small text-muted mt-2">Rojo · gris · Amarillo</p>
+        <p class="small text-muted mt-2">{{ c('simbolos.bandera_colores') }}</p>
       </div>
     </div>
   </div>
@@ -38,22 +32,41 @@
 
 <section>
   <div class="container">
-    <div class="container">
-      <div class="icono-circulo"><i class="bi {{ info.icono }}"></i></div>
-      <h1>{{ info.titulo }}</h1>
+    <div class="encabezado-seccion">
+      <div class="linea"></div>
+      <h2>{{ c('simbolos.mas_titulo') }}</h2>
     </div>
     <div class="row g-4">
       <div class="col-md-6 col-lg-3">
-        <div class="tarjeta"><div class="icono"><i class="bi bi-bank"></i></div><h3>Gobierno Escolar</h3><p>Rector, Consejo Directivo, Consejo Académico, personero, representantes estudiantiles. Democracia participativa en nuestra comunidad.</p><a href="{{ url_for('organigrama') }}" class="enlace">Ver Organigrama →</a></div>
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-bank"></i></div>
+          <h3>{{ c('simbolos.gobierno_titulo') }}</h3>
+          <p>{{ ch('simbolos.gobierno_texto') }}</p>
+          <a href="{{ url_for('organigrama') }}" class="enlace">{{ c('simbolos.gobierno_enlace') }}</a>
+        </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="tarjeta"><div class="icono"><i class="bi bi-file-earmark-pdf"></i></div><h3>Manual de Convivencia</h3><p>Documento oficial que regula la convivencia, derechos y deberes de todos los miembros de la comunidad educativa.</p><a href="#" class="enlace">Descargar →</a></div>
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-file-earmark-pdf"></i></div>
+          <h3>{{ c('simbolos.manual_titulo') }}</h3>
+          <p>{{ ch('simbolos.manual_texto') }}</p>
+          <a href="{{ url_for('nuestra_institucion_seccion', seccion='documentos') }}" class="enlace">{{ c('simbolos.manual_enlace') }}</a>
+        </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="tarjeta"><div class="icono"><i class="bi bi-person-badge"></i></div><h3>Uniformes</h3><p>Uniforme de diario (gris y verde) y uniforme de educación física (sudadera azul con franjas verdes). Obligatorio para todos los estudiantes.</p></div>
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-person-badge"></i></div>
+          <h3>{{ c('simbolos.uniformes_titulo') }}</h3>
+          <p>{{ ch('simbolos.uniformes_texto') }}</p>
+        </div>
       </div>
       <div class="col-md-6 col-lg-3">
-        <div class="tarjeta"><div class="icono"><i class="bi bi-calendar3"></i></div><h3>Calendario Escolar</h3><p>El año escolar 2026 inicia el 6 de abril. Consulta el calendario completo con fechas de evaluaciones, izadas y vacaciones.</p><a href="{{ url_for('eventos') }}" class="enlace">Ver calendario →</a></div>
+        <div class="tarjeta">
+          <div class="icono"><i class="bi bi-calendar3"></i></div>
+          <h3>{{ c('simbolos.calendario_titulo') }}</h3>
+          <p>{{ ch('simbolos.calendario_texto') }}</p>
+          <a href="{{ url_for('eventos') }}" class="enlace">{{ c('simbolos.calendario_enlace') }}</a>
+        </div>
       </div>
     </div>
   </div>

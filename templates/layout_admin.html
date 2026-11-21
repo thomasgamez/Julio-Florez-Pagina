@@ -28,7 +28,10 @@
     <a href="{{ url_for('admin_galeria') }}" class="{{ 'activo' if activo=='galeria' else '' }}"><i class="bi bi-images"></i> Galería</a>
     {% endif %}
     {% if 'contenido' in permisos %}
-    <a href="{{ url_for('admin_contenido') }}" class="{{ 'activo' if activo=='contenido' else '' }}"><i class="bi bi-pencil-square"></i> Contenido del sitio</a>
+    <a href="{{ url_for('admin_editor_visual') }}" class="{{ 'activo' if activo=='contenido' else '' }}"><i class="bi bi-pencil-square"></i> Contenido del sitio</a>
+    {% endif %}
+    {% if 'hitos' in permisos %}
+    <a href="{{ url_for('admin_hitos') }}" class="{{ 'activo' if activo=='hitos' else '' }}"><i class="bi bi-clock-history"></i> Línea de tiempo</a>
     {% endif %}
     {% if 'documentos' in permisos %}
     <a href="{{ url_for('admin_documentos') }}" class="{{ 'activo' if activo=='documentos' else '' }}"><i class="bi bi-folder2-open"></i> Documentos</a>

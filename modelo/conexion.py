@@ -17,6 +17,7 @@ SECCIONES = {
     "logros": "Logros",
     "galeria": "Galería",
     "contenido": "Contenido del sitio",
+    "hitos": "Línea de tiempo",
     "documentos": "Documentos",
     "solicitudes": "PQR y mensajes",
     "usuarios": "Usuarios",

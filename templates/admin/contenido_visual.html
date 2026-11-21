@@ -1,0 +1,58 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Contenido del sitio{% endblock %}
+{% block encabezado %}Contenido del sitio{% endblock %}
+{% block acciones_topbar %}
+<a href="{{ url_for('admin_contenido') }}" class="btn btn-outline-secondary"><i class="bi bi-list-ul"></i> Lista de textos y enlaces</a>
+{% endblock %}
+{% block contenido_admin %}
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+  <select id="selector-pagina" class="form-select w-auto">
+    {% for nombre, ruta in paginas %}
+    <option value="{{ ruta }}" {{ 'selected' if ruta == inicial else '' }}>{{ nombre }}</option>
+    {% endfor %}
+  </select>
+  <div class="btn-group" role="group" aria-label="Tamaño de la vista">
+    <button type="button" class="btn btn-outline-secondary active" data-ancho="100%" title="Computador"><i class="bi bi-display"></i></button>
+    <button type="button" class="btn btn-outline-secondary" data-ancho="768px" title="Tablet"><i class="bi bi-tablet"></i></button>
+    <button type="button" class="btn btn-outline-secondary" data-ancho="390px" title="Celular"><i class="bi bi-phone"></i></button>
+  </div>
+  <span class="small text-muted">Pasa el cursor sobre un texto y pulsa <strong>Editar</strong>. Se guarda al instante.</span>
+</div>
+
+<div class="marco-visual">
+  <iframe id="vista" src="{{ inicial }}?editor=1" title="Vista de la página"></iframe>
+</div>
+
+<style>
+  .marco-visual { background: #e9ecef; border: 1px solid #dee2e6; border-radius: 12px; height: calc(100vh - 200px); min-height: 480px; display: flex; justify-content: center; overflow: hidden; }
+  .marco-visual iframe { width: 100%; height: 100%; border: 0; background: #fff; transition: width .25s ease; }
+</style>
+
+<script>
+  (function () {
+    var vista = document.getElementById('vista');
+    var selector = document.getElementById('selector-pagina');
+
+    selector.addEventListener('change', function () { vista.src = selector.value + '?editor=1'; });
+
+    // Si navegas dentro de la vista (por el menú del sitio), el selector se actualiza
+    vista.addEventListener('load', function () {
+      try {
+        var ruta = vista.contentWindow.location.pathname;
+        for (var i = 0; i < selector.options.length; i++) {
+          if (selector.options[i].value === ruta) selector.selectedIndex = i;
+        }
+      } catch (e) {}
+    });
+
+    document.querySelectorAll('[data-ancho]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('[data-ancho]').forEach(function (o) { o.classList.remove('active'); });
+        b.classList.add('active');
+        vista.style.width = b.dataset.ancho;
+      });
+    });
+  })();
+</script>
+{% endblock %}

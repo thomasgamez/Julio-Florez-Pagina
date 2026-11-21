@@ -14,7 +14,8 @@ from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, url_for, flash, session, abort, g, send_from_directory
 
 from modelo.conexion import inicializar_bd, SECCIONES
-from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos, log_contenido, log_documento, log_solicitud
+from modelo import log_noticia, log_evento, log_libro, log_pago, log_usuario, log_logro, log_galeria, log_rol, log_intentos
+from modelo import log_contenido, log_documento, log_solicitud, log_hito
 from contenido_base import CONTENIDO_BASE
 
 app = Flask(__name__)
@@ -213,6 +214,7 @@ NUESTRA_INSTITUCION_SECCIONES = {
     "historia": {"titulo": "Historia del Colegio", "corto": "Historia", "icono": "bi-journal-bookmark"},
     "simbolos": {"titulo": "Símbolos Institucionales", "corto": "Símbolos", "icono": "bi-shield-shaded"},
     "ubicacion": {"titulo": "Ubicación Geográfica", "corto": "Ubicación", "icono": "bi-geo-alt"},
+    "documentos": {"titulo": "Documentos Institucionales", "corto": "Documentos", "icono": "bi-file-earmark-text"},
 }
 
 NUESTRA_INSTITUCION_TEMPLATES = {
@@ -220,6 +222,7 @@ NUESTRA_INSTITUCION_TEMPLATES = {
     "resena-historica": "pagina/institucion/resena_historica.html",
     "simbolos": "pagina/institucion/simbolos.html",
     "ubicacion": "pagina/institucion/ubicacion.html",
+    "documentos": "pagina/institucion/documentos.html",
 }
 
 HITOS = [
@@ -314,6 +317,8 @@ HITOS = [
         "descripcion": "Reconocimiento a los procesos de excelencia y calidad desarrollados por la institución."
     }
 ]
+
+log_hito.preparar(HITOS)   # crea la tabla y la llena una sola vez con los hitos de arriba
 
 CAMPOS_HOME = [
     {"nombre": "Educación Inicial", "icono": "bi-flower1", "resumen": "Desarrollo integral de la primera infancia con enfoque lúdico y pedagógico."},
@@ -568,17 +573,28 @@ def nuestra_institucion():
     return redirect(url_for("nuestra_institucion_seccion", seccion="historia"))
 
 
+def secciones_ni():
+    """Secciones de Nuestra Institución con títulos editables desde el panel."""
+    return {
+        clave: {**dato, "titulo": contenido(f"ni.{clave}.titulo"), "corto": contenido(f"ni.{clave}.corto")}
+        for clave, dato in NUESTRA_INSTITUCION_SECCIONES.items()
+    }
+
+
 @app.route("/nuestra-institucion/<seccion>")
 def nuestra_institucion_seccion(seccion):
-    info = NUESTRA_INSTITUCION_SECCIONES.get(seccion)
+    secciones = secciones_ni()
+    info = secciones.get(seccion)
     if not info:
         return redirect(url_for("nuestra_institucion_seccion", seccion="historia"))
     return render_template(
         NUESTRA_INSTITUCION_TEMPLATES[seccion],
         info=info,
         seccion_actual=seccion,
-        secciones=NUESTRA_INSTITUCION_SECCIONES,
-        hitos=HITOS,
+        secciones=secciones,
+        hitos=log_hito.listar(),
+        documentos=[d for d in log_documento.listar()
+                    if (d["categoria"] or "").strip().lower() == "institucional"],
     )
 
 
@@ -689,7 +705,8 @@ def pagaduria():
         "pagina/pagaduria.html",
         faq=FAQ_PAGADURIA,
         conceptos=log_pago.listar_conceptos_activos(),
-        documentos=log_documento.listar(),
+        documentos=[d for d in log_documento.listar()
+            if (d["categoria"] or "").strip().lower() != "institucional"],
     )
 
 
@@ -872,7 +889,18 @@ def inyectar_permisos():
     return {
         "permisos": permisos,
         "solicitudes_nuevas": log_solicitud.contar_nuevas() if "solicitudes" in permisos else 0,
-    }
+        "puede_editar_sitio": bool(session.get("admin_id")) and "contenido" in permisos,
+        "modo_edicion": modo_edicion(),
+}
+
+@app.context_processor
+def version_estaticos():
+    """estatico('js/editor.js') -> ruta con ?v=fecha, para que el navegador no use una copia vieja."""
+    def con_version(archivo):
+        ruta = os.path.join(app.root_path, "static", archivo)
+        version = int(os.path.getmtime(ruta)) if os.path.exists(ruta) else 0
+        return f"{url_for('static', filename=archivo)}?v={version}"
+    return {"estatico": con_version}
 
 def contenido(clave):
     """Devuelve el texto editado si existe; si no, el texto base del código."""
@@ -887,16 +915,45 @@ def contenido(clave):
     return item["base"]
 
 
-app.jinja_env.globals["c"] = contenido
-
 def contenido_html(clave):
     """Como contenido(), pero para párrafos: **negrita** y saltos de línea."""
     texto = str(escape(contenido(clave)))                      # 1) se neutraliza cualquier HTML
     texto = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", texto)   # 2) **x** -> <strong>x</strong>
     return Markup(texto.replace("\n", "<br>"))                 # 3) saltos de línea
 
+def modo_edicion():
+    """True solo si la página se abre con ?editor=1 (dentro del panel) y el usuario tiene permiso."""
+    if "modo_edicion" not in g:
+        g.modo_edicion = bool(
+            request.args.get("editor") == "1"
+            and session.get("admin_id")
+            and "contenido" in permisos_actuales()
+        )
+    return g.modo_edicion
 
-app.jinja_env.globals["ch"] = contenido_html
+
+def marcar(clave, html):
+    """En modo edición envuelve el texto para poder editarlo. Los enlaces (tipo url) nunca se marcan."""
+    item = CONTENIDO_BASE.get(clave)
+    if not modo_edicion() or not item or item["tipo"] == "url":
+        return html
+    editado = "1" if clave in g.get("contenido_editado", {}) else "0"
+    return Markup(
+        '<span class="ed-texto" data-clave="{}" data-tipo="{}" data-editado="{}">{}</span>'
+    ).format(clave, item["tipo"], editado, html)
+
+
+def texto_marcado(clave):
+    return marcar(clave, escape(contenido(clave)))
+
+
+def parrafo_marcado(clave):
+    return marcar(clave, contenido_html(clave))
+
+
+app.jinja_env.globals["c"] = texto_marcado
+app.jinja_env.globals["ch"] = parrafo_marcado
+app.jinja_env.globals["cp"] = contenido   # texto plano: úsalo dentro de atributos (alt, title, placeholder, value)
 
 @app.before_request
 def verificar_permisos_por_rol():
@@ -1322,7 +1379,7 @@ def grupo_de(clave):
     return CONTENIDO_BASE.get(clave, {}).get("grupo")
 
 
-@app.route("/admin/contenido")
+@app.route("/admin/contenido/lista")
 @login_requerido
 def admin_contenido():
     # Lista de páginas, en el orden en que aparecen en contenido_base.py
@@ -1369,6 +1426,34 @@ def admin_contenido_guardar():
     flash(mensaje, "success" if ok else "error")
     return redirect(url_for("admin_contenido", grupo=grupo_de(clave)))
 
+def paginas_editables():
+    """Páginas que se pueden editar con vista previa: lista de (nombre, ruta)."""
+    paginas = [
+        ("Inicio", url_for("inicio")),
+        ("Historia", url_for("nuestra_institucion_seccion", seccion="historia")),
+        ("Símbolos institucionales", url_for("nuestra_institucion_seccion", seccion="simbolos")),
+        ("Ubicación", url_for("nuestra_institucion_seccion", seccion="ubicacion")),
+        ("Documentos", url_for("nuestra_institucion_seccion", seccion="documentos")),
+        ("Organigrama", url_for("organigrama")),
+        ("Campos de formación", url_for("campos_formacion")),
+        ("Matrículas", url_for("matriculas")),
+        ("Contacto", url_for("contacto")),
+        ("PQR", url_for("pqr")),
+    ]
+    for clave, info in secciones_bi().items():
+        paginas.append((f"Bachillerato Int.: {info['corto']}", url_for("bachillerato_seccion", seccion=clave)))
+    return paginas
+
+
+@app.route("/admin/contenido")
+@login_requerido
+def admin_editor_visual():
+    paginas = paginas_editables()
+    rutas = [ruta for _, ruta in paginas]
+    inicial = request.args.get("pagina", "")
+    if inicial not in rutas:      # solo se aceptan páginas de la lista
+        inicial = rutas[0]
+    return render_template("admin/contenido_visual.html", activo="contenido", paginas=paginas, inicial=inicial)
 
 @app.route("/admin/contenido/restaurar", methods=["POST"])
 @login_requerido
@@ -1380,6 +1465,52 @@ def admin_contenido_restaurar():
     else:
         flash("Ese texto no existe.", "error")
     return redirect(url_for("admin_contenido", grupo=grupo_de(clave)))
+
+
+def texto_pintado(clave):
+    """El HTML del texto tal como se ve en la página, sin la marca de edición."""
+    if CONTENIDO_BASE[clave]["tipo"] == "parrafo":
+        return str(contenido_html(clave))
+    return str(escape(contenido(clave)))
+
+
+@app.route("/admin/contenido/valor")
+@login_requerido
+def admin_contenido_valor():
+    clave = request.args.get("clave", "")
+    item = CONTENIDO_BASE.get(clave)
+    if not item or item["tipo"] == "url":
+        return {"ok": False}, 404
+    editados = log_contenido.todos()
+    return {
+        "ok": True, "etiqueta": item["etiqueta"], "tipo": item["tipo"], "base": item["base"],
+        "valor": editados.get(clave, item["base"]), "editado": clave in editados,
+    }
+
+
+@app.route("/admin/contenido/guardar-directo", methods=["POST"])
+@login_requerido
+def admin_contenido_guardar_directo():
+    clave = request.form.get("clave", "")
+    ok, mensaje = log_contenido.guardar(clave, request.form.get("valor", ""))
+    if not ok:
+        return {"ok": False, "mensaje": mensaje}, 400
+    g.pop("contenido_editado", None)   # fuerza a leer los cambios recién guardados
+    return {
+        "ok": True, "mensaje": mensaje, "html": texto_pintado(clave),
+        "editado": clave in log_contenido.todos(),
+    }
+
+
+@app.route("/admin/contenido/restaurar-directo", methods=["POST"])
+@login_requerido
+def admin_contenido_restaurar_directo():
+    clave = request.form.get("clave", "")
+    if clave not in CONTENIDO_BASE:
+        return {"ok": False, "mensaje": "Ese texto no existe."}, 400
+    log_contenido.restaurar(clave)
+    g.pop("contenido_editado", None)
+    return {"ok": True, "mensaje": "Texto restaurado al original.", "html": texto_pintado(clave), "editado": False}
 
 # ---------------- DOCUMENTOS (Pagaduría) ----------------
 
@@ -1494,6 +1625,43 @@ def admin_solicitud_eliminar(id_solicitud):
     log_solicitud.eliminar(id_solicitud)
     flash("Solicitud eliminada.", "success")
     return redirect(url_for("admin_solicitudes"))
+
+# ---------------- LÍNEA DE TIEMPO (HITOS) ----------------
+
+@app.route("/admin/hitos", methods=["GET", "POST"])
+@login_requerido
+def admin_hitos():
+    if request.method == "POST":
+        ok, mensaje = log_hito.crear(
+            request.form.get("anio", ""), request.form.get("titulo", ""), request.form.get("descripcion", ""))
+        flash(mensaje, "success" if ok else "error")
+        return redirect(url_for("admin_hitos"))
+    return render_template("admin/hitos_lista.html", activo="hitos", hitos=log_hito.listar())
+
+
+@app.route("/admin/hitos/<int:id_hito>/editar", methods=["POST"])
+@login_requerido
+def admin_hito_editar(id_hito):
+    ok, mensaje = log_hito.actualizar(
+        id_hito, request.form.get("anio", ""), request.form.get("titulo", ""), request.form.get("descripcion", ""))
+    flash(mensaje, "success" if ok else "error")
+    return redirect(url_for("admin_hitos"))
+
+
+@app.route("/admin/hitos/<int:id_hito>/eliminar", methods=["POST"])
+@login_requerido
+def admin_hito_eliminar(id_hito):
+    log_hito.eliminar(id_hito)
+    flash("Hito eliminado.", "success")
+    return redirect(url_for("admin_hitos"))
+
+
+@app.route("/admin/hitos/restaurar", methods=["POST"])
+@login_requerido
+def admin_hitos_restaurar():
+    log_hito.restaurar_base(HITOS)
+    flash("Línea de tiempo restaurada a la original.", "success")
+    return redirect(url_for("admin_hitos"))
 
 if __name__ == "__main__":
     app.run(debug=True)

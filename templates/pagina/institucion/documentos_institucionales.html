@@ -16,11 +16,14 @@
       <div class="col-md-6 col-lg-4">
         <div class="tarjeta h-100">
           <h3 class="h6">{{ documento.titulo }}</h3>
-          <p class="small text-muted mb-0">{{ documento.descripcion }}</p>
-          <a href="{{ url_for('static', filename=documento.archivo) }}" class="btn-institucional mt-3" target="_blank">Descargar</a>
+          <p class="small text-muted mb-0">{{ documento.extension|upper }} · {{ documento.tamano|tamano_legible }}</p>
+          <a href="{{ url_for('documento_ver', id_documento=documento.id) }}" class="btn-institucional mt-3" target="_blank">Descargar</a>
         </div>
       </div>
-      {% endfor %}
+        {% else %}
+        <p class="text-muted">Aún no hay documentos publicados.</p>
+        {% endfor %}
+        {% endfor %}
     </div>
   </div>
 </section>

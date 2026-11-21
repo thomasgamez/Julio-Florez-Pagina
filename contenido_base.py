@@ -74,6 +74,81 @@ CONTENIDO_BASE = {
     "inicio.noticias_leer": _t("Inicio", "Noticias: texto de cada «Leer más»", "Leer más →"),
     "inicio.noticias_boton": _t("Inicio", "Noticias: texto del botón", "Ver todas las noticias →"),
 
+        # ---------- Nuestra Institución: títulos de las páginas y del menú ----------
+    "ni.historia.titulo": _t("Nuestra Institución: menú", "Historia: título de la página", "Historia del Colegio"),
+    "ni.historia.corto": _t("Nuestra Institución: menú", "Historia: nombre en el menú", "Historia"),
+    "ni.simbolos.titulo": _t("Nuestra Institución: menú", "Símbolos: título de la página", "Símbolos Institucionales"),
+    "ni.simbolos.corto": _t("Nuestra Institución: menú", "Símbolos: nombre en el menú", "Símbolos"),
+    "ni.ubicacion.titulo": _t("Nuestra Institución: menú", "Ubicación: título de la página", "Ubicación Geográfica"),
+    "ni.ubicacion.corto": _t("Nuestra Institución: menú", "Ubicación: nombre en el menú", "Ubicación"),
+    "ni.documentos.titulo": _t("Nuestra Institución: menú", "Documentos: título de la página", "Documentos Institucionales"),
+    "ni.documentos.corto": _t("Nuestra Institución: menú", "Documentos: nombre en el menú", "Documentos"),
+
+    # ---------- Historia ----------
+    "historia.parrafo_1": _t("Historia", "Primer párrafo", (
+        "El Instituto Técnico Distrital Julio Flórez lleva el nombre del célebre poeta colombiano **Julio Flórez (1867–1923)**, "
+        "nacido en Chiquinquirá, Boyacá. Considerado uno de los poetas más importantes del Romanticismo colombiano, su obra "
+        "refleja el sentimiento nacional, la nostalgia y la belleza de la naturaleza colombiana."), "parrafo"),
+    "historia.parrafo_2": _t("Historia", "Segundo párrafo", (
+        "La institución fue fundada con el propósito de brindar formación técnica y académica de calidad a los jóvenes del norte "
+        "de Bogotá, en la localidad de Usaquén. A lo largo de más de cinco décadas, ha crecido hasta convertirse en una de las "
+        "instituciones educativas de mayor prestigio de la ciudad."), "parrafo"),
+    "historia.parrafo_3": _t("Historia", "Tercer párrafo", (
+        "Hoy contamos con dos sedes, más de 2.500 estudiantes, cuatro especialidades técnicas articuladas con el SENA y el único "
+        "Programa del Diploma IB ofrecido por un colegio oficial en el norte de Bogotá."), "parrafo"),
+    "historia.proposito_titulo": _t("Historia", "Propósito institucional: título", "Propósito institucional"),
+    "historia.mision_titulo": _t("Historia", "Misión: título", "Misión"),
+    "historia.mision_texto": _t("Historia", "Misión: texto", (
+        "El Colegio Instituto Técnico Distrital Julio Flórez es una institución de carácter oficial que propende por una "
+        "educación innovadora y de calidad; para formar ciudadanos del mundo, líderes críticos, creativos y solidarios, "
+        "comprometidos con la transformación social y el desarrollo humano sostenible."), "parrafo"),
+    "historia.vision_titulo": _t("Historia", "Visión: título", "Visión"),
+    "historia.vision_texto": _t("Historia", "Visión: texto", (
+        "En el año 2026, el Colegio Instituto Técnico Distrital Julio Flórez será reconocido a nivel distrital y nacional como "
+        "una institución innovadora que ofrece una educación de calidad; comprometido con la formación de jóvenes felices y "
+        "competentes para afrontar los desafíos y necesidades del siglo XXI. Fortalecido en alianzas con el sector productivo "
+        "y entidades de educación superior acreditadas."), "parrafo"),
+    "historia.linea_titulo": _t("Historia", "Línea de tiempo: título", "Línea de tiempo institucional"),
+    "historia.linea_texto": _t("Historia", "Línea de tiempo: texto",
+        "Los principales acontecimientos que han marcado la historia del Instituto Técnico Distrital Julio Flórez", "parrafo"),
+    "historia.ubicacion_titulo": _t("Historia", "Ubicación: título", "Ubicación geográfica"),
+    "historia.ubicacion_texto": _t("Historia", "Ubicación: texto", "Localidad de Suba — Bogotá D.C."),
+
+    # ---------- Símbolos ----------
+    "simbolos.escudo_titulo": _t("Símbolos", "El escudo: título", "El Escudo"),
+    "simbolos.escudo_texto": _t("Símbolos", "El escudo: texto", (
+        "Producto de la unificación de los Colegios Santa Rosa y Julio Flórez, sus símbolos institucionales, luego de un "
+        "ejercicio participativo de la comunidad educativa, resultaron de una mixtura entro los originales de cada uno de las "
+        "instituciones. De esta forma el color gris presente en las dos se mantiene para el escudo y la bandera significando la "
+        "responsabilidad y disciplina que caracterizan a la comunidad escolar. El rojo dado por el Colegio Julio Flórez como "
+        "reflejo de la autonomía base de su apuesta formativa y el amarillo para representar la capacidad creativa de los "
+        "estudiantes que se reflejan en la innovación y la ciencia del perfil técnico de sus estudiantes y que también puede "
+        "evidenciarse en el libro y la representación del átomo."), "parrafo"),
+    "simbolos.bandera_titulo": _t("Símbolos", "La bandera: título", "La Bandera"),
+    "simbolos.bandera_colores": _t("Símbolos", "La bandera: colores", "Rojo · gris · Amarillo"),
+    "simbolos.mas_titulo": _t("Símbolos", "Sección inferior: título", "Información institucional"),
+    "simbolos.gobierno_titulo": _t("Símbolos", "Gobierno escolar: título", "Gobierno Escolar"),
+    "simbolos.gobierno_texto": _t("Símbolos", "Gobierno escolar: texto",
+        "Rector, Consejo Directivo, Consejo Académico, personero, representantes estudiantiles. Democracia participativa en nuestra comunidad.", "parrafo"),
+    "simbolos.gobierno_enlace": _t("Símbolos", "Gobierno escolar: texto del enlace", "Ver Organigrama →"),
+    "simbolos.manual_titulo": _t("Símbolos", "Manual de convivencia: título", "Manual de Convivencia"),
+    "simbolos.manual_texto": _t("Símbolos", "Manual de convivencia: texto",
+        "Documento oficial que regula la convivencia, derechos y deberes de todos los miembros de la comunidad educativa.", "parrafo"),
+    "simbolos.manual_enlace": _t("Símbolos", "Manual de convivencia: texto del enlace", "Ver documentos →"),
+    "simbolos.uniformes_titulo": _t("Símbolos", "Uniformes: título", "Uniformes"),
+    "simbolos.uniformes_texto": _t("Símbolos", "Uniformes: texto",
+        "Uniforme de diario (gris y verde) y uniforme de educación física (sudadera azul con franjas verdes). Obligatorio para todos los estudiantes.", "parrafo"),
+    "simbolos.calendario_titulo": _t("Símbolos", "Calendario escolar: título", "Calendario Escolar"),
+    "simbolos.calendario_texto": _t("Símbolos", "Calendario escolar: texto",
+        "El año escolar 2026 inicia el 6 de abril. Consulta el calendario completo con fechas de evaluaciones, izadas y vacaciones.", "parrafo"),
+    "simbolos.calendario_enlace": _t("Símbolos", "Calendario escolar: texto del enlace", "Ver calendario →"),
+
+    # ---------- Documentos ----------
+    "documentos.titulo": _t("Documentos", "Título de la página", "Documentos Institucionales"),
+    "documentos.subtitulo": _t("Documentos", "Subtítulo de la página", "Consulta y descarga los documentos oficiales de la institución"),
+    "documentos.boton": _t("Documentos", "Texto del botón de cada documento", "Descargar"),
+    "documentos.vacio": _t("Documentos", "Mensaje cuando no hay documentos", "Aún no hay documentos publicados."),
+    
         # ---------- IB: ¿Qué es el IB? ----------
     "bi.ib.hero_etiqueta": _t("IB: ¿Qué es el IB?", "Portada: etiqueta superior", "Programa del Diploma · IB"),
     "bi.ib.hero_titulo": _t("IB: ¿Qué es el IB?", "Portada: título", "Bachillerato Internacional"),

@@ -1,0 +1,78 @@
+{% extends "layout_admin.html" %}
+{% block titulo %}Línea de tiempo{% endblock %}
+{% block encabezado %}Línea de tiempo{% endblock %}
+{% block acciones_topbar %}
+<button type="button" class="btn-institucional" data-bs-toggle="modal" data-bs-target="#modalNuevoHito"><i class="bi bi-plus-lg"></i> Nuevo hito</button>
+{% endblock %}
+{% block contenido_admin %}
+
+<p class="text-muted small mb-3">
+  Estos hitos aparecen en la línea de tiempo de la página Historia, agrupados por año. Puedes agregar, cambiar y eliminar.
+</p>
+
+<div class="tabla-admin">
+  <table class="table mb-0">
+    <thead><tr><th style="width:80px">Año</th><th>Título</th><th>Descripción</th><th class="text-end" style="width:150px"></th></tr></thead>
+    <tbody>
+      {% for h in hitos %}
+      <tr>
+        <td class="fw-semibold">{{ h.anio }}</td>
+        <td>{{ h.titulo }}</td>
+        <td class="small text-muted">{{ h.descripcion }}</td>
+        <td class="text-end text-nowrap">
+          <button type="button" class="btn btn-sm btn-outline-institucional" data-bs-toggle="modal" data-bs-target="#editarHito{{ h.id }}"><i class="bi bi-pencil"></i></button>
+          <form method="POST" action="{{ url_for('admin_hito_eliminar', id_hito=h.id) }}" class="d-inline" onsubmit="return confirm('¿Eliminar este hito?');">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-muted py-4">No hay hitos. Agrega el primero o restaura la línea de tiempo original.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<form method="POST" action="{{ url_for('admin_hitos_restaurar') }}" class="mt-3"
+      onsubmit="return confirm('Esto borra todos los hitos actuales y vuelve a cargar los originales. ¿Continuar?');">
+  <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-counterclockwise"></i> Restaurar línea de tiempo original</button>
+</form>
+
+<!-- Nuevo hito -->
+<div class="modal fade" id="modalNuevoHito" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="POST" action="{{ url_for('admin_hitos') }}">
+      <div class="modal-header"><h5 class="modal-title">Nuevo hito</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <label class="form-label fw-semibold">Año</label>
+        <input type="text" name="anio" class="form-control mb-3" maxlength="4" pattern="\d{4}" placeholder="2026" required>
+        <label class="form-label fw-semibold">Título</label>
+        <input type="text" name="titulo" class="form-control mb-3" maxlength="150" required>
+        <label class="form-label fw-semibold">Descripción</label>
+        <textarea name="descripcion" class="form-control" rows="4" maxlength="600" required></textarea>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn-institucional">Guardar</button></div>
+    </form>
+  </div></div>
+</div>
+
+<!-- Editar hito (uno por fila) -->
+{% for h in hitos %}
+<div class="modal fade" id="editarHito{{ h.id }}" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog"><div class="modal-content">
+    <form method="POST" action="{{ url_for('admin_hito_editar', id_hito=h.id) }}">
+      <div class="modal-header"><h5 class="modal-title">Editar hito</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <label class="form-label fw-semibold">Año</label>
+        <input type="text" name="anio" class="form-control mb-3" value="{{ h.anio }}" maxlength="4" pattern="\d{4}" required>
+        <label class="form-label fw-semibold">Título</label>
+        <input type="text" name="titulo" class="form-control mb-3" value="{{ h.titulo }}" maxlength="150" required>
+        <label class="form-label fw-semibold">Descripción</label>
+        <textarea name="descripcion" class="form-control" rows="4" maxlength="600" required>{{ h.descripcion }}</textarea>
+      </div>
+      <div class="modal-footer"><button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button><button class="btn-institucional">Guardar</button></div>
+    </form>
+  </div></div>
+</div>
+{% endfor %}
+{% endblock %}
